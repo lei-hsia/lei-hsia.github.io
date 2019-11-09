@@ -13,7 +13,7 @@
 
 
 
-<title>dp各种总结 | Blogs ©️ Lei Xia</title>
+<title>dp总结 | Blogs ©️ Lei Xia</title>
 
 
 
@@ -175,7 +175,7 @@
     
     <article class="post-wrap">
         <header class="post-header">
-            <h1 class="post-title">dp各种总结</h1>
+            <h1 class="post-title">dp总结</h1>
             
                 <div class="post-meta">
                     
@@ -184,7 +184,7 @@
 
                     
                         <span class="post-time">
-                        Date: <a href="#">十一月 8, 2019&nbsp;&nbsp;22:16:10</a>
+                        Date: <a href="#">十一月 8, 2019&nbsp;&nbsp;22:32:00</a>
                         </span>
                     
                     
@@ -193,36 +193,215 @@
         </header>
 
         <div class="post-content">
-            <p>早就想总结一下dp了。其实我这个也掌握的不是很好，不过这些题做起来可以说很有意思，而且做多了发现规律性挺强。</p>
-<p>虽然自己也不怎么熟练，不过好歹看完了这些讲解，总结一下，如果今后忘记了还可以返回来看一看。虽然LeetCode上面关于dp的题已经168道了，但是如果总是”忘了怎么做”, 那只能说明实际上并没有掌握dp的精髓, 这样实际上并不好；不过如果理解了那么多做几次应该就熟练了。</p>
-<p>下面开始正文: </p>
-<h3 id="空间优化"><a href="#空间优化" class="headerlink" title="空间优化:"></a>空间优化:</h3><p>对于网格的dp，如果 f[i][j] 只依赖本行的f[i][x] 和上一行的<figure class="highlight plain"><figcaption><span>那么可以采用滚动数组压缩空间. 空间复杂度为```O(n)```而不是```O(m*n)```</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">1. Minimum Path Sum: 如果要打印path, 关键: 记录每一次是从left还是up的方向来的; 最后的path是从```A[m-1][n-1]```倒着得到的; 然后再reverse打印出来;</span><br><span class="line">2. Longest Increasing Subsequence; ```dp[i][j]```记录到```grid[i][j]```的位置的LIS长度;</span><br><span class="line">3. Bomb Enemy: 四个方向; e.g. 从上面来的方向: ```if(i&gt;0) up[i][j] = up[i-1][j]+1```;</span><br><span class="line">4. [Longest Increasing Subsequence奇淫技巧: O(NlogN)](https://leetcode.com/problems/longest-increasing-subsequence/discuss/74824/JavaPython-Binary-search-O(nlogn)-time-with-explanation)</span><br><span class="line"></span><br><span class="line">---</span><br><span class="line"></span><br><span class="line">异或: 不进位的加法: 1^1 = 0;</span><br><span class="line"></span><br><span class="line">4. Counting Bits: </span><br><span class="line"></span><br><span class="line">  1. brute-force:这个数不断mod2, floor(i/2); 直到最后为0: ``O(NlogN)```;</span><br><span class="line">  2. dp; 每个二进制数看最后一位是0/1, 再看去掉最后一位之后剩下的二进制有多少个1;</span><br><span class="line">  3. ```&gt;&gt;```:右移相当于除2往下找floor();</span><br><span class="line">  4. ```&lt;&lt;```:左移相当于乘2;</span><br><span class="line">  5. 另外, ```i%2```是很慢的, ```i &amp; 1```有相同的作用, 但是位操作比mod快很多;</span><br><span class="line">---</span><br><span class="line">### 坐标型&amp;&amp;序列型dp区别: </span><br><span class="line">1. 坐标型dp: ```f[i]```表示以ai为结尾的某种性质</span><br><span class="line">2. 序列型dp: ```f[i]```下标```i```表示**前**i个元素```a[0], ...a[i-1]```的某种性质</span><br><span class="line">3. 序列型dp这样，是因为初始化的时候```f[0]```表示前0个，所以就是**空序列**,这样的话初始化条件很简单</span><br><span class="line"></span><br><span class="line">**最长序列型dp**: 本质上是坐标型dp</span><br><span class="line"></span><br><span class="line">--- </span><br><span class="line">### 序列+状态型dp: </span><br><span class="line">1. when: 当思考dp到最后一步时，这一步依赖前一步的某种状态</span><br><span class="line">2. 初始化时，```f[0]```代表前0个元素/前0天的状态--与坐标型dp区别</span><br><span class="line">3. 计算时, ```f[i]```代表前```i``` 个元素, i.e. 元素```0- (i-1)```的某种性质 </span><br><span class="line"></span><br><span class="line">---</span><br><span class="line">### 划分型dp:</span><br><span class="line">1. subset;</span><br><span class="line">2. game theory;</span><br><span class="line">3. backpack: 背包问题;</span><br><span class="line"></span><br><span class="line">常见: 给定长度为K的序列或string，要求划分成若干段;</span><br><span class="line">- 段数不限，或者指定K段; 段数不限的时候就不用记录段数， 指定K段需要开一维记录段数;</span><br><span class="line">- 每一段满足一定的性质;</span><br><span class="line"></span><br><span class="line">approach:</span><br><span class="line">- 类似序列型dp, 但是通常要加上段数信息; e.g. best time to buy sell stocks;</span><br><span class="line">- 一般用```f[i][j]```记录前i个元素(元素```0 ~ i-1```分成j段的性质, e.g. minCost;</span><br><span class="line"></span><br><span class="line">只要是求min/max: ```int[] f = new int[n+1];</span><br></pre></td></tr></table></figure></p>
-<p>如果是划分成<figure class="highlight plain"><figcaption><span>etc. 需要记录```K```的状态的; 需要开一维记录; ```int[][] f```</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">#### 划分型dp一定是有group/partition, 并且有&quot;连续的&quot;这个意思</span><br><span class="line"></span><br><span class="line">#### 博弈:</span><br><span class="line">1. 只有博弈的dp是从第1步开始，其他的dp都是从最后一步开始分析; </span><br><span class="line">2. 这是因为dp的本质是找子问题，把问题的规模缩小，而博弈中最复杂的是第一步，每走一步问题规模都在缩小</span><br><span class="line">3. 状态一般都是用true/false表示“必胜／必败”</span><br><span class="line"></span><br><span class="line">e.g. Coins in a Line;</span><br><span class="line">```f[n]```--&gt; ```f[n-1], f[n-2]```状态的转移，都看先手的必胜/必败状态，由对方的必胜必败状态得到自己的必胜必败状态.</span><br><span class="line"></span><br><span class="line">### 背包问题 (也是划分型dp)</span><br><span class="line"></span><br><span class="line">1. 背包问题，一定有一维跟总承重M相关: i.e. 开一个数组大小是M+1, 这个增加的时候表示当前的重量是多少; 如果没有就错了;</span><br><span class="line">2. [lintcode: backpack](https://www.lintcode.com/problem/backpack/description)</span><br><span class="line">3. ```f[i][j]``` 表示前i个物品能不能拼出重量为j；</span><br><span class="line">##### 上面说了那么多，实际上背包问题几乎都是两维的，一维表示“到前i个物品”，另一维表示M那一维逐渐增加对应的值</span><br><span class="line"></span><br><span class="line">&gt;  一定有一维对应总承重M</span><br><span class="line"></span><br><span class="line">要求不超过target的时候能拼出的最大重量: f记录前i个物品能拼出哪些重量;</span><br><span class="line"></span><br><span class="line">前i个物品能拼出的重量: </span><br><span class="line">- 前i－1个物品能拼出的重量;</span><br><span class="line">- 前i－1个物品能拼出的重量 ＋ 第i个物品重量A[i-1]</span><br><span class="line"></span><br><span class="line">```f[i][j]```并不一定就是```true/false```, 有可能表达别的含义，e.g. 有多少种方式拼出当前w, etc.</span><br><span class="line"></span><br><span class="line">#### 背包总结: </span><br><span class="line"></span><br><span class="line">Backpack可行性背包(f: boolean):</span><br><span class="line">- 题目要求最多装多少重量 （能不能得到这个重量) </span><br><span class="line">- 记录前i个物品**能不能**拼出重量w (如果不能达到w只记录一维能得到的最大值, 答案会错)</span><br><span class="line"></span><br><span class="line">Backpack V, Backpack VI: 计数型背包(f: int):</span><br><span class="line">- 题目要求有多少种方式装出重量</span><br><span class="line">- Backpack V: 记录前i个物品有**多少种方式**拼出重量w</span><br><span class="line">- Backpack VI: 记录有**多少种方式**拼出重量w</span><br><span class="line"></span><br><span class="line">#### 关键点: 最后一步: </span><br><span class="line">- 没有顺序: 最后一步背包的物品是哪个</span><br><span class="line">- 有顺序: 最后一个物品有没有进背包(前i个物品...)</span><br><span class="line"></span><br><span class="line">附: 打印路径; </span><br><span class="line">1. 打出最优解的一种路径: dp用```pi```数组;</span><br><span class="line">2. 打出所有路径: dfs</span><br><span class="line"></span><br><span class="line">--- </span><br><span class="line">lintcode的背包的题目: 下面3种分别对应存在性，最值，可行性的种类;</span><br><span class="line"></span><br><span class="line">1. backpack 1: ```f[i][j]```表示前i个物品拼出重量为j是不是可能: ```or</span><br></pre></td></tr></table></figure></p>
-<ol start="2">
-<li><p>backpack 2: <figure class="highlight plain"><figcaption><span>-1就表示不能拼出重量为j: ```max```;  此时的状态转移方程不能用f[i][j], 因为这个-1不仅仅是值，还是表示这个并不能拼出来，所以不能用</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">3. backpack 5: ```f[i][j]```表示前i个物品拼出重量为j有多少种可能: ```add</span><br></pre></td></tr></table></figure></p>
-</li>
-<li><p>backpack 6: 每次物品可以用无穷多次: e.g. 可以用第1个，再第2个，再第1个… 所以不能考虑顺序了, i.e. <figure class="highlight plain"><figcaption><span>所以考虑最后一个物品是谁(参见上面的```关键点:最后一步```), 而不是(按顺序)看最后一个物品有没有进背包</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">5. backpack 3: 每个物品可以用无穷多次求最大价值; 无穷多次, 但是并不是求**有多少种, 所以物品的顺序还存在**, (注: “用无穷多次”和有无顺序并没有直接对应关系; 有无顺序/能不能用“前```i```个这种思路”是和“是不是求种类”有对应关系, 因为如果是求种类，可以前后来回取前后的物品，那么才没有顺序)</span><br></pre></td></tr></table></figure></p>
-</li>
-</ol>
-<p>顺序存在，就看最后一个物品进没进背包;<br>顺序不存在, 就看最后一个物品是谁<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">---</span><br><span class="line">1. backpack 2: ```f[i][w]```表示前i个物品拼出重量w时的最大总价值(-1表示不能拼出w); </span><br><span class="line">2. backpack 2: ```f[i][w] = max(f[i-1][w], f[i-1][w-A[i-1]] + V[i-1]);</span><br></pre></td></tr></table></figure></p>
-<ol start="3">
-<li>backpack 3: <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">4. backpack 3: ```f[i][w]=  max,k&gt;=0 &#123; f[i-1][w - k* A[i-1]] + k * V[i-1] &#125;;```; ```k```表示拿了k个第i种物品;</span><br><span class="line">5. 实际上3中的```k```如果限定```k = 0,1```, 那么就变成了2; </span><br><span class="line">6. backpack 3: 实际上可以优化成```f[i][w] = max(f[i-1][w], f[i][w - A[i-1]] + V[i-1]``` !!!!!!!</span><br><span class="line">解释:</span><br></pre></td></tr></table></figure></li>
-</ol>
-<p>e.g. Suppose w=5, A[i-1] = 2, V[i-1] = x</p>
-<p>f[i][5] = max(f[i-1][5], f[i-1][3]+x, f[i-1][1]+2x;<br>f[i][7] = max(f[i-1][7], f[i-1][5]+x, f[i-1][3]+2x, f[i-1][1]+3x)<br>        = max(f[i-1][7], f[i][5]+x);<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">这样就把```4```中的转移方程的```O(n*m^2)```降低时间复杂度为```O(n*m)```;</span><br><span class="line"></span><br><span class="line">实际上写起来很简单，跟backpack 2类似, 只有一个地方的```i-1```变成了```i```, 但是这个状态转移方程的推导有点吊</span><br><span class="line"></span><br><span class="line">我tmd能做到这么巧妙绝伦的题，真是非常荣幸</span><br><span class="line"></span><br><span class="line">&gt; 可是，实际上从一维的角度仔细想一下, 如果从backpack6的思路，因为是无序的，直接考虑最后一个物品是谁, 那么状态转移方程直接就是```f[j] = Math.max(f[j], f[j - A[i-1]] + V[i - 1])```, 根本就没有那个优化状态方程的过程了</span><br><span class="line"></span><br><span class="line">&gt; 所以, 只要是“可以用无穷多次”, 直接从**最后一个物品是谁**下手就好了</span><br><span class="line"></span><br><span class="line">---</span><br><span class="line">背包最后的小结: </span><br><span class="line">1. Backpack: 可行性背包</span><br><span class="line">- 题面: 要求不超过target时能拼出的最大重量</span><br><span class="line">- 记录```f[i][w]```=前i个物品能不能拼出重量w</span><br><span class="line">2. Backpack V, Backpack VI: 计数型背包</span><br><span class="line">- 题面: 要求有多少种方式拼出重量w</span><br><span class="line">- 记录```f[i][w]```=前i个物品有多少种方式拼出重量w</span><br><span class="line">3. Backpack II, Backpack III: 最值型背包</span><br><span class="line">- 题面: 要求能拼出的最大价值</span><br><span class="line">- 记录```f[i][w]```=前i个/种物品拼出重量w能得到的最大价值</span><br><span class="line"></span><br><span class="line">关键：</span><br><span class="line">1. 最后一步</span><br><span class="line">- **最后一个背包内的物品是哪个(没有顺序的情况下)**</span><br><span class="line">- **最后一个物品有没有放进背包(有顺序)**</span><br><span class="line">2. **数组大小和最大承重target相关 **</span><br><span class="line">3. 空间优化: 由(m * n)二维数组，优化为(m * 2)二维数组，再优化为长度为m的一维数组</span><br><span class="line"></span><br><span class="line">---</span><br><span class="line">### 区间型dp</span><br><span class="line">- 给定一个序列／字符串，进行一些操作</span><br><span class="line">- 最后一步是将序列/字符串去头/去尾</span><br><span class="line">- 剩下的是一个区间```[i,j]</span><br></pre></td></tr></table></figure></p>
-<ul>
-<li>状态自然定义为<figure class="highlight plain"><figcaption><span>表示面对自序列```[i, ...j]```时的最优性质</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">解法: 几乎都是定义```f[i][j]```为```[i,j]```区间对应的要求的东西, 然后分三种情况: </span><br><span class="line">1. 去头; </span><br><span class="line">2. 去尾;</span><br><span class="line">3. 去头去尾;</span><br><span class="line"></span><br><span class="line">#### e.g. Longest Palindrome Subsequence;</span><br><span class="line"></span><br><span class="line">注意: 这个题dp的顺序只能按照长度从小到大算, 并不能从```i```开始算; 因为转移方程是```f[i][j] = max&#123; f[i+1][j], f[i][j-1], f[i+1][j-1]+2|S[i]==S[j] &#125;```; 如果按照i从小到大的顺序，```f[i+1][j]```还没有算出来: 有问题; 而```f[i][j]```的长度比max里面的分别多1,1,2, 所以应该按照长度算;</span><br><span class="line"></span><br><span class="line">方法: </span><br><span class="line">1. dp: 递推; f[0], f[1], ... f[n]: 从下往上; </span><br><span class="line">2. memo + dfs: 递归; f(n), f(n-1), ... f(1): 从上往下;</span><br><span class="line">3. 区间型dp因为是按长度dp，所以比较适合memo+dfs: 这样memo中还是按照正常的```i,j```遍历,递归的计算都是在dfs中算的;</span><br><span class="line"></span><br><span class="line">e.g. </span><br><span class="line">- Longest Palindrome Subsequence: </span><br><span class="line">  1. dp; erode both ends: 3 scenarios;</span><br><span class="line">  2. memo + recursion;</span><br><span class="line">- Coins in a line III:</span><br><span class="line">  1. 区间型 + game theory;</span><br><span class="line">  2. payoff relation =&gt; ```f[i][j]```的状态转移方程</span><br><span class="line">- Scramble String:</span><br><span class="line">  1. 看最后一步: S1-T1, S2-T2 或者 S1-T2, S2-T1; 最后一步2个string的两段有没有交换;</span><br><span class="line">  2. 每一个对应的部分, enumerate所有的可能;</span><br><span class="line">  3. 4维dp降低为3维dp: 找隐含信息降维;</span><br><span class="line">- Burst Balloons:</span><br><span class="line">  1. 消去型: 一定不能顺着“消去”的思想做，因为每次消去之后左右两边的变为adjacent, 要手动变为adjacent,要记录消去的index...❌</span><br><span class="line">  2. 看最后一步: index ```k```对应的那个是最后消去的, 那么左右两边的从一开始到最后都是独立的;</span><br><span class="line">  3. 从2看出实际上是区间缩小的子问题: dp，想出对应的状态转移方程</span><br><span class="line"></span><br><span class="line">---</span><br><span class="line">#### 双序列型dp: </span><br><span class="line">```f[m][n]```二维对应两个string/array;</span><br><span class="line"></span><br><span class="line">1. Longest Common Subsequence (LCS);</span><br><span class="line">2. Interleaving String;</span><br><span class="line">3. Edit Distance: A和B同时变是没有区别的，等价于只变一个</span><br><span class="line">4. Distinct Subsequences: ```f[i][0]```初始化的时候小心: 用后面举例来看这个应该是多少</span><br></pre></td></tr></table></figure></li>
-</ul>
-<p>空间优化之滚动数组: </p>
+            <p>其实早就想总结一下看完讲解之后对dp的总结了。总体感受就是，dp的题做起来很神奇，比较有意思，而且经常让人感到惊奇“还可以这样看问题!”。不过看多了之后发现规律性也挺强的。即便如此，作为出来至少是medium经常是hard的类型，dp要完全掌握还是需要大量练习，并且经常想这个问题。</p>
+<p>虽然我看了不少，而且包括超级经典的题目, e.g. Edit Distance, Regular Expression Matching, 各种背包问题 etc. 经常出现: 这些题隔一天我就不会做了… 还是没有完全理解。不过还是要尽量可能去理解。</p>
+<p>正文部分: </p>
+<p>空间优化: </p>
+<p>对于网格的dp，如果<code>f[i][j]</code>只依赖本行的<code>f[i][x]</code>和上一行的<code>f[i-1][y]</code>,那么可以采用滚动数组压缩空间. 空间复杂度为<code>O(n)</code>而不是<code>O(m*n)</code></p>
 <ol>
-<li>f[m][n] –&gt; f[2][n];</li>
-<li>int old, now;</li>
-<li>两层循环i, j: 每次进外层循环的时候old, now互换;</li>
-<li>循环体中的f[i][j] -&gt; f[now][j], f[i-1][j] -&gt; f[old][j];<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">5. 上面: 存在型，计数型，最值型都出现了(其实dp就是解决这种问题的, 背包问题中也是这些问题); </span><br><span class="line">6. 从上面看出双序列的规律非常强，都是```f[m][n]```,最开始初始化, 初始化的时候难以判断的时候注意初始化为0/1; 都是```i,j```的常规循环.</span><br><span class="line">7. Regular Expression Matching</span><br><span class="line">8. Wildcard Matching: ```*```匹配0-多个，但是还有别的东西，所以并不一定regex一定能匹配</span><br></pre></td></tr></table></figure>
+<li>Minimum Path Sum: 如果要打印path, 关键: 记录每一次是从left还是up的方向来的; 最后的path是从<code>A[m-1][n-1]</code>倒着得到的; 然后再reverse打印出来;</li>
+<li>Longest Increasing Subsequence(经典中的经典, 需要闭着眼睛都能写出来); <code>dp[i][j]</code>记录到<code>grid[i][j]</code>的位置的LIS长度;</li>
+<li>Bomb Enemy: 四个方向; e.g. 从上面来的方向: <code>if(i&gt;0) up[i][j] = up[i-1][j]+1</code>;</li>
+<li><a href="https://leetcode.com/problems/longest-increasing-subsequence/discuss/74824/JavaPython-Binary-search-Onlogn-time-with-explanation" target="_blank" rel="noopener">Longest Increasing Subsequence奇淫技巧: O(NlogN)</a></li>
+</ol>
+<hr>
+<p>异或: 不进位的加法: 1^1 = 0;</p>
+<p>Counting Bits: </p>
+<ol>
+<li>brute-force:这个数不断mod2, floor(i/2); 直到最后为0: <code>O(NlogN)</code>;</li>
+<li>dp; 每个二进制数看最后一位是0/1, 再看去掉最后一位之后剩下的二进制有多少个1;</li>
+<li><code>&gt;&gt;</code>:右移相当于除2往下找floor();</li>
+<li><code>&lt;&lt;</code>:左移相当于乘2;</li>
+<li>另外, <code>i%2</code>是很慢的, <code>i &amp; 1</code>有相同的作用, 但是位操作比mod快很多;</li>
+</ol>
+<hr>
+<h3 id="坐标型-amp-amp-序列型dp区别"><a href="#坐标型-amp-amp-序列型dp区别" class="headerlink" title="坐标型&amp;&amp;序列型dp区别:"></a>坐标型&amp;&amp;序列型dp区别:</h3><ol>
+<li>坐标型dp: <code>f[i]</code>表示以ai为结尾的某种性质</li>
+<li>序列型dp: <code>f[i]</code>下标<code>i</code>表示<strong>前</strong>i个元素<code>a[0], ...a[i-1]</code>的某种性质</li>
+<li>序列型dp这样，是因为初始化的时候<code>f[0]</code>表示前0个，所以就是<strong>空序列</strong>,这样的话初始化条件很简单</li>
+</ol>
+<p><strong>最长序列型dp</strong>: 本质上是坐标型dp</p>
+<hr>
+<h3 id="序列-状态型dp"><a href="#序列-状态型dp" class="headerlink" title="序列+状态型dp:"></a>序列+状态型dp:</h3><ol>
+<li>when: 当思考dp到最后一步时，这一步依赖前一步的某种状态</li>
+<li>初始化时，<code>f[0]</code>代表前0个元素/前0天的状态–与坐标型dp区别</li>
+<li>计算时, <code>f[i]</code>代表前<code>i</code> 个元素, i.e. 元素<code>0- (i-1)</code>的某种性质 </li>
+</ol>
+<hr>
+<h3 id="划分型dp"><a href="#划分型dp" class="headerlink" title="划分型dp:"></a>划分型dp:</h3><ol>
+<li>subset;</li>
+<li>game theory;</li>
+<li>backpack: 背包问题;</li>
+</ol>
+<p>常见: 给定长度为K的序列或string，要求划分成若干段;</p>
+<ul>
+<li>段数不限，或者指定K段; 段数不限的时候就不用记录段数， 指定K段需要开一维记录段数;</li>
+<li>每一段满足一定的性质;</li>
+</ul>
+<p>approach:</p>
+<ul>
+<li>类似序列型dp, 但是通常要加上段数信息; e.g. best time to buy sell stocks;</li>
+<li>一般用<code>f[i][j]</code>记录前i个元素(元素<code>0 ~ i-1</code>分成j段的性质, e.g. minCost;</li>
+</ul>
+<p>只要是求min/max: <code>int[] f = new int[n+1];</code><br>如果是划分成<code>K</code>段, etc. 需要记录<code>K</code>的状态的; 需要开一维记录; <code>int[][] f</code></p>
+<h4 id="划分型dp一定是有group-partition-并且有”连续的”这个意思"><a href="#划分型dp一定是有group-partition-并且有”连续的”这个意思" class="headerlink" title="划分型dp一定是有group/partition, 并且有”连续的”这个意思"></a>划分型dp一定是有group/partition, 并且有”连续的”这个意思</h4><h4 id="博弈"><a href="#博弈" class="headerlink" title="博弈:"></a>博弈:</h4><ol>
+<li>只有博弈的dp是从第1步开始，其他的dp都是从最后一步开始分析; </li>
+<li>这是因为dp的本质是找子问题，把问题的规模缩小，而博弈中最复杂的是第一步，每走一步问题规模都在缩小</li>
+<li>状态一般都是用true/false表示“必胜／必败”</li>
+</ol>
+<p>e.g. Coins in a Line;<br><code>f[n]</code>–&gt; <code>f[n-1], f[n-2]</code>状态的转移，都看先手的必胜/必败状态，由对方的必胜必败状态得到自己的必胜必败状态.</p>
+<h3 id="背包问题-也是划分型dp"><a href="#背包问题-也是划分型dp" class="headerlink" title="背包问题 (也是划分型dp)"></a>背包问题 (也是划分型dp)</h3><ol>
+<li>背包问题，一定有一维跟总承重M相关: i.e. 开一个数组大小是M+1, 这个增加的时候表示当前的重量是多少; 如果没有就错了;</li>
+<li><a href="https://www.lintcode.com/problem/backpack/description" target="_blank" rel="noopener">lintcode: backpack</a></li>
+<li><code>f[i][j]</code> 表示前i个物品能不能拼出重量为j；<h5 id="上面说了那么多，实际上背包问题几乎都是两维的，一维表示“到前i个物品”，另一维表示M那一维逐渐增加对应的值"><a href="#上面说了那么多，实际上背包问题几乎都是两维的，一维表示“到前i个物品”，另一维表示M那一维逐渐增加对应的值" class="headerlink" title="上面说了那么多，实际上背包问题几乎都是两维的，一维表示“到前i个物品”，另一维表示M那一维逐渐增加对应的值"></a>上面说了那么多，实际上背包问题几乎都是两维的，一维表示“到前i个物品”，另一维表示M那一维逐渐增加对应的值</h5></li>
+</ol>
+<blockquote>
+<p> 一定有一维对应总承重M</p>
+</blockquote>
+<p>要求不超过target的时候能拼出的最大重量: f记录前i个物品能拼出哪些重量;</p>
+<p>前i个物品能拼出的重量: </p>
+<ul>
+<li>前i－1个物品能拼出的重量;</li>
+<li>前i－1个物品能拼出的重量 ＋ 第i个物品重量A[i-1]</li>
+</ul>
+<p><code>f[i][j]</code>并不一定就是<code>true/false</code>, 有可能表达别的含义，e.g. 有多少种方式拼出当前w, etc.</p>
+<h4 id="背包总结"><a href="#背包总结" class="headerlink" title="背包总结:"></a>背包总结:</h4><p>Backpack可行性背包(f: boolean):</p>
+<ul>
+<li>题目要求最多装多少重量 （能不能得到这个重量) </li>
+<li>记录前i个物品<strong>能不能</strong>拼出重量w (如果不能达到w只记录一维能得到的最大值, 答案会错)</li>
+</ul>
+<p>Backpack V, Backpack VI: 计数型背包(f: int):</p>
+<ul>
+<li>题目要求有多少种方式装出重量</li>
+<li>Backpack V: 记录前i个物品有<strong>多少种方式</strong>拼出重量w</li>
+<li>Backpack VI: 记录有<strong>多少种方式</strong>拼出重量w</li>
+</ul>
+<h4 id="关键点-最后一步"><a href="#关键点-最后一步" class="headerlink" title="关键点: 最后一步:"></a>关键点: 最后一步:</h4><ul>
+<li>没有顺序: 最后一步背包的物品是哪个</li>
+<li>有顺序: 最后一个物品有没有进背包(前i个物品…)</li>
+</ul>
+<p>附: 打印路径; </p>
+<ol>
+<li>打出最优解的一种路径: dp用<code>pi</code>数组;</li>
+<li>打出所有路径: dfs</li>
+</ol>
+<hr>
+<p>lintcode的背包的题目: 下面3种分别对应存在性，最值，可行性的种类;</p>
+<ol>
+<li>backpack 1: <code>f[i][j]</code>表示前i个物品拼出重量为j是不是可能: <code>or</code></li>
+<li>backpack 2: <code>f[i][j]</code>表示前i个物品拼出重量为j时能获得的max价值, -1就表示不能拼出重量为j: <code>max</code>;  此时的状态转移方程不能用f[i][j], 因为这个-1不仅仅是值，还是表示这个并不能拼出来，所以不能用</li>
+<li>backpack 5: <code>f[i][j]</code>表示前i个物品拼出重量为j有多少种可能: <code>add</code></li>
+<li>backpack 6: 每次物品可以用无穷多次: e.g. 可以用第1个，再第2个，再第1个… 所以不能考虑顺序了, i.e. <code>前i个...</code>不能用了, 所以考虑最后一个物品是谁(参见上面的<code>关键点:最后一步</code>), 而不是(按顺序)看最后一个物品有没有进背包</li>
+<li>backpack 3: 每个物品可以用无穷多次求最大价值; 无穷多次, 但是并不是求<strong>有多少种, 所以物品的顺序还存在</strong>, (注: “用无穷多次”和有无顺序并没有直接对应关系; 有无顺序/能不能用“前<code>i</code>个这种思路”是和“是不是求种类”有对应关系, 因为如果是求种类，可以前后来回取前后的物品，那么才没有顺序)</li>
+</ol>
+<h4 id="顺序存在，就看最后一个物品进没进背包"><a href="#顺序存在，就看最后一个物品进没进背包" class="headerlink" title="顺序存在，就看最后一个物品进没进背包;"></a>顺序存在，就看最后一个物品进没进背包;</h4><h4 id="顺序不存在-就看最后一个物品是谁"><a href="#顺序不存在-就看最后一个物品是谁" class="headerlink" title="顺序不存在, 就看最后一个物品是谁"></a>顺序不存在, 就看最后一个物品是谁</h4><hr>
+<ol>
+<li>backpack 2: <code>f[i][w]</code>表示前i个物品拼出重量w时的最大总价值(-1表示不能拼出w); </li>
+<li>backpack 2: <code>f[i][w] = max(f[i-1][w], f[i-1][w-A[i-1]] + V[i-1]);</code></li>
+<li>backpack 3: <code>f[i][w]</code>表示前i<strong>种</strong>物品拼出重量w时的最大总价值(-1表示不能拼出w);</li>
+<li>backpack 3: <code>f[i][w]=  max,k&gt;=0 { f[i-1][w - k* A[i-1]] + k * V[i-1] };</code>; <code>k</code>表示拿了k个第i种物品;</li>
+<li>实际上3中的<code>k</code>如果限定<code>k = 0,1</code>, 那么就变成了2; </li>
+<li>backpack 3: 实际上可以优化成<code>f[i][w] = max(f[i-1][w], f[i][w - A[i-1]] + V[i-1]</code>!!!!!!!<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">解释: </span><br><span class="line">e.g. Suppose w=5, A[i-1] = 2, V[i-1] = x</span><br><span class="line"></span><br><span class="line">f[i][5] = max(f[i-1][5], f[i-1][3]+x, f[i-1][1]+2x;</span><br><span class="line">f[i][7] = max(f[i-1][7], f[i-1][5]+x, f[i-1][3]+2x, f[i-1][1]+3x)</span><br><span class="line">        = max(f[i-1][7], f[i][5]+x);</span><br></pre></td></tr></table></figure>
 </li>
 </ol>
-<p>这道题最后打印int[] res, res是长度为m的数组, 表明每个A中的字符匹配B中的哪个字符: A[i]匹配B[res[i]]<br><code>`</code></p>
-
+<p>这样就把<code>4</code>中的转移方程的<code>O(n*m^2)</code>降低时间复杂度为<code>O(n*m)</code>;</p>
+<p>实际上写起来很简单，跟backpack 2类似, 只有一个地方的<code>i-1</code>变成了<code>i</code>, 但是这个状态转移方程的推导有点吊</p>
+<p>我tmd能做到这么巧妙绝伦的题，真是非常荣幸</p>
+<blockquote>
+<p>可是，实际上从一维的角度仔细想一下, 如果从backpack6的思路，因为是无序的，直接考虑最后一个物品是谁, 那么状态转移方程直接就是<code>f[j] = Math.max(f[j], f[j - A[i-1]] + V[i - 1])</code>, 根本就没有那个优化状态方程的过程了</p>
+</blockquote>
+<blockquote>
+<p>所以, 只要是“可以用无穷多次”, 直接从<strong>最后一个物品是谁</strong>下手就好了</p>
+</blockquote>
+<hr>
+<h3 id="背包最后的小结"><a href="#背包最后的小结" class="headerlink" title="背包最后的小结:"></a>背包最后的小结:</h3><ol>
+<li>Backpack: 可行性背包</li>
+</ol>
+<ul>
+<li>题面: 要求不超过target时能拼出的最大重量</li>
+<li>记录<code>f[i][w]</code>=前i个物品能不能拼出重量w</li>
+</ul>
+<ol start="2">
+<li>Backpack V, Backpack VI: 计数型背包</li>
+</ol>
+<ul>
+<li>题面: 要求有多少种方式拼出重量w</li>
+<li>记录<code>f[i][w]</code>=前i个物品有多少种方式拼出重量w</li>
+</ul>
+<ol start="3">
+<li>Backpack II, Backpack III: 最值型背包</li>
+</ol>
+<ul>
+<li>题面: 要求能拼出的最大价值</li>
+<li>记录<code>f[i][w]</code>=前i个/种物品拼出重量w能得到的最大价值</li>
+</ul>
+<p>关键：</p>
+<ol>
+<li>最后一步</li>
+</ol>
+<ul>
+<li><strong>最后一个背包内的物品是哪个(没有顺序的情况下)</strong></li>
+<li><strong>最后一个物品有没有放进背包(有顺序)</strong></li>
+</ul>
+<ol start="2">
+<li><strong>数组大小和最大承重target相关 </strong></li>
+<li>空间优化: 由(m <em> n)二维数组，优化为(m </em> 2)二维数组，再优化为长度为m的一维数组</li>
+</ol>
+<hr>
+<h3 id="区间型dp"><a href="#区间型dp" class="headerlink" title="区间型dp"></a>区间型dp</h3><ul>
+<li>给定一个序列／字符串，进行一些操作</li>
+<li>最后一步是将序列/字符串去头/去尾</li>
+<li>剩下的是一个区间<code>[i,j]</code></li>
+<li>状态自然定义为<code>f[i][j]</code>, 表示面对自序列<code>[i, ...j]</code>时的最优性质</li>
+</ul>
+<p>解法: 几乎都是定义<code>f[i][j]</code>为<code>[i,j]</code>区间对应的要求的东西, 然后分三种情况: </p>
+<ol>
+<li>去头; </li>
+<li>去尾;</li>
+<li>去头去尾;</li>
+</ol>
+<h4 id="e-g-Longest-Palindrome-Subsequence"><a href="#e-g-Longest-Palindrome-Subsequence" class="headerlink" title="e.g. Longest Palindrome Subsequence;"></a>e.g. Longest Palindrome Subsequence;</h4><p>注意: 这个题dp的顺序只能按照长度从小到大算, 并不能从<code>i</code>开始算; 因为转移方程是<code>f[i][j] = max{ f[i+1][j], f[i][j-1], f[i+1][j-1]+2|S[i]==S[j] }</code>; 如果按照i从小到大的顺序，<code>f[i+1][j]</code>还没有算出来: 有问题; 而<code>f[i][j]</code>的长度比max里面的分别多1,1,2, 所以应该按照长度算;</p>
+<p>方法: </p>
+<ol>
+<li>dp: 递推; f[0], f[1], … f[n]: 从下往上; </li>
+<li>memo + dfs: 递归; f(n), f(n-1), … f(1): 从上往下;</li>
+<li>区间型dp因为是按长度dp，所以比较适合memo+dfs: 这样memo中还是按照正常的<code>i,j</code>遍历,递归的计算都是在dfs中算的;</li>
+</ol>
+<hr>
+<p>e.g. </p>
+<ul>
+<li>Longest Palindrome Subsequence: <ol>
+<li>dp; erode both ends: 3 scenarios;</li>
+<li>memo + recursion;</li>
+</ol>
+</li>
+<li>Coins in a line III:<ol>
+<li>区间型 + game theory;</li>
+<li>payoff relation =&gt; <code>f[i][j]</code>的状态转移方程</li>
+</ol>
+</li>
+<li>Scramble String:<ol>
+<li>看最后一步: S1-T1, S2-T2 或者 S1-T2, S2-T1; 最后一步2个string的两段有没有交换;</li>
+<li>每一个对应的部分, enumerate所有的可能;</li>
+<li>4维dp降低为3维dp: 找隐含信息降维;</li>
+</ol>
+</li>
+<li>Burst Balloons:<ol>
+<li>消去型: 一定不能顺着“消去”的思想做，因为每次消去之后左右两边的变为adjacent, 要手动变为adjacent,要记录消去的index…❌</li>
+<li>看最后一步: index <code>k</code>对应的那个是最后消去的, 那么左右两边的从一开始到最后都是独立的;</li>
+<li>从2看出实际上是区间缩小的子问题: dp，想出对应的状态转移方程</li>
+</ol>
+</li>
+</ul>
+<hr>
+<h4 id="双序列型dp"><a href="#双序列型dp" class="headerlink" title="双序列型dp:"></a>双序列型dp:</h4><p><code>f[m][n]</code>二维对应两个string/array;</p>
+<ol>
+<li>Longest Common Subsequence (LCS);</li>
+<li>Interleaving String;</li>
+<li>Edit Distance: A和B同时变是没有区别的，等价于只变一个</li>
+<li>Distinct Subsequences: <code>f[i][0]</code>初始化的时候小心: 用后面举例来看这个应该是多少</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">空间优化之滚动数组: </span><br><span class="line">1. f[m][n] --&gt; f[2][n];</span><br><span class="line">2. int old, now;</span><br><span class="line">3. 两层循环i, j: 每次进外层循环的时候old, now互换;</span><br><span class="line">4. 循环体中的f[i][j] -&gt; f[now][j], f[i-1][j] -&gt; f[old][j];</span><br><span class="line">5. 上面: 存在型，计数型，最值型都出现了(其实dp就是解决这种问题的, 背包问题中也是这些问题); </span><br><span class="line">6. 从上面看出双序列的规律非常强，都是`f[m][n]`,最开始初始化, 初始化的时候难以判断的时候注意初始化为0/1; 都是`i,j`的常规循环.</span><br><span class="line">7. Regular Expression Matching</span><br><span class="line">8. Wildcard Matching: `*`匹配0-多个，但是还有别的东西，所以并不一定regex一定能匹配</span><br><span class="line">这道题最后打印int[] res, res是长度为m的数组, 表明每个A中的字符匹配B中的哪个字符: A[i]匹配B[res[i]]</span><br></pre></td></tr></table></figure>
         </div>
 
         
