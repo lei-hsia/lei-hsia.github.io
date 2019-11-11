@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="LEI XIA">
+
+
+    <meta name="subtitle" content="夏雷的博客~">
+
+
+
+
+<title>JS ES6 neophyte | Blogs ©️ Lei Xia</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">LEI&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">LEI&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">JS ES6 neophyte</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">LEI XIA</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">十一月 10, 2019&nbsp;&nbsp;16:42:08</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p><code>var</code> and <code>let</code>: global vs block;</p>
+<h5 id="Prevent-Object-mutation"><a href="#Prevent-Object-mutation" class="headerlink" title="Prevent Object mutation"></a>Prevent Object mutation</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">function freezeObj() &#123;</span><br><span class="line">  &quot;use strict&quot;;</span><br><span class="line">  const MATH_CONSTANTS = &#123;</span><br><span class="line">    PI: 3.14</span><br><span class="line">  &#125;;</span><br><span class="line">  </span><br><span class="line">  Object.freeze(MATH_CONSTANTS);  // this prevent const object mutation</span><br><span class="line"></span><br><span class="line">  try &#123;</span><br><span class="line">    MATH_CONSTANTS.PI = 99;</span><br><span class="line">  &#125; catch( ex ) &#123;</span><br><span class="line">    console.log(ex);</span><br><span class="line">  &#125;</span><br><span class="line">  return MATH_CONSTANTS.PI;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">const PI = freezeObj();</span><br><span class="line"></span><br><span class="line">console.log(PI);</span><br></pre></td></tr></table></figure>
+<h4 id="Arrow-functions"><a href="#Arrow-functions" class="headerlink" title="Arrow functions"></a>Arrow functions</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">var magic = function() &#123;</span><br><span class="line">  return new Date();</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>is equivalent to:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">var magic = () =&gt; &#123;</span><br><span class="line">  return new Date();</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<p>When only a single <code>return</code> in func body:<br><code>var magic = () =&gt; new Date();</code></p>
+<p>With Params:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">var myConcat = function(arr1, arr2) &#123;</span><br><span class="line">  return arr1.concat(arr2);</span><br><span class="line">&#125;;</span><br><span class="line">console.log(myConcat([1, 2], [3, 4, 5]));</span><br></pre></td></tr></table></figure></p>
+<p>same:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">var myConcat = (arr1, arr2) =&gt; arr1.concat(arr2);</span><br><span class="line">console.log(myConcat([1, 2], [3, 4, 5]));</span><br></pre></td></tr></table></figure></p>
+<p>Higher order (using <code>map</code>, <code>filter</code> &amp;&amp; <code>reduce</code>):<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">const realNumberArray = [4, 5.6, -9.8, 3.14, 42, 6, 8.34, -2];</span><br><span class="line"></span><br><span class="line">const squareList = (arr) =&gt; &#123;</span><br><span class="line">  const squaredIntegers = arr.filter(num =&gt; Number.isInteger(num) &amp;&amp; num &gt; 0).map(x =&gt; x * x);</span><br><span class="line">  return squaredIntegers;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">const squaredIntegers = squareList(realNumberArray);</span><br><span class="line">console.log(squaredIntegers);</span><br></pre></td></tr></table></figure></p>
+<p><code>map, filter, reduce</code> functions are mostly used w. anonymous function definitions in the form of<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">arrayName.map/filter/reduce(e/(p1, p2) =&gt; blabla);</span><br></pre></td></tr></table></figure></p>
+<ol>
+<li><code>args.map()</code>: call func on each element in <code>args</code>, return <code>mapped</code> res;</li>
+<li><code>args.reduce()</code>: call func on all elements, return <strong>accumulated</strong> res;</li>
+<li><code>args.filter()</code>: call func on all eles, return filtered res.</li>
+</ol>
+<h4 id="Set-Default-params"><a href="#Set-Default-params" class="headerlink" title="Set Default params"></a>Set Default params</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">const increment = (function() &#123;</span><br><span class="line">	return function increment(number, value = 1) &#123;</span><br><span class="line">		return number + value;</span><br><span class="line">	&#125;;</span><br><span class="line">&#125;)();</span><br><span class="line">console.log(increment(5, 2));</span><br><span class="line">console.log(increment(5));</span><br></pre></td></tr></table></figure>
+<h4 id="Rest-operator-args-args-in-python"><a href="#Rest-operator-args-args-in-python" class="headerlink" title="Rest operator (...args); ~ *args in python"></a>Rest operator <code>(...args)</code>; ~ <code>*args</code> in python</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">const sum = (function() &#123;</span><br><span class="line">	return function sum(x, y, z) &#123;</span><br><span class="line">		const args = [x, y, z];</span><br><span class="line">		return args.reduce((a, b) =&gt; a + b, 0);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;)();</span><br><span class="line">console.log(sum(1,2,3));</span><br></pre></td></tr></table></figure>
+<p>is equivalent to:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">const sum = (function() &#123;</span><br><span class="line">	return function sum(...args) &#123;</span><br><span class="line">		return args.reduce((a, b) =&gt; a + b, 0);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;)();</span><br><span class="line">console.log(sum(1,2,3,4));</span><br></pre></td></tr></table></figure></p>
+<h4 id="Spread-operator-args-copy✅-reference❌-make-copy"><a href="#Spread-operator-args-copy✅-reference❌-make-copy" class="headerlink" title="Spread operator [...args]: copy✅, reference❌; (make copy)"></a>Spread operator <code>[...args]</code>: copy✅, reference❌; (make copy)</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">const arr1 = [&apos;JAN&apos;, &apos;FEB&apos;, &apos;MAR&apos;, &apos;APR&apos;, &apos;MAY&apos;];</span><br><span class="line">let arr2;</span><br><span class="line">(function() &#123;</span><br><span class="line">	arr2 = arr1; // reference; change arr2 would change arr1</span><br><span class="line">	arr1[0] = &apos;potato&apos;</span><br><span class="line">&#125;)();</span><br><span class="line">console.log(arr2);</span><br></pre></td></tr></table></figure>
+<p>spread operator:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">const arr1 = [&apos;JAN&apos;, &apos;FEB&apos;, &apos;MAR&apos;, &apos;APR&apos;, &apos;MAY&apos;];</span><br><span class="line">let arr2;</span><br><span class="line">(function() &#123;</span><br><span class="line">	arr2 = [...arr1]; // spread operator; make a copy</span><br><span class="line">	arr1[0] = &apos;potato&apos;</span><br><span class="line">&#125;)();</span><br><span class="line">console.log(arr2);</span><br></pre></td></tr></table></figure></p>
+<h4 id="Destructing-assignment-a-b-obj-assign-object-values-to-variables-“unbox”-in-py-java"><a href="#Destructing-assignment-a-b-obj-assign-object-values-to-variables-“unbox”-in-py-java" class="headerlink" title="Destructing assignment {a:b} = obj: assign object values to variables; ~ “unbox” in py/java"></a>Destructing assignment <code>{a:b} = obj</code>: assign object values to variables; ~ “unbox” in py/java</h4><p>template:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">var voxel = &#123;x: 3.6, y: 7.4, z: 6.54 &#125;;</span><br><span class="line"></span><br><span class="line">// old way</span><br><span class="line">var x = voxel.x; // x = 3.6</span><br><span class="line">var y = voxel.y; // y = 7.4</span><br><span class="line">var z = voxel.z; // z = 6.54</span><br><span class="line"></span><br><span class="line">// &#123; field: newVariable &#125; = oldVar;</span><br><span class="line">const &#123; x : a, y : b, z : c &#125; = voxel;  </span><br><span class="line"></span><br><span class="line">const AVG_TEMP = &#123;</span><br><span class="line">	today: 77.5;</span><br><span class="line">	tomorrow: 79</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">function getTempOfTomorrow(avgTemp) &#123;</span><br><span class="line">	&quot;use strict&quot;;</span><br><span class="line"></span><br><span class="line">	// destructing </span><br><span class="line">	const &#123; tomorrow: temp &#125; = avgTemp;</span><br><span class="line"></span><br><span class="line">	return temp;</span><br><span class="line">&#125;</span><br><span class="line">console.log(getTempOfTomorrow(AVG_TEMP));</span><br></pre></td></tr></table></figure></p>
+<p>nested:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">const LOCAL_FORECAST = &#123;</span><br><span class="line">	today: &#123; min: 72, max: 83 &#125;,</span><br><span class="line">	tomorrow: &#123; min: 73.3, max: 84.6 &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">function getMaxOfTmoorrow(forecast) &#123;</span><br><span class="line">	&quot;use strict&quot;;</span><br><span class="line"></span><br><span class="line">	const &#123;tomorrow : &#123; max : max_tomorrow &#125;&#125; = forecast;</span><br><span class="line"></span><br><span class="line">	return max_tomorrow;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">console.log(getMaxOfTmoorrow(LOCAL_FORECAST));</span><br></pre></td></tr></table></figure></p>
+<h4 id="Destructing-assign-arr-assign-vars-from-arrays"><a href="#Destructing-assign-arr-assign-vars-from-arrays" class="headerlink" title="Destructing assign [] = arr: assign vars from arrays;"></a>Destructing assign <code>[] = arr</code>: assign vars from arrays;</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">const [z, x] = [1,2,3,4,5,6];</span><br><span class="line">console.log(z, x); // 1 2</span><br><span class="line"></span><br><span class="line">const [z, x, , y] = [1, 2, 3, 4, 5, 6];</span><br><span class="line">console.log(z, x, y); // 1 2 4</span><br><span class="line"></span><br><span class="line">let a = 8, b = 6;</span><br><span class="line">(() =&gt; &#123;</span><br><span class="line">  &quot;use strict&quot;;</span><br><span class="line">  [a, b] = [b, a]  </span><br><span class="line">&#125;)();</span><br><span class="line">console.log(a); // 6</span><br><span class="line">console.log(b); // 8</span><br></pre></td></tr></table></figure>
+<h4 id="Destructing-assign-with-Rest-operator"><a href="#Destructing-assign-with-Rest-operator" class="headerlink" title="Destructing assign with Rest operator"></a>Destructing assign with Rest operator</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">const source = [1,2,3,4,5,6,7,8,9,10];</span><br><span class="line">function removeFirstTwo(list) &#123;</span><br><span class="line"></span><br><span class="line">  const [ , , ...arr] = list; </span><br><span class="line"></span><br><span class="line">  return arr;</span><br><span class="line">&#125;</span><br><span class="line">const arr = removeFirstTwo(source);</span><br><span class="line">console.log(arr); </span><br><span class="line">console.log(source);</span><br></pre></td></tr></table></figure>
+<h4 id="Destructing-assign-pass-an-Object-as-param-or-fields-of-Objects"><a href="#Destructing-assign-pass-an-Object-as-param-or-fields-of-Objects" class="headerlink" title="Destructing assign: pass an Object as param; or fields of Objects"></a>Destructing assign: pass an Object as param; or fields of Objects</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">// create an object with &#123;&#125;;</span><br><span class="line">const stats = &#123;</span><br><span class="line">	max: 56.78,</span><br><span class="line">	standard_deviation: 4.34,</span><br><span class="line">	median: 34.54,</span><br><span class="line">	mode: 23.87,</span><br><span class="line">	min: -0.75,</span><br><span class="line">	average: 35.85</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">// create an object in format: func();</span><br><span class="line">const half = (function() &#123;</span><br><span class="line">	return function half(&#123; max, min &#125;) &#123; // pass only desired fields </span><br><span class="line">		return (max + min) / 2;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;)();</span><br><span class="line">console.log(stats);</span><br><span class="line">console.log(half(stats));</span><br></pre></td></tr></table></figure>
+<hr>
+<h4 id="from-above-ways-to-create-objects-in-js"><a href="#from-above-ways-to-create-objects-in-js" class="headerlink" title="from above: ways to create objects in js:"></a>from above: ways to create objects in js:</h4><ol>
+<li><p>create several similar objects: <code>new</code></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">function person(fname, lname, age, eyecolor)&#123;</span><br><span class="line">  this.firstname = fname;</span><br><span class="line">  this.lastname = lname;</span><br><span class="line">  this.age = age;</span><br><span class="line">  this.eyecolor = eyecolor;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">myFather = new person(&quot;John&quot;, &quot;Doe&quot;, 50, &quot;blue&quot;);</span><br><span class="line">document.write(myFather.firstname + &quot; is &quot; + myFather.age + &quot; years old.&quot;);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>create <strong>one</strong> object of a kind, like a singleton;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">var Robot = &#123;</span><br><span class="line">  metal: &quot;Titanium&quot;,</span><br><span class="line">  killAllHumans: function()&#123;</span><br><span class="line">    alert(&quot;Exterminate!&quot;);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">Robot.killAllHumans();</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>initialize propertieis of the objects depending on other properties;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">var NewObject = &#123;&#125;;</span><br><span class="line"></span><br><span class="line">NewObject[&apos;property1&apos;] = value;</span><br><span class="line">NewObject[&apos;property2&apos;] = value;</span><br><span class="line">NewObject[&apos;method&apos;] = function()&#123; /* function code here */ &#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>Anyway, <code>{}</code> is used a lot; JS objects are represented in <code>{}</code>.</p>
+<hr>
+<h4 id="Create-Strings-w-Template-Literals-Template-in-Django-MVT"><a href="#Create-Strings-w-Template-Literals-Template-in-Django-MVT" class="headerlink" title="Create Strings w. Template Literals ~ Template in Django MVT"></a>Create Strings w. Template Literals ~ Template in Django MVT</h4><ol>
+<li><code>xxxx</code> as code block in markdown;</li>
+<li><code>${object fields}</code>;</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">const person = &#123;</span><br><span class="line">	name: &quot;Lei&quot;,</span><br><span class="line">	age: 999</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">const greeting = `Hello, my name is $&#123;person.name&#125;!</span><br><span class="line">I am $&#123;person.age&#125; years old.`;</span><br><span class="line"></span><br><span class="line">console.log(greeting);</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">const result = &#123;</span><br><span class="line">	success: [&quot;max-length&quot;, &quot;no-amd&quot;, &quot;prefer-arrow-functions&quot;],</span><br><span class="line">	failure: [&quot;no-var&quot;, &quot;var-on-top&quot;, &quot;linebreak&quot;],</span><br><span class="line">  	skipped: [&quot;id-blacklist&quot;, &quot;no-dup-keys&quot;]</span><br><span class="line">&#125;;</span><br><span class="line">function makeList(arr) &#123;</span><br><span class="line">	const resDisplayArray = [];</span><br><span class="line">	for (let i = 0; i &lt; arr.length; ++i) &#123;</span><br><span class="line">		resDisplayArray.push(`&lt;li class=&quot;text-warning&quot;&gt;$&#123;arr[i]&#125;&lt;/li&gt;`)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	return resDisplayArray;</span><br><span class="line">&#125;</span><br><span class="line">const resDisplayArray = makeList(result.failure);</span><br></pre></td></tr></table></figure>
+<h4 id="Concise-Object-literals-declarations-via-Simple-fields"><a href="#Concise-Object-literals-declarations-via-Simple-fields" class="headerlink" title="Concise Object literals declarations via Simple fields"></a>Concise Object literals declarations via Simple fields</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">const createPerson = (name, age, gender) =&gt; &#123;</span><br><span class="line"></span><br><span class="line">	return &#123;</span><br><span class="line">		name: name,</span><br><span class="line">		age: age,</span><br><span class="line">		gender: gender</span><br><span class="line">	&#125;;</span><br><span class="line">&#125;;</span><br><span class="line">console.log(createPerson(&quot;Lei&quot;, 999, &quot;male&quot;));</span><br></pre></td></tr></table></figure>
+<h4 id="Create-objects-via-Class"><a href="#Create-objects-via-Class" class="headerlink" title="Create objects via Class"></a>Create objects via <code>Class</code></h4><p>Old way: constructor function, <code>new</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">var SpaceShuttle = function(targetPlanet)&#123;</span><br><span class="line">  this.targetPlanet = targetPlanet;</span><br><span class="line">&#125;</span><br><span class="line">var zeus = new SpaceShuttle(&apos;Jupiter&apos;);</span><br><span class="line"></span><br><span class="line">console.log(zeus.targetPlanet)</span><br></pre></td></tr></table></figure></p>
+<p>New way:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">class SpaceShuttle &#123;</span><br><span class="line">	constructor(targetPlanet) &#123;</span><br><span class="line">		this.targetPlanet = targetPlanet;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line">var zeus = new SpaceShuttle(&apos;Jupiter&apos;);</span><br><span class="line">console.log(zeus.targetPlanet);</span><br></pre></td></tr></table></figure></p>
+<p>another example:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">function makeClass() &#123;</span><br><span class="line">	class Vegetable &#123;</span><br><span class="line">		constructor(name) &#123;</span><br><span class="line">			this.name = name;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	return Vegetable; // return a class </span><br><span class="line">&#125;</span><br><span class="line">const Vegetable = makeClass(); // create a class</span><br><span class="line">const carrot = new Vegetable(&apos;carrot&apos;); // create an object</span><br><span class="line">console.log(carrot.name);</span><br></pre></td></tr></table></figure></p>
+<h4 id="Getter-setter"><a href="#Getter-setter" class="headerlink" title="Getter, setter"></a>Getter, setter</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">class Book &#123;</span><br><span class="line">	constructor(author) &#123;</span><br><span class="line">		this._author = author;</span><br><span class="line">	&#125;</span><br><span class="line">	// getter</span><br><span class="line">	get writer() &#123;</span><br><span class="line">		return this._writer;</span><br><span class="line">	&#125;</span><br><span class="line">	// setter</span><br><span class="line">	set writer(updatedAuthor) &#123;</span><br><span class="line">		this._author = updatedAuthor;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>another example:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">function makeClass() &#123;</span><br><span class="line">	class Thermostat &#123;</span><br><span class="line">		constructor(temp) &#123;</span><br><span class="line">			this._temp = 5/9 * (temp - 32);</span><br><span class="line">		&#125;</span><br><span class="line">		get temp() &#123;</span><br><span class="line">			return this._temp;</span><br><span class="line">		&#125;</span><br><span class="line">		set temp(updatedTemp) &#123;</span><br><span class="line">			this._temp = updatedTemp;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	return Thermostat; // return a class</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">const Thermostat = makeClass(); // create a class</span><br><span class="line">const thermos = new Thermostat(76); // create an object</span><br><span class="line">let temp = thermos.temp; // object.fieldName</span><br><span class="line">console.log(temp); // 24.4444</span><br><span class="line">thermos.temp = 26;</span><br><span class="line">temperature = thermos.temp; </span><br><span class="line">console.log(temperature); // 26</span><br><span class="line">`</span><br></pre></td></tr></table></figure></p>
+<h4 id="import"><a href="#import" class="headerlink" title="import"></a>import</h4><p>Files can be imported from files that export.</p>
+<ol>
+<li>In one file <code>string_function.js</code>:<br><code>export const capitalizeString = str =&gt; str.toUpperCase()</code></li>
+<li>In another file <code>index.js</code> under same path:<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">import &#123; capitalizeString &#125; from &quot;./string_function&quot;</span><br><span class="line">const cap = capitalizeString(&quot;hello&quot;);</span><br><span class="line"></span><br><span class="line">console.log(cap);</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h4 id="Use-export-to-reuse-a-Code-block"><a href="#Use-export-to-reuse-a-Code-block" class="headerlink" title="Use export to reuse a Code block"></a>Use <code>export</code> to reuse a Code block</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">const capitalizeString = (string) =&gt; &#123;</span><br><span class="line">	return string.charAt(0).toUpperCase() + string.slice(1);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">export &#123; capitalizeString &#125;;</span><br><span class="line"></span><br><span class="line">export const foo = &quot;bar&quot;;</span><br><span class="line">export const bar = &quot;foo&quot;;</span><br><span class="line"></span><br><span class="line">// now function capitalizeString, const foo, bar can be imported</span><br></pre></td></tr></table></figure>
+<h5 id="create-an-export-fallback-w-export-default"><a href="#create-an-export-fallback-w-export-default" class="headerlink" title="create an export fallback w. export default"></a>create an export fallback w. <code>export default</code></h5><p><code>export default function subtract(x, y) {return x - y;}</code></p>
+<h5 id="import-a-default-export"><a href="#import-a-default-export" class="headerlink" title="import a default export"></a>import a default export</h5><p>Suppose there is a file <code>math_functions</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">import subtract from &quot;math_functions&quot;;</span><br><span class="line">subtract(7, 4);</span><br></pre></td></tr></table></figure></p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+            
+            <a class="next" rel="next" href="/2019/11/08/dp总结/">dp总结</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© LEI XIA | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>
