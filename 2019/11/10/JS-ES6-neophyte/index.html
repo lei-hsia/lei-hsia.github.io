@@ -186,7 +186,7 @@
 
                     
                         <span class="post-time">
-                        Date: <a href="#">十一月 10, 2019&nbsp;&nbsp;16:42:08</a>
+                        Date: <a href="#">十一月 10, 2019&nbsp;&nbsp;0:00:00</a>
                         </span>
                     
                     
@@ -254,6 +254,14 @@
 <h4 id="Use-export-to-reuse-a-Code-block"><a href="#Use-export-to-reuse-a-Code-block" class="headerlink" title="Use export to reuse a Code block"></a>Use <code>export</code> to reuse a Code block</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">const capitalizeString = (string) =&gt; &#123;</span><br><span class="line">	return string.charAt(0).toUpperCase() + string.slice(1);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">export &#123; capitalizeString &#125;;</span><br><span class="line"></span><br><span class="line">export const foo = &quot;bar&quot;;</span><br><span class="line">export const bar = &quot;foo&quot;;</span><br><span class="line"></span><br><span class="line">// now function capitalizeString, const foo, bar can be imported</span><br></pre></td></tr></table></figure>
 <h5 id="create-an-export-fallback-w-export-default"><a href="#create-an-export-fallback-w-export-default" class="headerlink" title="create an export fallback w. export default"></a>create an export fallback w. <code>export default</code></h5><p><code>export default function subtract(x, y) {return x - y;}</code></p>
 <h5 id="import-a-default-export"><a href="#import-a-default-export" class="headerlink" title="import a default export"></a>import a default export</h5><p>Suppose there is a file <code>math_functions</code><br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">import subtract from &quot;math_functions&quot;;</span><br><span class="line">subtract(7, 4);</span><br></pre></td></tr></table></figure></p>
+<h5 id="React-inline-styling"><a href="#React-inline-styling" class="headerlink" title="React inline styling"></a>React inline styling</h5><ol>
+<li>styles should be wrapped up with in <code>{}</code>.</li>
+<li>inside the <code>{}</code> is a JS object.</li>
+<li>JS object also included in <code>{}</code>.</li>
+<li>This will make the inline styling two <code>{}</code>.</li>
+<li>usually JS object is written in the previous places.</li>
+<li>so two <code>{}</code> are not shown in the same line</li>
+</ol>
 
         </div>
 
