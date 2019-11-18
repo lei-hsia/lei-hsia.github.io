@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="LEI XIA">
+
+
+    <meta name="subtitle" content="夏雷的博客~">
+
+
+
+
+<title>932.Beautiful Array | Blogs ©️ Lei Xia</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">LEI&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">LEI&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+
+
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">932.Beautiful Array</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">LEI XIA</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">十一月 18, 2019&nbsp;&nbsp;16:01:52</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>For some fixed <code>N</code>, an array <code>A</code> is beautiful if it is a permutation of the integers <code>1, 2, ..., N</code>, such that:</p>
+<p>For every <code>i &lt; j</code>, there is no <code>k</code> with <code>i &lt; k &lt; j</code> such that <code>A[k] * 2 = A[i] + A[j]</code>.</p>
+<p>Given <code>N</code>, return any beautiful array <code>A</code>.  (It is guaranteed that one exists.)</p>
+<p>Input: <code>4</code><br>Output: <code>[2,1,4,3]</code></p>
+<p>Input: <code>5</code><br>Output: <code>[3,1,2,5,4]</code></p>
+<hr>
+<p>Key: Suppose an array is already a beautiful array, e.g. <code>[1,3,2]</code>, then linear transformation of it, e.g. <code>+</code>, or <code>*</code> on each element would not kill <code>beautiful</code> property;</p>
+<ol>
+<li><code>[1,3,2] + 1 = [2,4,3]</code>, still beautiful;</li>
+<li><code>[1,3,2] * 2 = [2,6,4]</code>, still beautiful.</li>
+</ol>
+<p>As a result, if an array <code>A</code> satisfies beautiful property, <code>i*2-1</code> would create all-odd element beautiful array based on <code>A</code>, <code>i*2</code> would create an all-even element beautiful array. Merge them, and result array is still beautiful, because left &amp; right part is beautiful and two numbers from each part would generate a odd sum whose half is <code>x.5</code>—definitely not an element in array.</p>
+<h4 id="iteration"><a href="#iteration" class="headerlink" title="iteration:"></a>iteration:</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">class Solution(object):</span><br><span class="line">    def beautifulArray(self, N):</span><br><span class="line">        res = [1]</span><br><span class="line">        while len(res) &lt; N:</span><br><span class="line">            res = [i * 2 - 1 for i in res] + [i * 2 for i in res]</span><br><span class="line">        return [i for i in res if i &lt;= N]</span><br></pre></td></tr></table></figure>
+<h4 id="recursion"><a href="#recursion" class="headerlink" title="recursion:"></a>recursion:</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">class Solution(object):</span><br><span class="line">    def beautifulArray(self, N):</span><br><span class="line">        if N == 1 : return [1] # terminal condition </span><br><span class="line">        odd = [i * 2 - 1 for i in self.beautifulArray(N/2 + N%2)]</span><br><span class="line">        even = [i * 2 for i in self.beautifulArray(N/2)]</span><br><span class="line">        return odd + even</span><br></pre></td></tr></table></figure>
+<p>In recursion, if:<code>RuntimeError: maximum recursion depth exceeded</code>, usually it’s because <code>terminal condition</code> was left unattended.</p>
+<p>In recursion, always 2 <code>return</code>:</p>
+<ol>
+<li>terminal condition</li>
+<li>divide and conquer going down call stack, <code>return</code> going up</li>
+</ol>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/python-iteration-recursion/"># python, iteration, recursion</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+            
+            <a class="next" rel="next" href="/2019/11/18/Java-generic-type-Object-no-primitive-types/">Java generic type: Object, no primitive types</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© LEI XIA </span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>
