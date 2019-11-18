@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="LEI XIA">
+
+
+    <meta name="subtitle" content="夏雷的博客~">
+
+
+
+
+<title>Shift 2D Grid | Blogs ©️ Lei Xia</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">LEI&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">LEI&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+
+
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Shift 2D Grid</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">LEI XIA</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">十一月 18, 2019&nbsp;&nbsp;10:33:10</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <ol start="1260">
+<li>Shift 2D Grid</li>
+</ol>
+<p>Although it’s tagged easy, it’s a very good question, to me.</p>
+<h4 id="Question"><a href="#Question" class="headerlink" title="Question:"></a>Question:</h4><p>Given a 2D grid of size n * m and an integer k. You need to shift the grid k times.</p>
+<p>In one shift operation:</p>
+<ul>
+<li>Element at grid[i][j] becomes at grid[i][j + 1].</li>
+<li>Element at grid[i][m - 1] becomes at grid[i + 1][0].</li>
+<li>Element at grid[n - 1][m - 1] becomes at grid[0][0].</li>
+</ul>
+<p>Return the 2D grid after applying shift operation k times.</p>
+<p>Input: <code>grid = [[1,2,3],[4,5,6],[7,8,9]], k = 1</code><br>Output: <code>[[9,1,2],[3,4,5],[6,7,8]]</code></p>
+<p>Input: <code>grid = [[3,8,1,9],[19,7,2,5],[4,6,11,10],[12,0,21,13]], k = 4</code><br>Output: <code>[[12,0,21,13],[3,8,1,9],[19,7,2,5],[4,6,11,10]]</code></p>
+<p>Constraint: </p>
+<ol>
+<li><code>1 &lt;= grid.length &lt;= 50</code></li>
+<li><code>1 &lt;= grid[i].length &lt;= 50</code></li>
+<li><code>-1000 &lt;= grid[i][j] &lt;= 1000</code></li>
+<li><code>0 &lt;= k &lt;= 100</code></li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">class Solution &#123;</span><br><span class="line">        public List&lt;List&lt;Integer&gt;&gt; shiftGrid(int[][] grid, int k) &#123;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Essence: starting from index <code>start = (m * n - k) % (m * n)</code> to <code>m*n + start</code>, create a new list and add to list starting from index 0. Essentially shifting.</p>
+<h4 id="Solution"><a href="#Solution" class="headerlink" title="Solution:"></a>Solution:</h4><p>Java, ArrayList<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">class Solution &#123;</span><br><span class="line">        public List&lt;List&lt;Integer&gt;&gt; shiftGrid(int[][] grid, int k) &#123;</span><br><span class="line">        int m = grid.length, n = grid[0].length; </span><br><span class="line">        int start = m * n - k % (m * n);</span><br><span class="line">        List&lt;List&lt;Integer&gt;&gt; ans = new ArrayList&lt;&gt;();</span><br><span class="line">        for (int i = start; i &lt; m * n + start; ++i) &#123;</span><br><span class="line">            int j = i % (m * n), r = j / n, c = j % n;</span><br><span class="line">            if ((i - start) % n == 0)</span><br><span class="line">                ans.add(new ArrayList&lt;&gt;());</span><br><span class="line">            ans.get(ans.size()-1).add(grid[r][c]);</span><br><span class="line">        &#125;</span><br><span class="line">        return ans;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>Java, LinkedList<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">class Solution &#123;</span><br><span class="line">        public List&lt;List&lt;Integer&gt;&gt; shiftGrid(int[][] grid, int k) &#123;</span><br><span class="line">        int m = grid.length, n = grid[0].length; </span><br><span class="line">        int start = m * n - k % (m * n);</span><br><span class="line">        LinkedList&lt;List&lt;Integer&gt;&gt; ans = new LinkedList&lt;&gt;();</span><br><span class="line">        for (int i = start; i &lt; m * n + start; ++i) &#123;</span><br><span class="line">            int j = i % (m * n), r = j / n, c = j % n;</span><br><span class="line">            if ((i - start) % n == 0)</span><br><span class="line">                ans.add(new ArrayList&lt;&gt;());</span><br><span class="line">            ans.peekLast().add(grid[r][c]);</span><br><span class="line">        &#125;</span><br><span class="line">        return ans;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<hr>
+<p><strong>Additional</strong>: </p>
+<h5 id="ArrayList"><a href="#ArrayList" class="headerlink" title="ArrayList:"></a>ArrayList:</h5><p><code>add</code>, <code>get</code>, <code>indexOf</code>, <code>remove</code>, <code>set</code>, <strong><code>toArray</code></strong></p>
+<h5 id="LinkedList"><a href="#LinkedList" class="headerlink" title="LinkedList:"></a>LinkedList:</h5><p><code>add</code>, <code>addFirst</code>, <code>addLast</code>, <code>get</code>, <code>indexOf</code>, <code>offer</code>, <code>peek</code>(retrieve, not remove), <code>peekFirst</code>, <code>peekLast</code>, <code>poll</code>(retrieve, remove), <code>pollFirst</code>, <code>pollLast</code>, <code>remove</code>.</p>
+<p><code>offer</code>, <code>peek</code>, <code>poll</code>: return <code>null</code> if empty; safer than <code>add</code>, <code>get</code>, <code>remove</code>.</p>
+<h5 id="Queue"><a href="#Queue" class="headerlink" title="Queue"></a>Queue</h5><ol>
+<li><code>add</code> -&gt; <code>offer</code>, </li>
+<li><code>element</code> -&gt; <code>peek</code>,</li>
+<li><code>remove</code> -&gt; <code>poll</code>  </li>
+</ol>
+<p>right hand side methods: return <code>null</code> if empty</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/java-List/"># java, List</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+            
+            <a class="next" rel="next" href="/2019/11/15/reactJS-setState/">reactJS setState</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© LEI XIA </span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>
