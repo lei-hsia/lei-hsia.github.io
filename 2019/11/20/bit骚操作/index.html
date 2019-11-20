@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="LEI XIA">
+
+
+    <meta name="subtitle" content="夏雷的博客~">
+
+
+
+
+<title>bit骚操作 | Blogs ©️ Lei Xia</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">LEI&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">LEI&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+
+
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">bit骚操作</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">LEI XIA</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">十一月 20, 2019&nbsp;&nbsp;15:07:10</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h3 id="89-Gray-Code"><a href="#89-Gray-Code" class="headerlink" title="89. Gray Code"></a>89. Gray Code</h3><p>The gray code is a binary numeral system where two successive values differ in only one bit.</p>
+<p>Given a non-negative integer n representing the total number of bits in the code, print the sequence of gray code. A gray code sequence must begin with 0.</p>
+<p>Example 1:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">Input: 2</span><br><span class="line">Output: [0,1,3,2]</span><br><span class="line">Explanation:</span><br><span class="line">00 - 0</span><br><span class="line">01 - 1</span><br><span class="line">11 - 3</span><br><span class="line">10 - 2</span><br><span class="line"></span><br><span class="line">For a given n, a gray code sequence may not be uniquely defined.</span><br><span class="line">For example, [0,2,3,1] is also a valid gray code sequence.</span><br><span class="line"></span><br><span class="line">00 - 0</span><br><span class="line">10 - 2</span><br><span class="line">11 - 3</span><br><span class="line">01 - 1</span><br></pre></td></tr></table></figure></p>
+<p>Example 2:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Input: 0</span><br><span class="line">Output: [0]</span><br><span class="line">Explanation: We define the gray code sequence to begin with 0.</span><br><span class="line">             A gray code sequence of n has size = 2n, which for n = 0 the size is 20 = 1.</span><br><span class="line">             Therefore, for n = 0 the gray code sequence is [0].</span><br></pre></td></tr></table></figure></p>
+<p><strong>Explanation</strong>:</p>
+<ol start="2">
+<li>由已经有的生成还没有的: <code>xx | 1 &lt;&lt; i</code>. <code>|</code> is OR.</li>
+<li>为什么内部的for循环需要倒过来?  因为这样保证chunk之间衔接的两个边界元素也是differ by one</li>
+<li>然后右移一位<code>1&lt;&lt;i</code>得到下一部分.</li>
+</ol>
+<h5 id="Solution1"><a href="#Solution1" class="headerlink" title="Solution1"></a>Solution1</h5><p>由已有的sequence生成后续的sequence;<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">class Solution &#123;</span><br><span class="line">    public List&lt;Integer&gt; grayCode(int n) &#123;</span><br><span class="line">        List&lt;Integer&gt; res = new LinkedList&lt;&gt;();</span><br><span class="line">        res.add(0);</span><br><span class="line">        for (int i = 0; i &lt; n; ++i) &#123;</span><br><span class="line">            int size = res.size();</span><br><span class="line">            for (int j = size -1; j &gt;= 0; --j) &#123;</span><br><span class="line">                res.add(res.get(j) | 1&lt;&lt;i );</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        return res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h5 id="Solution2"><a href="#Solution2" class="headerlink" title="Solution2"></a>Solution2</h5><p>Or: <code>i ^ i/2</code>, or <code>i ^ i &gt;&gt; 1</code>; <code>^</code> is XOR.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">class Solution &#123;</span><br><span class="line">    public List&lt;Integer&gt; grayCode(int n) &#123;</span><br><span class="line">        List&lt;Integer&gt; res = new LinkedList&lt;&gt;();</span><br><span class="line">        for (int i = 0; i &lt; 1 &lt;&lt; n; ++i) &#123;</span><br><span class="line">            res.add(i ^ i &gt;&gt; 1);</span><br><span class="line">        &#125;</span><br><span class="line">        return res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>…<br>(此处应有👏)</p>
+<p>骚不骚? <code>G(i) = i ^ (i &gt;&gt; 1)</code>.</p>
+<hr>
+<h3 id="717-1-bit-and-2-bit-Characters"><a href="#717-1-bit-and-2-bit-Characters" class="headerlink" title="717. 1-bit and 2-bit Characters"></a>717. 1-bit and 2-bit Characters</h3><p>We have two special characters. The first character can be represented by one bit 0. The second character can be represented by two bits (10 or 11).</p>
+<p>Now given a string represented by several bits. Return whether the last character must be a one-bit character or not. The given string will always end with a zero.</p>
+<p>Example 1:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Input: </span><br><span class="line">bits = [1, 0, 0]</span><br><span class="line">Output: True</span><br><span class="line">Explanation: </span><br><span class="line">The only way to decode it is two-bit character and one-bit character. So the last character is one-bit character.</span><br></pre></td></tr></table></figure></p>
+<p>Example 2:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Input: </span><br><span class="line">bits = [1, 1, 1, 0]</span><br><span class="line">Output: False</span><br><span class="line">Explanation: </span><br><span class="line">The only way to decode it is two-bit character and two-bit character. So the last character is NOT one-bit character.</span><br></pre></td></tr></table></figure></p>
+<p>Note:</p>
+<ol>
+<li><code>1 &lt;= len(bits) &lt;= 1000.</code></li>
+<li><code>bits[i]</code> is always <code>0</code> or <code>1</code>.</li>
+</ol>
+<p><strong>Explanation</strong></p>
+<p>可以从前往后遍历, 如果是1那么这个part对应的肯定是2-bit, i+=2; 经过前面这样如果还能碰到0那么这个part肯定是1-bit, 那么++i; 遍历终止条件是到倒数第二位，那么如果是满足的那么跳出来是刚好在最后一位,否则不满足;</p>
+<h5 id="Solution-1"><a href="#Solution-1" class="headerlink" title="Solution 1"></a>Solution 1</h5><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">class Solution &#123;</span><br><span class="line">    public boolean isOneBitCharacter(int[] bits) &#123;</span><br><span class="line">        int n = bits.length;</span><br><span class="line">        int i = 0;</span><br><span class="line">        while (i &lt; n - 1) &#123;</span><br><span class="line">            if (bits[i] == 1) i += 2;</span><br><span class="line">            else i += 1;</span><br><span class="line">        &#125;</span><br><span class="line">        return i == n-1;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="Solution-2"><a href="#Solution-2" class="headerlink" title="Solution 2"></a>Solution 2</h5><p>而实际上可以优化: 并不需要遍历整个数组；可以只遍历最后面需要了解的地方 </p>
+<p>从倒数第二位开始后往前遍历看连续的1的数量; 如果是偶数个1那么所有的1都有配对，那么最后一个0就是单着的，可以；如果是奇数个连续的1那么最后一个0就跟前面一个1配对，就不行;</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">class Solution &#123;</span><br><span class="line">    public boolean isOneBitCharacter(int[] bits) &#123;</span><br><span class="line">        int ones = 0;</span><br><span class="line">        for (int i = bits.length - 2; i &gt;= 0 &amp;&amp; bits[i] == 1; --i) &#123;</span><br><span class="line">            ones++;</span><br><span class="line">        &#125;</span><br><span class="line">        if (ones % 2 == 0) return true;</span><br><span class="line">        return false;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/bit-manipulation/"># bit manipulation</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+            
+            <a class="next" rel="next" href="/2019/11/19/LC1261-selfの使い方/">LC1261-selfの使い方</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© LEI XIA </span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>
