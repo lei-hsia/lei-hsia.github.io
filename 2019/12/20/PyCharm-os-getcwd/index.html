@@ -13,7 +13,7 @@
 
 
 
-<title>JDK JRE JVM | Blogs ©️ Lei Xia</title>
+<title>PyCharm os.getcwd() | Blogs ©️ Lei Xia</title>
 
 
 
@@ -99,11 +99,73 @@
             <div class="container">
     
     
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
 
     
     <article class="post-wrap">
         <header class="post-header">
-            <h1 class="post-title">JDK JRE JVM</h1>
+            <h1 class="post-title">PyCharm os.getcwd()</h1>
             
                 <div class="post-meta">
                     
@@ -112,7 +174,7 @@
 
                     
                         <span class="post-time">
-                        Date: <a href="#">十二月 17, 2019&nbsp;&nbsp;22:08</a>
+                        Date: <a href="#">十二月 20, 2019&nbsp;&nbsp;16:48</a>
                         </span>
                     
                     
@@ -121,11 +183,13 @@
         </header>
 
         <div class="post-content">
-            <p>What is the relationship amon JDK, JRE, JVM?</p>
-<ol>
-<li>JDK = JRE + dev tools;</li>
-<li>JRE = JVM + libs.</li>
-</ol>
+            <h2 id="Achtung"><a href="#Achtung" class="headerlink" title="Achtung:"></a>Achtung:</h2><p><strong>Problem</strong>: In PyCharm, when deciding a path in a py file, use <code>os.getcwd()</code> to get current working directory, it’s highly likely that cwd is not the directory where current file is in. </p>
+<p>Why ?</p>
+<p>Because “working directory” would be set inside <code>Edit Configurations</code> which would be shown if <code>Run</code> was executed, on the top. </p>
+<p>A small issue can cost an hour. </p>
+<p>Also, for a repo to function normally, the most important two things would be in <code>File&gt;Settings&gt;Project&gt;Project Intepreter</code> and <code>File&gt;Settings&gt;Tools&gt;Python Integrated Tools</code> for testing purpose. </p>
+<p>pytest nowadays usually outperform unit test, like <code>with</code> usually beats classic <code>open</code> files.</p>
+<p>Machine: Ubuntu 16.04; CentOS 7</p>
 
         </div>
 
@@ -144,7 +208,7 @@
                 <span class="tag">
                     
                     
-                        <a href="/tags/java/"># java</a>
+                        <a href="/tags/pycharm/"># pycharm</a>
                     
                         
                 </span>
@@ -157,10 +221,8 @@
         </section>
         <section class="post-nav">
             
-                <a class="prev" rel="prev" href="/2019/12/20/PyCharm-os-getcwd/">PyCharm os.getcwd()</a>
             
-            
-            <a class="next" rel="next" href="/2019/12/16/Greatest-10-Algorithms-in-20th-Century/">Greatest 10 Algorithms in 20th Century</a>
+            <a class="next" rel="next" href="/2019/12/17/JDK-JRE-JVM/">JDK JRE JVM</a>
             
         </section>
 
