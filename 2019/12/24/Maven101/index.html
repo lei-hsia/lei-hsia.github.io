@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="LEI XIA">
+
+
+    <meta name="subtitle" content="夏雷的博客~">
+
+
+
+
+<title>Maven101 | Blogs ©️ Lei Xia</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">LEI&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">LEI&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+
+
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Maven101</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">LEI XIA</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">十二月 24, 2019&nbsp;&nbsp;4:55</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p><strong>Task</strong>: </p>
+<p>After installing Maven, create the Maven version <code>HelloWorld</code>.</p>
+<p>(Install maven Mac: <code>$ brew install maven</code>)</p>
+<p>Maven project directory would be like:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">src</span><br><span class="line">  -main</span><br><span class="line">    -java</span><br><span class="line">      -package</span><br><span class="line">  -test</span><br><span class="line">    -java</span><br><span class="line">      -package</span><br><span class="line">  resources</span><br></pre></td></tr></table></figure></p>
+<ol>
+<li>Create an empty folder <code>codeMaven</code> to store all maven projects.</li>
+<li>Under <code>codeMaven</code>, create folder <code>maven01</code>.</li>
+<li>under <code>maven01</code>, create <code>src</code>.</li>
+</ol>
+<p><code>src</code> would be where source code would be created.</p>
+<p>Under <code>src</code>, create 2 folders, <code>main</code>, <code>test</code>.</p>
+<h4 id="main"><a href="#main" class="headerlink" title="main"></a><code>main</code></h4><p>In <code>main</code>, create <code>java</code>. </p>
+<p><code>java</code> would be where java file would be stored. </p>
+<ol>
+<li>In <code>java</code>, create <code>com</code>.</li>
+<li>create <code>imooc</code> under <code>com</code></li>
+<li>create <code>maven01</code> under <code>imooc</code>.</li>
+<li>create <code>model</code> under <code>maven01</code>.</li>
+</ol>
+<p><code>package name</code> is <code>com.imooc.maven01</code>, <code>module name</code> is <code>model</code>.</p>
+<p>Create java file <code>HelloWorld.java</code> in module <code>model</code>:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">package com.imooc.maven01.model;</span><br><span class="line"></span><br><span class="line">public class HelloWorld &#123;</span><br><span class="line">	public String sayHello() &#123;</span><br><span class="line">		return &quot;Hello World Maven!&quot;;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="test"><a href="#test" class="headerlink" title="test"></a><code>test</code></h4><p>In <code>test</code>, create exactly the same folder structure. Create a java file <code>HelloWorldTest.java</code> under module <code>model</code>: </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">package com.imooc.maven01.model;</span><br><span class="line"></span><br><span class="line">import org.junit.*;</span><br><span class="line">import org.junit.Assert.*;</span><br><span class="line"></span><br><span class="line">public class HelloWorldTest &#123;</span><br><span class="line">	@Test </span><br><span class="line">	public void testHello() &#123;</span><br><span class="line">		Assert.assertEquals(&quot;Hello World Maven!&quot;, new HelloWorld().sayHello());</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="pom-xml"><a href="#pom-xml" class="headerlink" title="pom.xml"></a><code>pom.xml</code></h4><p>Now the <code>src</code> folder is completed. A <code>pom.xml</code> is needed to manage this source folder. Get the structure of <code>pom.xml</code> from <code>struts2 core ... pom.xml</code> at <a href="https://github.com/apache/struts-examples/blob/master/pom.xml" target="_blank" rel="noopener">this link</a>, delete all dependencies and just keep <code>&lt;?xml&gt;</code>, <code>&lt;project&gt;</code> and <code>&lt;modelVersion&gt;</code>:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span><br><span class="line">&lt;project xmlns=&quot;http://maven.apache.org/POM/4.0.0&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span><br><span class="line">         xsi:schemaLocation=&quot;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd&quot;&gt;</span><br><span class="line">    &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&lt;/project&gt;</span><br></pre></td></tr></table></figure></p>
+<p>Add <code>maven coordinates</code> and <code>junit dependency</code>(used in test):<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span><br><span class="line">&lt;project xmlns=&quot;http://maven.apache.org/POM/4.0.0&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span><br><span class="line">         xsi:schemaLocation=&quot;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd&quot;&gt;</span><br><span class="line">    &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;</span><br><span class="line"></span><br><span class="line">    &lt;!-- groupId: project package name --&gt;</span><br><span class="line">    &lt;!-- artifactId: module name --&gt;</span><br><span class="line">    &lt;groupId&gt;com.imooc.maven01&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;maven01-model&lt;/artifactId&gt;</span><br><span class="line">    &lt;version&gt;0.0.1SNAPSHOT&lt;/version&gt;</span><br><span class="line"></span><br><span class="line">    &lt;dependencies&gt;</span><br><span class="line">        &lt;dependency&gt;</span><br><span class="line">            &lt;groupId&gt;junit&lt;/groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;junit&lt;/artifactId&gt;</span><br><span class="line">            &lt;version&gt;4.10&lt;/version&gt;</span><br><span class="line">        &lt;/dependency&gt;</span><br><span class="line">    &lt;/dependencies&gt;</span><br><span class="line">&lt;/project&gt;</span><br></pre></td></tr></table></figure></p>
+<p>The structure under <code>maven01</code> is now like this:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">pom.xml</span><br><span class="line">src</span><br><span class="line"> -main</span><br><span class="line">   -java</span><br><span class="line">    -com</span><br><span class="line">      -imooc</span><br><span class="line">        -maven01</span><br><span class="line">          -model</span><br><span class="line">            HelloWorld.java</span><br><span class="line"> -test</span><br><span class="line">   -java</span><br><span class="line">     -com</span><br><span class="line">       -imooc</span><br><span class="line">         -maven01</span><br><span class="line">           -model</span><br><span class="line">             HelloWorldTest.java</span><br></pre></td></tr></table></figure></p>
+<h4 id="run"><a href="#run" class="headerlink" title="run"></a>run</h4><p>Now, under top directory <code>maven01</code>, run <code>mvn compile</code>. This compile the whole maven project. Should be something similar to this:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[INFO] --- maven-resources-plugin:2.6:resources (default-resources) @ maven01-model ---</span><br><span class="line">[INFO] </span><br><span class="line">[INFO] --- maven-compiler-plugin:3.1:compile (default-compile) @ maven01-model ---</span><br><span class="line"></span><br><span class="line">... </span><br><span class="line"></span><br><span class="line">[INFO] Compiling 1 source file to /Users/xialei/Desktop/codeMaven/maven01/target/classes</span><br><span class="line">[INFO] ------------------------------------------------------------------------</span><br><span class="line">[INFO] BUILD SUCCESS</span><br><span class="line">[INFO] ------------------------------------------------------------------------</span><br><span class="line">[INFO] Total time:  2.819 s</span><br></pre></td></tr></table></figure></p>
+<p><code>BUILD SUCCESS</code>.</p>
+<p>Run test: <code>mvn test</code>:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">[INFO] </span><br><span class="line">[INFO] --- maven-compiler-plugin:3.1:compile (default-compile) </span><br><span class="line">[INFO] --- maven-resources-plugin:2.6:testResources (default-testResources) @ maven01-model ---</span><br><span class="line">...</span><br><span class="line">ownloaded from central: https://repo.maven.apache.org/maven2/org/apache/maven/surefire/surefire-junit4/2.12.4/surefire-junit4-2.12.4.jar (37 kB at 2.1 MB/s)</span><br><span class="line"></span><br><span class="line">-------------------------------------------------------</span><br><span class="line"> T E S T S</span><br><span class="line">-------------------------------------------------------</span><br><span class="line">Running com.imooc.maven01.model.HelloWorldTest</span><br><span class="line">Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.022 sec</span><br><span class="line"></span><br><span class="line">Results :</span><br><span class="line"></span><br><span class="line">Tests run: 1, Failures: 0, Errors: 0, Skipped: 0</span><br></pre></td></tr></table></figure></p>
+<p>This shows tests passed.</p>
+<h4 id="root-directory-change"><a href="#root-directory-change" class="headerlink" title="root directory change"></a>root directory change</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">pom.xml</span><br><span class="line">src</span><br><span class="line">target</span><br></pre></td></tr></table></figure>
+<p>A new directory <code>target</code> is generated. Under this folder are </p>
+<ol>
+<li><code>classes</code> folder where compiled class files stored, </li>
+<li><code>surefire-reports</code>;</li>
+<li><code>test-classes</code>,</li>
+<li>etc.</li>
+</ol>
+<h4 id="extra"><a href="#extra" class="headerlink" title="extra"></a>extra</h4><p><code>mvn package</code>: generate <code>maven01-model-0.0.1SNAPSHOT.jar</code> under <code>target</code>. Generate a SNAPSHOT.</p>
+<p>I’ve put this <code>maven01</code> in my <a href="https://github.com/lei-hsia/java/tree/master/maven01" target="_blank" rel="noopener">Github</a>. Take a look at it should any problem arise. </p>
+<p>Extra question: how I push this petite project to github?</p>
+<p>Take a look at this <a href="https://help.github.com/en/github/importing-your-projects-to-github/adding-an-existing-project-to-github-using-the-command-line" target="_blank" rel="noopener">link</a></p>
+<p>If an error of <code>! [rejected] master -&gt; master (fetch first)</code> shows up, go to this <a href="https://stackoverflow.com/questions/28429819/rejected-master-master-fetch-first" target="_blank" rel="noopener">StackOverFlow</a></p>
+<p>本来想写个”以上”的，跟”钦此”类似，现在不流行了。</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2020/01/01/maven-package-xxx-doesn-t-exist/">maven: package xxx doesn't exist</a>
+            
+            
+            <a class="next" rel="next" href="/2019/12/21/with-open-csv-no-String-needed/">with open csv: no String needed</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© LEI XIA </span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>

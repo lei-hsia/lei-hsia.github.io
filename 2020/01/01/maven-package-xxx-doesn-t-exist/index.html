@@ -13,7 +13,7 @@
 
 
 
-<title>Hello World | Blogs ©️ Lei Xia</title>
+<title>maven: package xxx doesn&#39;t exist | Blogs ©️ Lei Xia</title>
 
 
 
@@ -165,7 +165,7 @@
     
     <article class="post-wrap">
         <header class="post-header">
-            <h1 class="post-title">Hello World</h1>
+            <h1 class="post-title">maven: package xxx doesn&#39;t exist</h1>
             
                 <div class="post-meta">
                     
@@ -174,7 +174,7 @@
 
                     
                         <span class="post-time">
-                        Date: <a href="#">五月 16, 2019&nbsp;&nbsp;5:50</a>
+                        Date: <a href="#">一月 1, 2020&nbsp;&nbsp;16:30</a>
                         </span>
                     
                     
@@ -183,15 +183,15 @@
         </header>
 
         <div class="post-content">
-            <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="https://hexo.io/docs/deployment.html" target="_blank" rel="noopener">Deployment</a></p>
+            <p>In <code>src &gt; main &gt; java &gt; ... &gt; XXX.java</code>, if <code>import package.module.YYY</code>, <code>mvn compile</code>, then an error of <code>package package.module.YYY doesn&#39;t exist</code>:</p>
+<p>this is because though <code>import package.module.YYY</code>, the jar that contains <code>class YYY</code> is not added in ClassPath. In maven, an easier solving approach is possible:</p>
+<ol>
+<li>In src directory of <code>YYY</code>, <code>mvn install</code> to publish jar containing <code>YYY</code> in local repository.</li>
+<li>In <code>pom.xml</code> of <code>XXX</code>, add <code>YYY</code> as a new dependency:<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">  &lt;groupId&gt;package&lt;/groupId&gt;</span><br><span class="line">  &lt;artifactId&gt;module&lt;/artifactId&gt;</span><br><span class="line">  &lt;version&gt;0.0.1SNAPSHOT&lt;/version&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>In this way, <code>import ...YYY</code> is possible.</p>
+<h4 id="maven-install"><a href="#maven-install" class="headerlink" title="maven install"></a>maven install</h4><p>When <code>import xxx</code> in java source file, maven would go to <code>pom.xml</code> to find if this package dependency is in local repository. If so, add it into classPath; if not, go to maven central repo to download jar for use. If nothing is found, ERROR.</p>
 
         </div>
 
@@ -209,6 +209,10 @@
                 <span>Tag(s):</span>
                 <span class="tag">
                     
+                    
+                        <a href="/tags/maven-install/"># maven install</a>
+                    
+                        
                 </span>
             </div>
             <div>
@@ -219,8 +223,8 @@
         </section>
         <section class="post-nav">
             
-                <a class="prev" rel="prev" href="/2019/11/08/dp总结/">dp总结</a>
             
+            <a class="next" rel="next" href="/2019/12/24/Maven101/">Maven101</a>
             
         </section>
 
