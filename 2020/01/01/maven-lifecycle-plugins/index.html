@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="LEI XIA">
+
+
+    <meta name="subtitle" content="夏雷的博客~">
+
+
+
+
+<title>maven: lifecycle, plugins | Blogs ©️ Lei Xia</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">LEI&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">LEI&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+
+
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">maven: lifecycle, plugins</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">LEI XIA</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">一月 1, 2020&nbsp;&nbsp;17:44</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>Maven has a set of abstract lifecycle; plugins are implementations of these lifecycle phases.</p>
+<p>Complete project build process usually includes: clean, compile, test, package, integrated testing, validation, deployment. </p>
+<p>Maven lifecycle includes: <code>clean</code>, <code>default</code>(build project), <code>site</code>(generate project site). By lifecycle, I mean if lifecycle is in the sequence of <code>A,B,C</code>, then to execute <code>C</code> would force <code>A</code> and <code>B</code> to be executed beforehand. In maven, lifecycle is <code>clean, compile, test, package, install</code>. Running <code>package</code> would force <code>compile</code> and <code>test</code> to run before <code>package</code>.</p>
+<ol>
+<li>clean: <code>pre-clean</code>, <code>clean</code>(clean all files built last time), <code>post-clean</code>;</li>
+<li>default: <code>compile</code>, <code>test</code>, <code>package</code>, <code>install</code>;</li>
+<li>site: <code>pre-site</code>, <code>site</code>, <code>post-site</code>, <code>site-deploy</code>;</li>
+</ol>
+<h4 id="example-plugin-gt-source"><a href="#example-plugin-gt-source" class="headerlink" title="example: plugin&gt; source"></a>example: plugin&gt; source</h4><p>Add this into a <code>quickstart</code> created maven project’s <code>pom.xml</code>:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">&lt;build&gt;</span><br><span class="line">  &lt;plugins&gt;</span><br><span class="line">    &lt;plugin&gt;</span><br><span class="line">      &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;</span><br><span class="line">        &lt;artifactId&gt;maven-source-plugin&lt;/artifactId&gt;</span><br><span class="line">          &lt;version&gt;2.4&lt;/version&gt;</span><br><span class="line">            &lt;executions&gt;</span><br><span class="line">              &lt;execution&gt;</span><br><span class="line">                &lt;phase&gt;package&lt;/phase&gt;</span><br><span class="line">                &lt;goals&gt;</span><br><span class="line">                  &lt;goal&gt;jar-no-fork&lt;/goal&gt;</span><br><span class="line">                &lt;/goals&gt;</span><br><span class="line">              &lt;/execution&gt;</span><br><span class="line">            &lt;/executions&gt;</span><br><span class="line">    &lt;/plugin&gt;</span><br><span class="line">  &lt;/plugins&gt;</span><br><span class="line">&lt;/build&gt;</span><br></pre></td></tr></table></figure></p>
+<p>This would bind <code>source</code> plugin with <code>package</code> in maven lifecycle, as shown in <code>&lt;phase&gt;package&lt;/phase&gt;</code> in execution with the plugin coordinates: <code>groupId</code>, <code>artifactId</code> w. specific <code>goal</code>.</p>
+<p>Run <code>clean package</code> in Eclipse Run As <code>Maven Build</code>.</p>
+<p>This is the result of an execution:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line">[INFO] Scanning for projects...</span><br><span class="line">[INFO]                                                                         </span><br><span class="line">[INFO] ------------------------------------------------------------------------</span><br><span class="line">[INFO] Building moduleName 0.0.1-SNAPSHOT</span><br><span class="line">[INFO] ------------------------------------------------------------------------</span><br><span class="line">[INFO] </span><br><span class="line">[INFO] --- maven-clean-plugin:2.5:clean (default-clean) @ moduleName ---</span><br><span class="line">[INFO] Deleting /Users/.../workspace/moduleName/target</span><br><span class="line">[INFO] </span><br><span class="line">[INFO] --- maven-resources-plugin:2.6:resources (default-resources) @ moduleName ---</span><br><span class="line">[INFO] Using &apos;UTF-8&apos; encoding to copy filtered resources.</span><br><span class="line">[INFO] skip non existing resourceDirectory /Users/.../workspace/moduleName/src/main/resources</span><br><span class="line">[INFO] </span><br><span class="line">[INFO] --- maven-compiler-plugin:3.1:compile (default-compile) @ moduleName ---</span><br><span class="line">[INFO] Changes detected - recompiling the module!</span><br><span class="line">[INFO] Compiling 1 source file to /Users/.../workspace/moduleName/target/classes</span><br><span class="line">[INFO] </span><br><span class="line">[INFO] --- maven-resources-plugin:2.6:testResources (default-testResources) @ moduleName ---</span><br><span class="line">[INFO] Using &apos;UTF-8&apos; encoding to copy filtered resources.</span><br><span class="line">[INFO] skip non existing resourceDirectory /Users/.../workspace/moduleName/src/test/resources</span><br><span class="line">[INFO] </span><br><span class="line">[INFO] --- maven-compiler-plugin:3.1:testCompile (default-testCompile) @ moduleName ---</span><br><span class="line">[INFO] Changes detected - recompiling the module!</span><br><span class="line">[INFO] Compiling 1 source file to /Users/.../workspace/moduleName/target/test-classes</span><br><span class="line">[INFO] </span><br><span class="line">[INFO] --- maven-surefire-plugin:2.12.4:test (default-test) @ moduleName ---</span><br><span class="line">[INFO] Surefire report directory: /Users/.../workspace/moduleName/target/surefire-reports</span><br><span class="line"></span><br><span class="line">-------------------------------------------------------</span><br><span class="line"> T E S T S</span><br><span class="line">-------------------------------------------------------</span><br><span class="line">Running com.imooc.projectName.moduleName.AppTest</span><br><span class="line">Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.007 sec</span><br><span class="line"></span><br><span class="line">Results :</span><br><span class="line"></span><br><span class="line">Tests run: 1, Failures: 0, Errors: 0, Skipped: 0</span><br><span class="line"></span><br><span class="line">[INFO] </span><br><span class="line">[INFO] --- maven-jar-plugin:2.4:jar (default-jar) @ moduleName ---</span><br><span class="line">[INFO] Building jar: /Users/.../workspace/moduleName/target/moduleName-0.0.1-SNAPSHOT.jar</span><br><span class="line">[INFO] ------------------------------------------------------------------------</span><br><span class="line">[INFO] BUILD SUCCESS</span><br><span class="line">[INFO] ------------------------------------------------------------------------</span><br><span class="line">[INFO] Total time: 1.848 s</span><br><span class="line">[INFO] Finished at: 2020-01-01T17:40:26+08:00</span><br><span class="line">[INFO] Final Memory: 17M/232M</span><br><span class="line">[INFO] ------------------------------------------------------------------------</span><br></pre></td></tr></table></figure></p>
+<p>It’s seen that <code>clean</code>, <code>compile</code>, <code>test</code>, <code>source</code> are executed sequentially.</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/maven-plugins/"># maven plugins</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+            
+            <a class="next" rel="next" href="/2020/01/01/maven-create-archetype/">maven: create archetype</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© LEI XIA </span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>
