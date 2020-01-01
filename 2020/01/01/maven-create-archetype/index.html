@@ -13,7 +13,7 @@
 
 
 
-<title>アーカイブ: 2020/1 | Blogs ©️ Lei Xia</title>
+<title>maven: create archetype | Blogs ©️ Lei Xia</title>
 
 
 
@@ -96,31 +96,82 @@
 
 
         <div class="main">
-            <div class="post-wrap archive">
+            <div class="container">
     
     
-        
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">maven: create archetype</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">LEI XIA</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">一月 1, 2020&nbsp;&nbsp;16:54</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>2 ways to create project directory archetype:</p>
+<ol>
+<li><code>mvn archetype:generate</code>, then select groupId, artifactId, version, package accordingly, </li>
+</ol>
+<p>or </p>
+<ol>
+<li><code>mvn archetype:generate -DgroupId=xxx -DartifactId=yyy -Dversion=vvv -Dpackage=ppp</code>, where:</li>
+<li><code>-DgroupId</code>: usually reverse company site + project name;</li>
+<li><code>-DartifactId</code>: project name + module name;</li>
+<li><code>-Dpackage</code>: package name where code exist</li>
+</ol>
+
+        </div>
 
         
-            <h3>2020</h3>
-        
+            <section class="post-copyright">
+                
+                
+                
+                
 
-        <article class="archive-item">
-            <a class="archive-item-link" href="/2020/01/01/maven-create-archetype/">maven: create archetype</a>
-            <span class="archive-item-date">一月 1, 2020</span>
-        </article>
-    
+            </section>
         
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/maven-archetype/"># maven archetype</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+            
+            <a class="next" rel="next" href="/2020/01/01/maven-package-xxx-doesn-t-exist/">maven: package xxx doesn't exist</a>
+            
+        </section>
 
-        
 
-        <article class="archive-item">
-            <a class="archive-item-link" href="/2020/01/01/maven-package-xxx-doesn-t-exist/">maven: package xxx doesn&#39;t exist</a>
-            <span class="archive-item-date">一月 1, 2020</span>
-        </article>
-    
-    
+    </article>
 </div>
+
         </div>
         <footer id="footer" class="footer">
     <div class="copyright">
