@@ -138,6 +138,8 @@
 </ol>
 <p>Priority: 2 &gt; 1.</p>
 <p>In <code>settings.xml</code>, locate <code>&lt;pluginGroups&gt;, add</code><plugingroup>org.mortbay.jetty</plugingroup>`, then maven would add prefix each time service is running.</p>
+<p>Or, use a different jetty coordinate:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;groupId&gt;org.eclipse.jetty&lt;/groupId&gt;</span><br><span class="line">&lt;artifactId&gt;jetty-maven-plugin&lt;/artifactId&gt;</span><br><span class="line">&lt;version&gt;9.4.24.v20191120&lt;/version&gt;</span><br></pre></td></tr></table></figure></p>
+<p>Or use Apache Tomcat as server container:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;groupId&gt;org.apache.tomcat.maven&lt;/groupId&gt;</span><br><span class="line">&lt;artifactId&gt;tomcat7-maven-plugin&lt;/artifactId&gt;</span><br><span class="line">&lt;version&gt;2.2&lt;/version&gt;</span><br></pre></td></tr></table></figure></p>
 
         </div>
 
