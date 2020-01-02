@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="LEI XIA">
+
+
+    <meta name="subtitle" content="夏雷的博客~">
+
+
+
+
+<title>maven: jetty run maven web demo in Eclipse:  | Blogs ©️ Lei Xia</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">LEI&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">LEI&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+
+
+        <div class="main">
+            <div class="container">
+    
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">maven: jetty run maven web demo in Eclipse: </h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">LEI XIA</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">一月 2, 2020&nbsp;&nbsp;16:08</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>In <code>pom.xml</code> of a maven web demo project, </p>
+<ol>
+<li>add <code>servlet-api</code> in this <code>pom.xml</code>;</li>
+<li>add <code>src/main/java</code> and <code>src/test/java</code> directories to make it maven;</li>
+<li>add <code>jetty plugins</code> for this project:</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">&lt;project xmlns=&quot;http://maven.apache.org/POM/4.0.0&quot; xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span><br><span class="line">  xsi:schemaLocation=&quot;http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd&quot;&gt;</span><br><span class="line">  &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;</span><br><span class="line">  &lt;groupId&gt;com.imooc.webdemo&lt;/groupId&gt;</span><br><span class="line">  &lt;artifactId&gt;webdemo&lt;/artifactId&gt;</span><br><span class="line">  &lt;packaging&gt;war&lt;/packaging&gt;</span><br><span class="line">  &lt;version&gt;0.0.1-SNAPSHOT&lt;/version&gt;</span><br><span class="line">  &lt;name&gt;webdemo Maven Webapp&lt;/name&gt;</span><br><span class="line">  &lt;url&gt;http://maven.apache.org&lt;/url&gt;</span><br><span class="line">  &lt;dependencies&gt;</span><br><span class="line">    &lt;dependency&gt;</span><br><span class="line">      &lt;groupId&gt;junit&lt;/groupId&gt;</span><br><span class="line">      &lt;artifactId&gt;junit&lt;/artifactId&gt;</span><br><span class="line">      &lt;version&gt;3.8.1&lt;/version&gt;</span><br><span class="line">      &lt;scope&gt;test&lt;/scope&gt;</span><br><span class="line">    &lt;/dependency&gt;</span><br><span class="line">    &lt;dependency&gt;</span><br><span class="line">      &lt;groupId&gt;javax.servlet&lt;/groupId&gt;</span><br><span class="line">      &lt;artifactId&gt;javax.servlet-api&lt;/artifactId&gt;</span><br><span class="line">      &lt;version&gt;3.0.1&lt;/version&gt;</span><br><span class="line">      &lt;!-- scope: only run in compile and testing time --&gt;</span><br><span class="line">      &lt;scope&gt;provided&lt;/scope&gt;</span><br><span class="line">    &lt;/dependency&gt;</span><br><span class="line">  &lt;/dependencies&gt;</span><br><span class="line">  &lt;build&gt;</span><br><span class="line">    &lt;finalName&gt;webdemo&lt;/finalName&gt;</span><br><span class="line">    &lt;plugins&gt;</span><br><span class="line">      &lt;plugin&gt;</span><br><span class="line">        &lt;groupId&gt;org.mortbay.jetty&lt;/groupId&gt;</span><br><span class="line">        &lt;artifactId&gt;jetty-maven-plugin&lt;/artifactId&gt;</span><br><span class="line">        &lt;version&gt;8.1.16.v20140903&lt;/version&gt;</span><br><span class="line">      &lt;/plugin&gt;</span><br><span class="line">    &lt;/plugins&gt;</span><br><span class="line">  &lt;/build&gt;</span><br><span class="line">&lt;/project&gt;</span><br></pre></td></tr></table></figure>
+<p>If <code>Run As&gt; jetty:run</code> gives <code>No plugin found for prefix &#39;jetty&#39; in the current project</code> error like this: </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">[INFO] Scanning for projects...</span><br><span class="line">[INFO] Downloading: https://repo.maven.apache.org/maven2/org/apache/maven/plugins/maven-metadata.xml</span><br><span class="line">[INFO] Downloading: https://repo.maven.apache.org/maven2/org/codehaus/mojo/maven-metadata.xml</span><br><span class="line">[INFO] Downloaded: https://repo.maven.apache.org/maven2/org/codehaus/mojo/maven-metadata.xml (20 KB at 1.7 KB/sec)</span><br><span class="line">[INFO] Downloaded: https://repo.maven.apache.org/maven2/org/apache/maven/plugins/maven-metadata.xml (14 KB at 0.9 KB/sec)</span><br><span class="line">[INFO] ------------------------------------------------------------------------</span><br><span class="line">[INFO] BUILD FAILURE</span><br><span class="line">[INFO] ------------------------------------------------------------------------</span><br><span class="line">[INFO] Total time: 14.422 s</span><br><span class="line">[INFO] Final Memory: 10M/245M</span><br><span class="line">[INFO] ------------------------------------------------------------------------</span><br><span class="line">[ERROR] No plugin found for prefix &apos;jetty&apos; in the current project and in the plugin groups [org.apache.maven.plugins, org.codehaus.mojo] available from the repositories [local (/Users/xialei/.m2/repository), central (https://repo.maven.apache.org/maven2)] -&gt; [Help 1]</span><br><span class="line">[ERROR] </span><br><span class="line">[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.</span><br><span class="line">[ERROR] Re-run Maven using the -X switch to enable full debug logging.</span><br><span class="line">[ERROR] </span><br><span class="line">[ERROR] For more information about the errors and possible solutions, please read the following articles:</span><br><span class="line">[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/NoPluginFoundForPrefixException</span><br></pre></td></tr></table></figure>
+<p>Add <code>jetty</code> in current project and in the plugin groups in <code>setting.xml</code>.</p>
+<p>Edit maven default setting:</p>
+<ol>
+<li>installation: <code>$M2_HOME/conf/settings.xml</code>; (global config)</li>
+<li>user directory: <code>${user.home}/.m2/settings.xml</code>; (user config)</li>
+</ol>
+<p>Priority: 2 &gt; 1.</p>
+<p>In <code>settings.xml</code>, locate <code>&lt;pluginGroups&gt;, add</code><plugingroup>org.mortbay.jetty</plugingroup>`, then maven would add prefix each time service is running.</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/maven-jetty/"># maven jetty</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+            
+            <a class="next" rel="next" href="/2020/01/02/maven-aggregate-inheritance/">maven: aggregate, inheritance</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© LEI XIA </span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>
