@@ -128,6 +128,22 @@
 <li>创建mybatis主配置文件<code>SqlMapConfig.xml</code>;</li>
 <li>创建映射配置文件<code>IUserDao.xml</code></li>
 </ol>
+<p>环境搭建的注意事项: </p>
+<ol>
+<li>创建<code>IUserDao.xml</code>和<code>IUserDao.java</code>时候名称是为了和之前的知识保持一致. 在mybatis中把持久层的操作接口名称和映射文件也叫做Mapper; 所以，<code>IUserDao</code>和<code>IUserMapper</code>是一样的;</li>
+<li>在IDEA中创建目录的时候，包和目录是不同的:<ol>
+<li>包早创建时, com.lei.dao时三层结构</li>
+<li>目录在创建时，com.lei.dao时一层结构</li>
+</ol>
+</li>
+<li><p>mybatis的映射配置文件位置必须和dao接口的包结构相同:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">src</span><br><span class="line">  main</span><br><span class="line">    java</span><br><span class="line">      com</span><br><span class="line">        lei</span><br><span class="line">          dao</span><br><span class="line">            (I)IUserDao</span><br><span class="line">    resources</span><br><span class="line">      com</span><br><span class="line">        lei</span><br><span class="line">          dao</span><br><span class="line">            IUserDao.xml</span><br><span class="line">      SqlMapConfig.xml</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>映射配置文件的mapper标签的namespace属性的曲直必须时dao接口的全限定类名: <code>&lt;mapper namespace=&quot;com.itheima.dao.IUserDao&quot;&gt;</code> …` </p>
+</li>
+<li>映射配置文件的操作配置(e.g. <code>select</code>), id属性的取值必须时dao接口的方法名</li>
+</ol>
+<p>遵从了3,4,5之后, 在开发中就不需要再写dao的实现类, mybatis为之代劳了;</p>
 
         </div>
 
