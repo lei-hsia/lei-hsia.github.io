@@ -13,7 +13,7 @@
 
 
 
-<title>mybatis环境搭建 | Blogs ©️ Lei Xia</title>
+<title>pytest via command line options | Blogs ©️ Lei Xia</title>
 
 
 
@@ -103,7 +103,7 @@
     
     <article class="post-wrap">
         <header class="post-header">
-            <h1 class="post-title">mybatis环境搭建</h1>
+            <h1 class="post-title">pytest via command line options</h1>
             
                 <div class="post-meta">
                     
@@ -112,7 +112,7 @@
 
                     
                         <span class="post-time">
-                        Date: <a href="#">一月 3, 2020&nbsp;&nbsp;16:14</a>
+                        Date: <a href="#">一月 6, 2020&nbsp;&nbsp;10:29</a>
                         </span>
                     
                     
@@ -121,29 +121,14 @@
         </header>
 
         <div class="post-content">
-            <p>mybatis 环境搭建: </p>
-<ol>
-<li>创建maven工程，导入dependency坐标</li>
-<li>创建实体类和Dao接口</li>
-<li>创建mybatis主配置文件<code>SqlMapConfig.xml</code>;</li>
-<li>创建映射配置文件<code>IUserDao.xml</code></li>
-</ol>
-<p>环境搭建的注意事项: </p>
-<ol>
-<li>创建<code>IUserDao.xml</code>和<code>IUserDao.java</code>时候名称是为了和之前的知识保持一致. 在mybatis中把持久层的操作接口名称和映射文件也叫做Mapper; 所以，<code>IUserDao</code>和<code>IUserMapper</code>是一样的;</li>
-<li>在IDEA中创建目录的时候，包和目录是不同的:<ol>
-<li>包早创建时, com.lei.dao时三层结构</li>
-<li>目录在创建时，com.lei.dao时一层结构</li>
-</ol>
-</li>
-<li><p>mybatis的映射配置文件位置必须和dao接口的包结构相同:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">src</span><br><span class="line">  main</span><br><span class="line">    java</span><br><span class="line">      com</span><br><span class="line">        lei</span><br><span class="line">          dao</span><br><span class="line">            (I)IUserDao</span><br><span class="line">    resources</span><br><span class="line">      com</span><br><span class="line">        lei</span><br><span class="line">          dao</span><br><span class="line">            IUserDao.xml</span><br><span class="line">      SqlMapConfig.xml</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>映射配置文件的mapper标签的namespace属性的曲直必须时dao接口的全限定类名: <code>&lt;mapper namespace=&quot;com.itheima.dao.IUserDao&quot;&gt;</code> …` </p>
-</li>
-<li>映射配置文件的操作配置(e.g. <code>select</code>), id属性的取值必须时dao接口的方法名</li>
-</ol>
-<p>遵从了3,4,5之后, 在开发中就不需要再写dao的实现类, mybatis为之代劳了;</p>
+            <p>In <code>conftest.py</code>: </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">def pytest_addoption(parser):</span><br><span class="line">    parser.addoption(</span><br><span class="line">        &quot;--test_mode&quot;, action=&quot;store&quot;, default=None, help=&quot;my option: type1 or type2&quot;</span><br><span class="line">    )</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">@pytest.fixture</span><br><span class="line">def test_mode(request):</span><br><span class="line">    return request.config.getoption(&quot;--test_mode&quot;)</span><br></pre></td></tr></table></figure>
+<p>In <code>config.py</code>:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">config_dict = &#123;</span><br><span class="line">	&quot;sql&quot;: TestMode.SQL,</span><br><span class="line">	&quot;data&quot;: TestMode.DATA,</span><br><span class="line">	&quot;update_sql&quot;: TestMode.UPDATE_SQL,</span><br><span class="line">	&quot;update_data&quot;: TestMode.UPDATE_DATA</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>For different test case executions:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">def run_query(self, scope, query_func, *args):</span><br><span class="line">    query = query_func(scope, *args)</span><br><span class="line"></span><br><span class="line">    if self._mode == TestMode.SQL:</span><br><span class="line">        ...</span><br><span class="line">    elif self._mode == TestMode.DATA:</span><br><span class="line">        ...</span><br><span class="line">    ...</span><br></pre></td></tr></table></figure></p>
+<p>For command line test usage:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">pytest -q tests/test_derived.py --test_mode=update_sql</span><br><span class="line">pytest -q tests/test_derived.py --test_mode=sql</span><br><span class="line">pytest -q tests/test_derived.py --test_mode=update_data</span><br><span class="line">pytest -q tests/test_derived.py --test_mode=data</span><br></pre></td></tr></table></figure></p>
+<p>For more information and easier examples, click <a href="http://doc.pytest.org/en/latest/example/simple.html" target="_blank" rel="noopener">here</a></p>
 
         </div>
 
@@ -162,7 +147,7 @@
                 <span class="tag">
                     
                     
-                        <a href="/tags/mybatis-环境/"># mybatis 环境</a>
+                        <a href="/tags/pytest-cmd/"># pytest cmd</a>
                     
                         
                 </span>
@@ -175,10 +160,8 @@
         </section>
         <section class="post-nav">
             
-                <a class="prev" rel="prev" href="/2020/01/06/mutable-string-io-StringIO/">mutable string: io.StringIO</a>
             
-            
-            <a class="next" rel="next" href="/2020/01/03/点菜-Dao层的作用/">点菜~Dao层的作用</a>
+            <a class="next" rel="next" href="/2020/01/06/mutable-string-io-StringIO/">mutable string: io.StringIO</a>
             
         </section>
 
