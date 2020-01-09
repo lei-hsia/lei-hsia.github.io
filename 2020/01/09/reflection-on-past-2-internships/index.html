@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="LEI XIA">
+
+
+    <meta name="subtitle" content="夏雷的博客~">
+
+
+
+
+<title>reflection on past 2 internships | Blogs ©️ Lei Xia</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">LEI&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">LEI&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+
+
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">reflection on past 2 internships</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">LEI XIA</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">一月 9, 2020&nbsp;&nbsp;17:15</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>This is a reflection on past two internships.</p>
+<h4 id="Software-Engineering-Interactive-Brokers-CT"><a href="#Software-Engineering-Interactive-Brokers-CT" class="headerlink" title="Software Engineering @ Interactive Brokers, CT"></a>Software Engineering @ Interactive Brokers, CT</h4><ol>
+<li>Price Retriever: A SpringMVC example to get price from Oracle database given contract id and date. No UI/frontend; obtain data in JSON in terminal;</li>
+<li>Kafka Health Visualizer(KHV): 4 genres of Grafana dashboards to monitor 532 Kafka cluster health metrics via Prometheus</li>
+</ol>
+<p>Additional information about 2:</p>
+<ol>
+<li>JMX exporter and Kafka exporter are used to export these metrics;</li>
+<li>532 metrics are divided into 3 categories: ~464 Kafka broker metrics, ~50 producer metrics, ~30 consumer metrics;</li>
+<li>Demo producers, consumers, broker clusters are deployed in bash;</li>
+<li>Metrics are exported to a Prometheus server;</li>
+<li>Grafana are dashboards to visualize the value of these metrics in Prometheus.</li>
+</ol>
+<p>KHV is a part of CAT(Consolidated Audit Trail), an automatic internal audit system requested by FINRA and SEC.</p>
+<p>My part was estimated to save engineers around 450 hours.</p>
+<h4 id="Quant-Dev-Greenwich-St-Advisors-NY"><a href="#Quant-Dev-Greenwich-St-Advisors-NY" class="headerlink" title="Quant Dev @ Greenwich St. Advisors, NY"></a>Quant Dev @ Greenwich St. Advisors, NY</h4><p>Dataset Exploder: A SQL snippet to explode daily data of 20k records to 0.17 billion intraday records. This is a fake dataset for quant big data analysis. They will use this table as a practice to test their tools. Once perfect, it can be easily transplanted to real incoming big data table.</p>
+<p>The next pivot was an automated testing framework. There are ~20 tests given, all of which had many lines. My task was to rewrite, or more precisely, wrap all these tests into one-line tests. This one line would just invoke a <code>run_query()</code> method with its parameters and it will perform in exactly the same way. Tests are unit tests, but it can be done via pytest. </p>
+<p>Tests are to test different modes as well. Specifically, 4 modes: <code>update_sql</code>, <code>sql</code>, <code>update_data</code>, <code>data</code>. Clearly, 2 kinds of tests on SQL and data. For data, database is needed. </p>
+<p>Task: make all tests pass; perform different kinds of tests on write or read sql or data via cmd. </p>
+<ol>
+<li>Containerization: SQL Server is used. It’s running inside a docker container. </li>
+<li>Chinook database is used. For convenient db operations, Azure Data Studio was installed. It’s not fit for large amount of data import, though. </li>
+<li>Cmd SQL Server was used for Chinook tables import.</li>
+<li><code>TestController</code>, <code>TestMode</code> was created for testing purpose.</li>
+<li>4 kinds of operations, <code>write_sql</code>, <code>read_sql</code>, <code>write_data</code>, <code>read_data</code> were created to write/read sql/csv files for <code>assert actual == expected</code>.</li>
+<li>dataframes can be directly written to files; they don’t have to be converted into strings, etc. </li>
+<li><code>cmd option</code> and <code>parser</code> are used for cmd input selecting testing modes:<a href="http://doc.pytest.org/en/latest/example/simple.html" target="_blank" rel="noopener">pytest cmd option</a></li>
+</ol>
+<p>This internship mainly built low level pyLib infra for app level quant data analysis. It was kind of harder than IB internship because it didn’t use frameworks like SpringMVC, nor did it use widely-used tools such as Apache Kafka. But it was a great experience. Pytest, docker, parser, delicate business logics. </p>
+<p>Ausgezeichnet.</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/job-software-engineering-quant/"># job, software engineering, quant</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+            
+            <a class="next" rel="next" href="/2020/01/06/JavaBean/">JavaBean</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© LEI XIA </span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>
