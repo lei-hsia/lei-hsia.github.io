@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="LEI XIA">
+
+
+    <meta name="subtitle" content="夏雷的博客~">
+
+
+
+
+<title>hibernate VS mybatis: mapping file &amp;&amp; db operation file | Blogs ©️ Lei Xia</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">LEI&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">LEI&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+
+
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">hibernate VS mybatis: mapping file &amp;&amp; db operation file</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">LEI XIA</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">一月 10, 2020&nbsp;&nbsp;9:27</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h3 id="Hibernate"><a href="#Hibernate" class="headerlink" title="Hibernate"></a>Hibernate</h3><p>Hibernate is the mapping file that maps POJO to database tables, e.g. </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot;?&gt;</span><br><span class="line">&lt;!DOCTYPE hibernate-mapping PUBLIC &quot;-//Hibernate/Hibernate Mapping DTD3.0//EN&quot;</span><br><span class="line">        &quot;http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd&quot;&gt;</span><br><span class="line">&lt;hibernate-mapping&gt;</span><br><span class="line">    &lt;class name=&quot;com.learn.chapter1.pojo.Role&quot; table=&quot;t_role&quot;&gt;</span><br><span class="line">        &lt;id name=&quot;id&quot; type=&quot;java.lang.Integer&quot;&gt;</span><br><span class="line">            &lt;column name=&quot;id&quot; /&gt;</span><br><span class="line">            &lt;generator class=&quot;identity&quot; /&gt;</span><br><span class="line">        &lt;/id&gt;</span><br><span class="line">        &lt;property name=&quot;roleName&quot; type=&quot;string&quot;&gt;</span><br><span class="line">            &lt;column name=&quot;role_name&quot; length=&quot;60&quot; not-null=&quot;true&quot; /&gt;</span><br><span class="line">        &lt;/property&gt;</span><br><span class="line">        &lt;property name=&quot;note&quot; type=&quot;string&quot;&gt;</span><br><span class="line">            &lt;column name=&quot;note&quot; length=&quot;512&quot; /&gt;</span><br><span class="line">        &lt;/property&gt;</span><br><span class="line">    &lt;/class&gt;</span><br><span class="line">&lt;/hibernate-mapping&gt;</span><br></pre></td></tr></table></figure>
+<p>As seen above, there is a mapping on POJO and table <code>t_role</code>. CRUD operations are performed over POJO to modify <code>t_role</code> table data, e.g.</p>
+<p>Hibernate operating on database via Session: (<code>HibernateSessionDao.java</code>)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">public class HibernateSessionDao &#123;</span><br><span class="line">    Session session = null;</span><br><span class="line">    Transaction tx = null;</span><br><span class="line">    try &#123;</span><br><span class="line">        // open Session</span><br><span class="line">        session = HibernateUtil.getSessionFactory().openSession();</span><br><span class="line">        // tx</span><br><span class="line">        tx = session.beginTransaction();</span><br><span class="line">        // POJO</span><br><span class="line">        Role role = new Role();</span><br><span class="line">        role.setId(1);</span><br><span class="line">        role.setRoleName(&quot;rolename1&quot;);</span><br><span class="line">        role.setNote(&quot;note1&quot;);</span><br><span class="line">        session.save(role);</span><br><span class="line">        Role role2 = (Role) session.get(Role.class, 1); // read</span><br><span class="line">        role2.setNote(&quot;modify note&quot;);</span><br><span class="line">        System.err.println(role2.getRoleName());</span><br><span class="line">        session.delete(role2);</span><br><span class="line">        tx.commit();</span><br><span class="line">    &#125; catch (Exception ex) &#123;</span><br><span class="line">        if (tx != null &amp;&amp; tx.isActive()) &#123;</span><br><span class="line">            tx.rollback();</span><br><span class="line">        &#125;</span><br><span class="line">        ex.printStackTrace();</span><br><span class="line">    &#125; finally &#123;</span><br><span class="line">        if (session != null &amp;&amp; session.isOpen()) &#123;</span><br><span class="line">            session.close();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>No SQL involved, because Hibernate would generate SQL based on mapping relations. It’s beneficial in the era of CRM because implementation of business logics would be the priority and then come performances, which is why Hibernate became the major framework in that era. </p>
+<h3 id="MyBatis"><a href="#MyBatis" class="headerlink" title="MyBatis"></a>MyBatis</h3><p>In mobile era, myBatis becomes the major Java persistence framework. In contrast to Hibernate which eliminate SQL, mybatis doesn’t wipe SQL out; rather, it leaves for programmers to customize SQL without Hibernate’s automated SQL generation. In this way, more precisely defined SQL are used to ameliorate performances. It is more consistent with the requirements of mobile era: “high concurrency”, “big data”, “high-performance”, “high-responsiveness”.</p>
+<p>mybatis also needs a mapping file from POJO to database, like Hibernate:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; ?&gt;</span><br><span class="line">&lt;!DOCTYPE mapper</span><br><span class="line">        PUBLIC &quot;-//mybatis.org//DTD Mapper 3.0//EN&quot;</span><br><span class="line">        &quot;http://mybatis.org/dtd/mybatis-3-mapper.dtd&quot;&gt;</span><br><span class="line">&lt;mapper namespace=&quot;com.learn.chapter1.mapper.RoleMapper&quot;&gt;</span><br><span class="line">    &lt;resultMap id=&quot;roleMap&quot; type=&quot;com.learn.chapter1.pojo.Role&quot;&gt;</span><br><span class="line">        &lt;id property=&quot;id&quot; column=&quot;id&quot; /&gt;</span><br><span class="line">        &lt;result property=&quot;roleName&quot; column=&quot;role_name&quot; /&gt;</span><br><span class="line">        &lt;result property=&quot;note&quot; column=&quot;note&quot; /&gt;</span><br><span class="line">    &lt;/resultMap&gt;</span><br><span class="line"></span><br><span class="line">    &lt;select id=&quot;getRole&quot; resultMap=&quot;roleMap&quot;&gt;</span><br><span class="line">        select id, role_name, note from t_role where id = #&#123;id&#125;</span><br><span class="line">    &lt;/select&gt;</span><br><span class="line"></span><br><span class="line">    &lt;delete id=&quot;deleteRole&quot; parameterType=&quot;int&quot;&gt;</span><br><span class="line">        delete from t_role where id = #&#123;id&#125;</span><br><span class="line">    &lt;/delete&gt;</span><br><span class="line"></span><br><span class="line">    &lt;insert id=&quot;insertRole&quot; parameterType=&quot;com.learn.chapter1.pojo.Role&quot;&gt;</span><br><span class="line">        insert into t_role (role_name, note) values (#&#123;roleName&#125;, #&#123;note&#125;)</span><br><span class="line">    &lt;/insert&gt;</span><br><span class="line"></span><br><span class="line">    &lt;update id=&quot;updateRole&quot; parameterType=&quot;com.learn.chapter1.pojo.Role&quot;&gt;</span><br><span class="line">        update t_role set</span><br><span class="line">        role_name = #&#123;roleName&#125;,</span><br><span class="line">        note = #&#123;note&#125;</span><br><span class="line">        where id = #&#123;id&#125;</span><br><span class="line">    &lt;/update&gt;</span><br><span class="line">&lt;/mapper&gt;</span><br></pre></td></tr></table></figure></p>
+<p><code>resultMap</code> element is used to define mapping rules; mybatis would automatically finish mapping under these rules, CRUD map to 4 elements <code>select</code>, <code>delete</code>, <code>insert</code>, <code>update</code>.</p>
+<p>Achtung⚠️: </p>
+<ol>
+<li><code>namespace</code> property of <code>mapper</code> element === full qualified name of the interface;</li>
+<li>Inside <code>mapper</code>, <code>id</code> of SQL === interface methods;</li>
+</ol>
+<p>The 2nd part of mapping file:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">package com.learn.chapter1.mapper;</span><br><span class="line">        import com.learn.chapter1.pojo.Role;</span><br><span class="line"></span><br><span class="line">public interface RoleMapper &#123;</span><br><span class="line">    public Role getRole(Integer id);</span><br><span class="line">    public int deleteRole(Integer id);</span><br><span class="line">    public int insertRole(Role role);</span><br><span class="line">    public int updateRole(Role role);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>Achtung⚠️: </p>
+<p>In fact, <code>mapper</code> files consists of two parts, XML mapper and an interface. Both parts are necessary. Divided, each is bootless.</p>
+<p><strong>There is no need to write an implementation of this interface</strong>.</p>
+<p><code>MybatisSessionDao.java</code>:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">package com.learn.chapter1.mapper;</span><br><span class="line"></span><br><span class="line">import org.apache.ibatis.session.SqlSession;</span><br><span class="line"></span><br><span class="line">public class MybatisSessionDao &#123;</span><br><span class="line">    SqlSession sqlSession = null;</span><br><span class="line">    try &#123;</span><br><span class="line">        sqlSession = MyBatisUtil.getSqlSession();</span><br><span class="line">        RoleMapper roleMapper = sqlSession.getMapper(RoleMapper.class);</span><br><span class="line">        Role role = roleMapper.getRole(1); // read</span><br><span class="line">        System.err.println(role.getRoleName());</span><br><span class="line">        role.setRoleName(&quot;update_role_name&quot;);</span><br><span class="line">        roleMapper.updateRole(role); // update</span><br><span class="line">        Role role2 = new Role();</span><br><span class="line">        role2.setNote(&quot;note2&quot;);</span><br><span class="line">        role2.setRoleName(&quot;role2&quot;);</span><br><span class="line">        roleMapper.insertRole(role); // insert</span><br><span class="line">        roleMapper.deleteRole(5); // delete</span><br><span class="line">        sqlSession.commit();</span><br><span class="line">    &#125; catch (Exception ex) &#123;</span><br><span class="line">        ex.printStackTrace();</span><br><span class="line">        if (sqlSession != null) &#123;</span><br><span class="line">            sqlSession.rollback();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; finally &#123;</span><br><span class="line">        if (sqlSession != null) &#123;</span><br><span class="line">            sqlSession.close();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/hibernate-mybatis/"># hibernate mybatis</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+            
+            <a class="next" rel="next" href="/2020/01/09/reflection-on-past-2-internships/">reflection on past 2 internships</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© LEI XIA </span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>
