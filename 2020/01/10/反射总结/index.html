@@ -129,6 +129,7 @@
 <li><code>Class.forName(full Qualified Name)</code>获取类对象;</li>
 </ol>
 <p>然后调用<code>.newInstance()</code>或者<code>.getConstructor().newInstance()</code><br>或者<code>.getMethod()</code>创建对象或者调用方法; <code>getMethod()</code> 创建返回的事一个<code>Method</code>对象<code>method</code>, 用<code>invoke()</code>方法调用这个方法，得到返回值<code>returnObj</code>.</p>
+<p>对象在反射机制下生成后，反射了方法，这样完全可以通过配置来完成对象和方法的反射，大大增强了java的可配置性和可扩展性，其中Spring IoC时一个典型样例。</p>
 
         </div>
 
