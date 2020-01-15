@@ -13,7 +13,7 @@
 
 
 
-<title>Intellij: build path | Blogs ©️ Lei Xia</title>
+<title>IoC本质 | Blogs ©️ Lei Xia</title>
 
 
 
@@ -99,73 +99,11 @@
             <div class="container">
     
     
-        <div class="post-toc">
-    <div class="tocbot-list">
-    </div>
-    <div class="tocbot-list-menu">
-        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
-        <a onclick="go_top()">Back to top</a>
-        <a onclick="go_bottom()">Go to bottom</a>
-    </div>
-</div>
-
-<script>
-    document.ready(
-        function () {
-            tocbot.init({
-                tocSelector: '.tocbot-list',
-                contentSelector: '.post-content',
-                headingSelector: 'h1, h2, h3, h4, h5',
-                collapseDepth: 1,
-                orderedList: false,
-                scrollSmooth: true,
-            })
-        }
-    )
-
-    function expand_toc() {
-        var b = document.querySelector(".tocbot-toc-expand");
-        tocbot.init({
-            tocSelector: '.tocbot-list',
-            contentSelector: '.post-content',
-            headingSelector: 'h1, h2, h3, h4, h5',
-            collapseDepth: 6,
-            orderedList: false,
-            scrollSmooth: true,
-        });
-        b.setAttribute("onclick", "collapse_toc()");
-        b.innerHTML = "Collapse all"
-    }
-
-    function collapse_toc() {
-        var b = document.querySelector(".tocbot-toc-expand");
-        tocbot.init({
-            tocSelector: '.tocbot-list',
-            contentSelector: '.post-content',
-            headingSelector: 'h1, h2, h3, h4, h5',
-            collapseDepth: 1,
-            orderedList: false,
-            scrollSmooth: true,
-        });
-        b.setAttribute("onclick", "expand_toc()");
-        b.innerHTML = "Expand all"
-    }
-
-    function go_top() {
-        window.scrollTo(0, 0);
-    }
-
-    function go_bottom() {
-        window.scrollTo(0, document.body.scrollHeight);
-    }
-
-</script>
-    
 
     
     <article class="post-wrap">
         <header class="post-header">
-            <h1 class="post-title">Intellij: build path</h1>
+            <h1 class="post-title">IoC本质</h1>
             
                 <div class="post-meta">
                     
@@ -174,7 +112,7 @@
 
                     
                         <span class="post-time">
-                        Date: <a href="#">一月 13, 2020&nbsp;&nbsp;10:41</a>
+                        Date: <a href="#">一月 15, 2020&nbsp;&nbsp;9:51</a>
                         </span>
                     
                     
@@ -183,7 +121,10 @@
         </header>
 
         <div class="post-content">
-            <h4 id="Intellij-build-path"><a href="#Intellij-build-path" class="headerlink" title="Intellij: build path"></a>Intellij: build path</h4><p>File &gt; Project Structure &gt; Modules &gt; Select projects that is going to “add build path” &gt; Dependencies &gt; “+” at bottom &gt; JARs or directories &gt; select outside JAR file.</p>
+            <p>IoC理解: Java代码中已经有类的定义:进行制造; 而IoC的精髓在于用XML描述信息，让spring容器制造需要的对象</p>
+<p>XML: IoC创建Objects, bean的id对应类名，property对应类属性</p>
+<p>XML进行配置描述创建对象的需求，写java代码直接调用通过IoC创建对象</p>
+<p>我: 并不关心创建过程, 只关心对Object的描述，以及委托制造(下订单)</p>
 
         </div>
 
@@ -202,7 +143,7 @@
                 <span class="tag">
                     
                     
-                        <a href="/tags/Intellij/"># Intellij</a>
+                        <a href="/tags/Spring-IoC/"># Spring IoC</a>
                     
                         
                 </span>
@@ -215,10 +156,8 @@
         </section>
         <section class="post-nav">
             
-                <a class="prev" rel="prev" href="/2020/01/15/IoC本质/">IoC本质</a>
             
-            
-            <a class="next" rel="next" href="/2020/01/13/MyBatis部分/">MyBatis部分</a>
+            <a class="next" rel="next" href="/2020/01/13/Intellij-build-path/">Intellij: build path</a>
             
         </section>
 
