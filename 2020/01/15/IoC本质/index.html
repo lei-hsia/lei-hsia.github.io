@@ -99,6 +99,68 @@
             <div class="container">
     
     
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
 
     
     <article class="post-wrap">
@@ -121,10 +183,36 @@
         </header>
 
         <div class="post-content">
-            <p>IoC理解: Java代码中已经有类的定义:进行制造; 而IoC的精髓在于用XML描述信息，让spring容器制造需要的对象</p>
+            <h4 id="描述，制造"><a href="#描述，制造" class="headerlink" title="描述，制造"></a>描述，制造</h4><p>IoC理解: Java代码中已经有类的定义:进行制造; 而IoC的精髓在于用XML描述信息，让spring容器制造需要的对象</p>
 <p>XML: IoC创建Objects, bean的id对应类名，property对应类属性</p>
 <p>XML进行配置描述创建对象的需求，写java代码直接调用通过IoC创建对象</p>
 <p>我: 并不关心创建过程, 只关心对Object的描述，以及委托制造(下订单)</p>
+<p>Achtung: 这个对对象的描述，可以是通过XML或者annotation</p>
+<p>IoC: 通过描述(XML/annotation)，通过第三方产生/获取特定对象的方式</p>
+<p>IoC的实现方法是DI</p>
+<h4 id="过程"><a href="#过程" class="headerlink" title="过程"></a>过程</h4><p>每个熟悉特定板块的部分，由熟悉那个板块的人完成，并将其service发布到Spring IoC容器中</p>
+<p>e.g. 测试人员，已经测试完成了财务模块；现在需要测试交易模块，不用细致地了解交易模块，只需要从Spring IoC容器中获取就行了. 因为IoC所以获取对象只需要从IoC容器中获取就行了, 实现了模块之间的解耦。</p>
+<h4 id="IoC容器的设计"><a href="#IoC容器的设计" class="headerlink" title="IoC容器的设计"></a>IoC容器的设计</h4><p><strong>Spring IoC容器设计主要基于<code>BeanFactory</code>和<code>ApplicationContext</code>两个接口</strong>(“容器基于接口”这种设计)，其中<code>ApplicationContext</code>是<code>BeanFactory</code>的子接口之一。主要用<code>ApplicationContext</code>做为IoC容器。</p>
+<p><code>ApplicationContext</code>的子类: <code>ClassPathXmlApplicationContext</code>.</p>
+<h4 id="IoC容器初始化和DI"><a href="#IoC容器初始化和DI" class="headerlink" title="IoC容器初始化和DI"></a>IoC容器初始化和DI</h4><p>初始化之后才会进行DI;</p>
+<p>Bean的初始化: </p>
+<ol>
+<li>Resource定位;</li>
+<li>BeanDefinition载入: Spring根据配置获取POJO,生成对应实例</li>
+<li>BeanDefinition注册: 前面的POJO往Spring IoC容器注册, 从此各种人员都可以通过描述从容器中获取bean;</li>
+</ol>
+<p>Bean在Spring IoC容器中得到了初始化,但是没有完成DI; i.e. 没有注入配置的资源给bean:还是不能完成使用; DI: Spring Bean的配置选项: <code>lazy-init</code>, i.e. 是否初始化SpringBean. 在没有任何配置的情况下，默认值是default, 实际值是false, i.e. Spring IoC自动初始化Bean. 如果设置为true，那么只有使用Spring IoC容器的getBean方法获取的时候才会完成DI.</p>
+<h4 id="关于依赖jar包"><a href="#关于依赖jar包" class="headerlink" title="关于依赖jar包"></a>关于依赖jar包</h4><p><a href="https://blog.csdn.net/chenfengbao/article/details/70477380" target="_blank" rel="noopener">spring核心框架体系：各个jar包作用</a></p>
+<h4 id="example"><a href="#example" class="headerlink" title="example"></a>example</h4><p>实际案例: </p>
+<ol>
+<li>创建XML文件，文件中定义bean，使得Spring IoC容器在初始化的时候能找到它们</li>
+<li><code>ClassPathXmlApplicationContext</code>容器初始化</li>
+</ol>
+<p><code>POJO</code>:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">package ssm.chap9.pojo;</span><br><span class="line"></span><br><span class="line">public class Source &#123;</span><br><span class="line">    private String fruit;</span><br><span class="line">    private String sugar;</span><br><span class="line">    private Integer size;</span><br><span class="line"></span><br><span class="line">    // getters and setters</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public class JuiceMaker2 &#123;</span><br><span class="line"></span><br><span class="line">    private String beverageShop = null;</span><br><span class="line">    private Source source = null;</span><br><span class="line"></span><br><span class="line">    public String makeJuice() &#123;</span><br><span class="line">        String juice = &quot;this is a cup of juice made by &quot; + beverageShop + source.getSize()</span><br><span class="line">                + source.getSugar() + source.getFruit();</span><br><span class="line">        return juice;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // getters and setters</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>spring-cfg.xml</code>: 描述bean<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;</span><br><span class="line">&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;</span><br><span class="line">       xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;</span><br><span class="line">       xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans</span><br><span class="line">        http://www.springframework.org/schema/beans/spring-beans-4.0.xsd &quot;&gt;</span><br><span class="line">    &lt;bean id=&quot;source&quot; class=&quot;com.ssm.chap9.pojo.Source&quot;&gt;</span><br><span class="line">        &lt;property name=&quot;fruit&quot; value=&quot;orange&quot;/&gt;</span><br><span class="line">        &lt;property name=&quot;sugar&quot; value=&quot;little&quot;/&gt;</span><br><span class="line">        &lt;property name=&quot;size&quot; value=&quot;large&quot;/&gt;</span><br><span class="line">    &lt;/bean&gt;</span><br><span class="line"></span><br><span class="line">    &lt;bean id=&quot;juiceMaker2&quot; class=&quot;com.ssm.chap9.pojo.JuiceMaker2&quot;&gt;</span><br><span class="line">        &lt;property name=&quot;beverageShop&quot; value=&quot;Gong Cha&quot;/&gt;</span><br><span class="line">        &lt;property name=&quot;source&quot; ref=&quot;source&quot; /&gt;</span><br><span class="line">    &lt;/bean&gt;</span><br><span class="line">&lt;/beans&gt;</span><br></pre></td></tr></table></figure></p>
+<p>test:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">package ssm.chap9.test;</span><br><span class="line"></span><br><span class="line">import org.springframework.context.ApplicationContext;</span><br><span class="line">import org.springframework.context.support.ClassPathXmlApplicationContext;</span><br><span class="line">import ssm.chap9.pojo.JuiceMaker2;</span><br><span class="line"></span><br><span class="line">public class DemoContainer  &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        ApplicationContext ctx = new ClassPathXmlApplicationContext(&quot;spring-cfg.xml&quot;); // container</span><br><span class="line">        JuiceMaker2 juiceMaker2 = (JuiceMaker2) ctx.getBean(&quot;juiceMaker2&quot;); // object</span><br><span class="line">        System.out.println(juiceMaker2.makeJuice());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>Dependencies:  4 core Spring dependencies<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">spring-beans-4.2.4.RELEASE.jar</span><br><span class="line">spring-core-4.2.4.RELEASE.jar</span><br><span class="line">spring-context-4.2.4.RELEASE.jar</span><br><span class="line">spring-expression-4.2.4.RELEASE.jar</span><br></pre></td></tr></table></figure></p>
 
         </div>
 
