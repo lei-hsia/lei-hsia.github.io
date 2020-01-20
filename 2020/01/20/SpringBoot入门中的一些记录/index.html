@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="LEI XIA">
+
+
+    <meta name="subtitle" content="夏雷的博客~">
+
+
+
+
+<title>SpringBoot入门中的一些记录 | Blogs ©️ Lei Xia</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">LEI&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">LEI&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+
+
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">SpringBoot入门中的一些记录</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">LEI XIA</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">一月 20, 2020&nbsp;&nbsp;15:56</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h4 id="springboot-JPA-Mybatis-Hibernate"><a href="#springboot-JPA-Mybatis-Hibernate" class="headerlink" title="springboot, JPA, Mybatis, Hibernate"></a>springboot, JPA, Mybatis, Hibernate</h4><p>SpringBoot是MVC框架的starter，用的持久层框架可以选择mybatis，而JPA是一种统一ORM框架的一部分，hinernate遵循JPA(和其他的很多规范)实现了hibernate JPA，所以JPA不可能“选择mybatis”，因为JPA是ORM规范，而mybatis不属于这种</p>
+<h4 id="JPA是什么"><a href="#JPA是什么" class="headerlink" title="JPA是什么"></a>JPA是什么</h4><p>Java Persistence API, 是这几个概念中唯一一个我没有系统性学过的东西。</p>
+<p>JPA本身是一种ORM规范（不是ORM框架，因为JPA没有提供ORM实现，只是制定了规范）。因为JPA是一种规范，所以只提供了一些相关的接口，但是接口并不能直接用。JPA和hibernate，可以理解为JPA是标准接口，hibernate是实现，并不是对标关系。<code>hibernate, TokLink, etc. 等框架实现了JPA(和其他很多)规范</code>。</p>
+<h4 id="Spring-Data-JPA"><a href="#Spring-Data-JPA" class="headerlink" title="Spring Data JPA"></a>Spring Data JPA</h4><p>Spring Data是Spring的子项目，用于简化数据库访问，直接RDBMS(JDBC, JPA)和NoSQL(MongoDB:文档数据库, Redis:键值存储, Neo4j:图形数据库, HBase:列族数据库)</p>
+<p>为什么用这个？因为这个极大简化了数据库操作；解脱了DAO层操作，所有CRUD都可以依赖这个实现，开发中唯一要做的就是<strong>声明持久层的接口</strong>, 其他的都给Spring Data JPA完成。实际操作中推荐Spring Data JPA + ORM(e.g. hibernate)完成，这样在切换不同的ORM框架时很方便。</p>
+<p>框架如何代替开发实现业务逻辑？e.g. 当有一个<code>UserDao.findUserById()</code>这样一个方法声明的时候，大致能判断是根据给定id查询满足条件的user对象的方法。Spring Data JPA做的就是规范方法的名字，根据符合规范的名字确定方法需要实现什么样的业务逻辑。</p>
+<p>Spring Data JPA进行持久层(Dao层)开发步骤:</p>
+<ol>
+<li>dependency中引入spring-boot-starter-data-jpa依赖</li>
+<li>声明持久层的接口, 这个接口继承Repository(或Repository子接口)</li>
+<li>接口中写需要的业务方法</li>
+</ol>
+<h4 id="Valid-表单验证"><a href="#Valid-表单验证" class="headerlink" title="@Valid 表单验证"></a>@Valid 表单验证</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">public Girl girlAdd(@Valid Girl girl, BindingResult bindingResult) &#123;</span><br><span class="line">	...</span><br><span class="line">&#125; // 表单验证girl对象，验证完成结果返回给bindingResult对象</span><br></pre></td></tr></table></figure>
+<h4 id="AOP"><a href="#AOP" class="headerlink" title="AOP"></a>AOP</h4><ol>
+<li>多个地方用AOP: <code>@Pointcut(...)</code>, <code>@Before</code>, <code>@After</code></li>
+<li>代替System.out.println: spring自带<code>org.slf4j.logger</code>: <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">private static final Logger logger = LoggerFactory.getLogger(类名.class);</span><br><span class="line">logger.info(&quot;&gt;&gt;print msg&lt;&lt;&quot;);</span><br></pre></td></tr></table></figure></li>
+</ol>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/springBoot/"># springBoot</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+            
+            <a class="next" rel="next" href="/2020/01/16/dependency-injection-Autowired/">dependency injection:@Autowired</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© LEI XIA </span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>
