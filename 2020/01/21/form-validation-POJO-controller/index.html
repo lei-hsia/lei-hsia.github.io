@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="LEI XIA">
+
+
+    <meta name="subtitle" content="夏雷的博客~">
+
+
+
+
+<title>form validation:POJO,controller | Blogs ©️ Lei Xia</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">LEI&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">LEI&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+
+
+        <div class="main">
+            <div class="container">
+    
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">form validation:POJO,controller</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">LEI XIA</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">一月 21, 2020&nbsp;&nbsp;17:24</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>好的范式:</p>
+<ol>
+<li>定义POJO,里面的字段用校验表单的各种JSR303注解标记；</li>
+<li>controller中用<code>@Valid</code>标明这个bean会被检验</li>
+</ol>
+<p>检验：</p>
+<ol>
+<li>若有写html前端，那么有html, POJO, controller三个文件，运行之后从前端表单提交发送request测试；</li>
+<li>没有写前端就用postman测试后端接口</li>
+</ol>
+<p>JSR303: 用于bean的Java Specification Request:</p>
+<p>maven:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;javax.validation&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;validation-api&lt;/artifactId&gt;</span><br><span class="line">    &lt;version&gt;1.1.0.Final&lt;/version&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure></p>
+<p>注解和描述:</p>
+<ul>
+<li><code>@AssertFalse</code>: 所注解的元素是Boolean类型，且值为false</li>
+<li><code>@AssertTrue</code></li>
+<li><code>@DecimalMax</code>    注解的元素是数字, 最大值为这个BigDecimalString值</li>
+<li><code>@DecimalMin</code>: 类似上面</li>
+<li><code>@Digits</code>: 注解的元素是数字，值必须有指定位数</li>
+<li><code>@Future</code>: 注解的元素的值是一个将来时间</li>
+<li><code>@Max</code>: 注解元素是数组，最大值</li>
+<li><code>@Min</code>    </li>
+<li><code>@NotNull</code></li>
+<li><code>@Null</code>    </li>
+<li><code>@Past</code>: 注解元素的值必是一个已过去的日期</li>
+<li><code>@Pattern</code>: 注解的元素的值匹配给定的正则表达式</li>
+<li><code>@Size</code>:    注解的元素的值是String,集合或数组，长度要符合给定范围</li>
+</ul>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/validation/"># validation</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+            
+            <a class="next" rel="next" href="/2020/01/20/SpringBoot入门中的一些记录/">SpringBoot入门中的一些记录</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© LEI XIA </span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>
