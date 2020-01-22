@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="LEI XIA">
+
+
+    <meta name="subtitle" content="夏雷的博客~">
+
+
+
+
+<title>controller中使用@Autowired | Blogs ©️ Lei Xia</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">LEI&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">LEI&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+
+
+        <div class="main">
+            <div class="container">
+    
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">controller中使用@Autowired</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">LEI XIA</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">一月 22, 2020&nbsp;&nbsp;15:57</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>本来在controller文件中是:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">@RestController</span><br><span class="line">public class HelloController &#123;</span><br><span class="line"></span><br><span class="line">	@Valid(&quot;$&#123;minMoney&#125;&quot;)</span><br><span class="line">	private BigDecimal minValue;</span><br><span class="line"></span><br><span class="line">	@Valid(&quot;$&#123;maxMoney&#125;&quot;)</span><br><span class="line">	private BigDecimal maxValue;</span><br><span class="line"></span><br><span class="line">	@Valid(&quot;$&#123;description&#125;&quot;)</span><br><span class="line">	private String description;</span><br><span class="line">	</span><br><span class="line">	@RequestMapping(value = &quot;/hello&quot;, method = RequestMethod.GET)</span><br><span class="line">	public String say() &#123;</span><br><span class="line">		return ...</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure></p>
+<p>对应的yml配置是:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">server:</span><br><span class="line">  port: 8081</span><br><span class="line">  servlet:</span><br><span class="line">    context-path: /luckymoney</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">minMoney: 0.01</span><br><span class="line">maxMoney: 9999</span><br><span class="line">description: minvalue would be $1</span><br></pre></td></tr></table></figure></p>
+<p>如果配置中的字段越来越多，那么在controller中对应配置字段的类属性也越来越多，重复写<code>@Valid</code>很多: 为了避免这种问题, 更好的方式是把现在controller中的类属性全部放在一个类中，这样配置的时候只用配置这个类，只用写一次注解，不用重复写多次<code>@Valid</code>.</p>
+<p>改配置为:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">server:</span><br><span class="line">  port: 8081</span><br><span class="line">  servlet:</span><br><span class="line">    context-path: /luckymoney</span><br><span class="line"></span><br><span class="line">limit:</span><br><span class="line">  minMoney: 0.01</span><br><span class="line">  maxMoney: 9999</span><br><span class="line">  description: minvalue would be $1</span><br></pre></td></tr></table></figure></p>
+<p>在<code>HelloController</code>同级目录下创建文件<code>LimitConfig</code>,注意注解<code>@ConfigurationProperties</code>的参数<code>prefix</code>，要和配置那个结构体名称对应起来<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">@ConfigurationProperties(prefix = &quot;limit&quot;)</span><br><span class="line">public class LimitConfig &#123;</span><br><span class="line"></span><br><span class="line">	private BigDecimal minMoney;</span><br><span class="line"></span><br><span class="line">	private BigDecimal maxMoney;</span><br><span class="line"></span><br><span class="line">	private String description;</span><br><span class="line"></span><br><span class="line">	// getters and setters</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>此时controller为:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">@RestController</span><br><span class="line">public class HelloController &#123;</span><br><span class="line"></span><br><span class="line">	@Autowired</span><br><span class="line">	private LimitConfig limitConfig;</span><br><span class="line">	</span><br><span class="line">	@RequestMapping(value = &quot;/hello&quot;, method = RequestMethod.GET)</span><br><span class="line">	public String say() &#123;</span><br><span class="line">		return limitConfig.getDescription();</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure></p>
+<p>也就是<code>@Autowired</code>都是用来注解类的(其实最多是用来装配POJO的), 此时运行会报错<code>Could not autowire. No beans of &#39;LimitConfig&#39; type found.</code>这是因为spring容器并不知道这个类是什么东西，要用<code>@Component</code>告诉容器可以自动装配这个类，从而把这个POJO变成bean:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">@Component</span><br><span class="line">@ConfigurationProperties(prefix = &quot;limit&quot;)</span><br><span class="line">public class LimitConfig &#123;</span><br><span class="line"></span><br><span class="line">	private BigDecimal minMoney;</span><br><span class="line"></span><br><span class="line">	private BigDecimal maxMoney;</span><br><span class="line"></span><br><span class="line">	private String description;</span><br><span class="line"></span><br><span class="line">	// getters and setters</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>仔细一想，autowired实际上是完成了把POJO变成bean的第二步。bean的来源都是两步：</p>
+<ol>
+<li>定义好POJO；</li>
+<li>dependency injection;</li>
+</ol>
+<p>第二步如果手动写，我记得是要用另一个config类注解<code>@ComponentScan</code>配合POJO类的<code>@Component</code>, 这里<code>@Autowired</code>就自动装配自动扫描存在的component从而注入得到bean。</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/Autowired/"># Autowired</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+            
+            <a class="next" rel="next" href="/2020/01/21/form-validation-POJO-controller/">form validation:POJO,controller</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© LEI XIA </span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>
