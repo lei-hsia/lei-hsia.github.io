@@ -183,7 +183,7 @@
         </header>
 
         <div class="post-content">
-            <p>这是 Zuul 1.x: 同步阻塞网关的实现<br>后来，Zuul 2.x: 基于Gateway异步非阻塞网关的实现</p>
+            <p>这是 Zuul 1.x: <strong>同步阻塞</strong>网关的实现<br>后来，Zuul 2.x(简称基于Gateway): 基于Gateway<strong>异步非阻塞</strong>网关的实现。因为Netflix后期不再维护Zuul 2.x而是采用Gateway，并且Gateway原理和Zuul 2.x相同，所以基于Zuul 2.x简称基于Gateway</p>
 <h3 id="main"><a href="#main" class="headerlink" title="main"></a>main</h3><p>2 services: </p>
 <ol>
 <li>one springboot application providing a service/URL;</li>
@@ -205,6 +205,8 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># Zuul routes. For /student path here, we are routing to localhost:8090 with extra path after that</span><br><span class="line">zuul.routes.student.url=http://localhost:8090</span><br><span class="line"># Ribbon is auto integrated with Zuul and for this exercise we are not using that</span><br><span class="line">ribbon.eureka.enabled=false</span><br><span class="line"># Will start gateway server @8080</span><br><span class="line">server.port=8080</span><br></pre></td></tr></table></figure>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">http://localhost:8080/student/echoStudentName/lei</span><br><span class="line">http://localhost:8080/student/getStudentDetails/lei</span><br></pre></td></tr></table></figure>
 <p>服务运行在端口8090，网关开启运行在端口8080，通过网关实现了服务的转发.</p>
+<hr>
+<p>基于 Gateway实现API网关: 可以基于java代码或者基于配置实现</p>
 
         </div>
 
@@ -235,6 +237,8 @@
             </div>
         </section>
         <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2020/01/31/architecture-Zuul-1-x-vs-Zuul-2-x-vs-gateway/">architecture: Zuul 1.x vs Zuul 2.x vs gateway</a>
             
             
             <a class="next" rel="next" href="/2020/01/31/Rest-POST-vs-PUT/">Rest: POST vs PUT</a>
