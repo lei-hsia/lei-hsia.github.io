@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="LEI XIA">
+
+
+    <meta name="subtitle" content="夏雷的博客~">
+
+
+
+
+<title>单体架构, 微服务 | Blogs ©️ Lei Xia</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">LEI&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">LEI&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+
+
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">单体架构, 微服务</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">LEI XIA</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">二月 3, 2020&nbsp;&nbsp;15:02</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h4 id="软件架构进化，我的经历"><a href="#软件架构进化，我的经历" class="headerlink" title="软件架构进化，我的经历:"></a>软件架构进化，我的经历:</h4><ul>
+<li>一层架构</li>
+<li>MVC (ssh, ssm)</li>
+<li>dubbo (分离前后端，单体变2个)</li>
+</ul>
+<p>上面都是单体架构，而且现实中大多数公司也都还在用单体架构</p>
+<h4 id="单体架构"><a href="#单体架构" class="headerlink" title="单体架构"></a>单体架构</h4><p>单体架构: 功能，业务集中在一个发布包中，部署运行在同一个进程中; </p>
+<p>优势: 易于开发，测试，部署，水平伸缩</p>
+<p>现在的缺点:</p>
+<ul>
+<li>代码膨胀，难以维护</li>
+<li>CD交付周期长; 构建、部署成本大</li>
+<li>新人上手周期过长(说的就是我…)</li>
+<li>创新困难</li>
+<li>可扩展性差(一个进程，无论是垂直扩展增强载体机器性能，还是水平扩展增大/强集群性能，都很贵)</li>
+</ul>
+<h4 id="微服务特征"><a href="#微服务特征" class="headerlink" title="微服务特征"></a>微服务特征</h4><ul>
+<li>单一职责</li>
+<li>轻量级通信</li>
+<li>隔离性</li>
+<li>每个微服务有自己的存储系统</li>
+<li>技术多样性, 只要能提供API即可</li>
+</ul>
+<h4 id="诞生背景"><a href="#诞生背景" class="headerlink" title="诞生背景"></a>诞生背景</h4><ul>
+<li>容器技术成熟</li>
+<li>敏捷开发, 精益方法 (频繁修改，开发，测试，上线)</li>
+</ul>
+<h4 id="e-g-项目架构"><a href="#e-g-项目架构" class="headerlink" title="e.g. 项目架构"></a>e.g. 项目架构</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Client:                            </span><br><span class="line">                        ---&gt; REST API| Container(登录注册MS) -- DB  (QPS: 40, use 2 containers)</span><br><span class="line">PC                     |              </span><br><span class="line">                       |---&gt; REST API| Container(用户信息MS) -- DB  (QPS: 100, use 5) etc.</span><br><span class="line">iOS   ---&gt; ApiGateway-&gt;|</span><br><span class="line">                       |---&gt; REST API| Container(邮件短信MS) -- DB</span><br><span class="line">Android                |</span><br><span class="line">                        ---&gt; REST API| Container(课程 MS) -- DB</span><br></pre></td></tr></table></figure>
+<p>注: </p>
+<ol>
+<li>并不是所有的微服务都能提供REST API, 这里只是举个例子，假设这里所有的微服务都暴露接口</li>
+<li>上面各个微服务之间可以通讯，这里没有画出来</li>
+</ol>
+<h4 id="网关"><a href="#网关" class="headerlink" title="网关"></a>网关</h4><p>并不是所有的微服务都需要，或者都能，提供REST API; </p>
+<p>提供REST API:<strong>表明是基于HTTP通信的</strong>, 但是有的可能是基于RPC,或者Dubbo, Thrift,还可能是基于MQ的; </p>
+<p>所以需要网关。网关还可能有其他的功能，比如授权，监控，负载均衡，缓存, etc.</p>
+<p><strong>注: HTTP并不等于REST, HTTP是一个属于应用层的协议，REST是一种风格</strong> </p>
+<h4 id="微服务的划分"><a href="#微服务的划分" class="headerlink" title="微服务的划分"></a>微服务的划分</h4><p>DDD: Domain Driven Design: 精细划分微服务各个服务的界限</p>
+<p>之前看的DDD关于MVC三层架构的划分，DDD精髓在于<strong>领域模型准确反映了业务语言</strong>; 我的理解: 所以不用思考是用 controller还是service来写业务逻辑, 而是写在repository中, 也就是之前考虑的dao层中本身就包含业务逻辑</p>
+<h4 id="微服务架构引入的问题"><a href="#微服务架构引入的问题" class="headerlink" title="微服务架构引入的问题"></a>微服务架构引入的问题</h4><ol>
+<li>微服务之间如何通讯? <ul>
+<li>单体架构中没有这个问题，因为都在一台机器/一个集群上</li>
+</ul>
+</li>
+<li>微服务如何发现彼此?<ul>
+<li>单体架构中只有Dubbo有这个问题: Dubbo中是用ZK解决的，ZK作为中间人，web端(消费端)向中间人要这个服务，服务端把服务传给ZK</li>
+<li>除了ZK之外，还有Eureka, etcd, Consul, etc.</li>
+</ul>
+</li>
+<li>微服务怎样部署？更新？扩容？<ul>
+<li>单体架构中，各个公司有差异，原始的可能用FTP修改重启，自动化的可能e.g. Jenkins从master拉取，在预发环境，编译环境中改写然后脚本直接同步到生产环境，重启; </li>
+<li>微服务数量庞大，可能一个功能需要100+个微服务同时修改上线，手动上线更新是不可能的，所以要用服务编排框架</li>
+</ul>
+</li>
+</ol>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/architecture-microservice/"># architecture, microservice</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2020/02/03/微服务之间的通讯/">微服务之间的通讯</a>
+            
+            
+            <a class="next" rel="next" href="/2020/02/03/Docker-Kubernetes-微服务容器化/">Docker, Kubernetes, 微服务容器化</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© LEI XIA </span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>
