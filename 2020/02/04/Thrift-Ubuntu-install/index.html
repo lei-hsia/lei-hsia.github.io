@@ -13,7 +13,7 @@
 
 
 
-<title>微服务之间的通讯 | Blogs ©️ Lei Xia</title>
+<title>Thrift: Ubuntu install | Blogs ©️ Lei Xia</title>
 
 
 
@@ -165,7 +165,7 @@
     
     <article class="post-wrap">
         <header class="post-header">
-            <h1 class="post-title">微服务之间的通讯</h1>
+            <h1 class="post-title">Thrift: Ubuntu install</h1>
             
                 <div class="post-meta">
                     
@@ -174,7 +174,7 @@
 
                     
                         <span class="post-time">
-                        Date: <a href="#">二月 3, 2020&nbsp;&nbsp;17:39</a>
+                        Date: <a href="#">二月 4, 2020&nbsp;&nbsp;15:22</a>
                         </span>
                     
                     
@@ -183,29 +183,29 @@
         </header>
 
         <div class="post-content">
-            <h4 id="通讯分类"><a href="#通讯分类" class="headerlink" title="通讯分类"></a>通讯分类</h4><ol>
-<li><p>从通讯模式角度考虑</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">          一对一                一对多</span><br><span class="line">同步    请求响应模式,最常见        \</span><br><span class="line"></span><br><span class="line">异步    通知/请求 异步响应      发布订阅/发布异步响应</span><br></pre></td></tr></table></figure>
+            <p>Documented below:</p>
+<ol>
+<li><p>Go to <a href="www.apache.org/dyn/closer.cgi?path=/thrift/0.11.0/thrift-0.11.0.tar.gz">Apache website</a>. Depending on where you are, use this site or <a href="http://mirrors.tuna.tsinghua.edu.cn/apache/thrift/0.11.0/thrift-0.11.0.tar.gz" target="_blank" rel="noopener">Tsinghua mirror</a></p>
 </li>
-<li><p>从通讯协议角度</p>
+<li><p>Decompress: <code>tar -xvf thrift-0.11.0.tar.gz</code></p>
+</li>
+<li><p><code>cd thrift-0.11.0</code></p>
+</li>
+<li><p>install, compile:</p>
+<ul>
+<li><code>./configure</code></li>
+<li><code>make</code></li>
+<li><code>sudo make install</code></li>
+</ul>
+</li>
+<li><p><code>thrift -version</code> or <code>thrift</code> to ensure successful installation.</p>
 </li>
 </ol>
-<ul>
-<li>REST API (以http协议的角度设计一个REST风格的API)</li>
-<li>RPC: Dubbo(Alibaba), dubbox(Dangdang), Motan(Sina Weibo), Thrift(Facebook, Apache), gRPC(Google)</li>
-<li>MQ:  RabbitMQ, Kafka, Rocket, etc.</li>
-</ul>
-<h4 id="如何选择RPC框架"><a href="#如何选择RPC框架" class="headerlink" title="如何选择RPC框架"></a>如何选择RPC框架</h4><ul>
-<li>I/O, 线程调度模型</li>
-<li>序列化方式<ul>
-<li>可读: XML, json, fastjson</li>
-<li>binary: jdk自带的</li>
-</ul>
-</li>
-<li>多语言</li>
-<li>服务治理, e.g. 服务发现，监控(如果有，一般支持集群部署，高可用)</li>
-</ul>
-<h4 id="RPC框架的结构图，此处省略"><a href="#RPC框架的结构图，此处省略" class="headerlink" title="RPC框架的结构图，此处省略"></a>RPC框架的结构图，此处省略</h4><h4 id="流行的RPC框架"><a href="#流行的RPC框架" class="headerlink" title="流行的RPC框架"></a>流行的RPC框架</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">RPC          Dubbo     Motan      Thrift      gRPC</span><br><span class="line">-----------------------------------------------------------</span><br><span class="line">开发语言       Java      Java      跨语言       跨语言</span><br><span class="line"></span><br><span class="line">服务治理        √          √          x           x</span><br><span class="line"></span><br><span class="line">多种序列化      √          √     只支持thrift   只支持protobuf</span><br><span class="line"></span><br><span class="line">多种注册中心    √          √           x           x</span><br><span class="line"></span><br><span class="line">管理中心        √          √          x            x</span><br><span class="line"></span><br><span class="line">跨语言通讯      x          x           √           √</span><br><span class="line"></span><br><span class="line">整体性能        3         4            5           3</span><br><span class="line">-----------------------------------------------------------</span><br></pre></td></tr></table></figure>
+<h5 id="writing-a-thrift-file"><a href="#writing-a-thrift-file" class="headerlink" title="writing a thrift file"></a>writing a thrift file</h5><p>To generate the source from a thrift file run<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">thrift --gen &lt;language&gt; &lt;Thrift filename&gt;</span><br></pre></td></tr></table></figure></p>
+<p>e.g. <code>vim demo.thrift</code>:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"># namespace  LAN  PACKAGE_NAME</span><br><span class="line">namespace java com.lei.thrift.demo</span><br><span class="line">namespace py thrift.demo</span><br><span class="line"></span><br><span class="line"># interface</span><br><span class="line">service DemoService &#123;</span><br><span class="line">	void sayHello(1:string name);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>thrift --gen java demo.thrift</code>; or <code>thrift --gen py demo.thrift</code></p>
+
         </div>
 
         
@@ -223,7 +223,7 @@
                 <span class="tag">
                     
                     
-                        <a href="/tags/RPC-REST-API-MQ/"># RPC, REST API, MQ</a>
+                        <a href="/tags/Thrift/"># Thrift</a>
                     
                         
                 </span>
@@ -236,10 +236,8 @@
         </section>
         <section class="post-nav">
             
-                <a class="prev" rel="prev" href="/2020/02/04/Thrift-Ubuntu-install/">Thrift: Ubuntu install</a>
             
-            
-            <a class="next" rel="next" href="/2020/02/03/单体架构-微服务/">单体架构, 微服务</a>
+            <a class="next" rel="next" href="/2020/02/03/微服务之间的通讯/">微服务之间的通讯</a>
             
         </section>
 
