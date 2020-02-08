@@ -13,7 +13,7 @@
 
 
 
-<title>maven: java class missing dependencies | Blogs ©️ Lei Xia</title>
+<title>mvn dependency: thrift, @Override, @javax.annotation.generated | Blogs ©️ Lei Xia</title>
 
 
 
@@ -103,7 +103,7 @@
     
     <article class="post-wrap">
         <header class="post-header">
-            <h1 class="post-title">maven: java class missing dependencies</h1>
+            <h1 class="post-title">mvn dependency: thrift, @Override, @javax.annotation.generated</h1>
             
                 <div class="post-meta">
                     
@@ -112,7 +112,7 @@
 
                     
                         <span class="post-time">
-                        Date: <a href="#">二月 8, 2020&nbsp;&nbsp;15:38</a>
+                        Date: <a href="#">二月 8, 2020&nbsp;&nbsp;16:01</a>
                         </span>
                     
                     
@@ -121,10 +121,18 @@
         </header>
 
         <div class="post-content">
-            <p>Solution: </p>
-<p>when missing packages in Java class, hovering over the package name when it’s showing <code>Add Maven Dependencies</code>, click it. Do not manually write dependencies in <code>pom.xml</code></p>
-<p>e.g.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">thrift --gen java --out ../message-thrift-java-service-api/src/main/java message.thrift</span><br></pre></td></tr></table></figure></p>
-<p>Using thrift file to automatically generate Java class, but many packages is missing. Click on “Add Maven Dependencies”</p>
+            <ol>
+<li><code>org.apache.thrift.TException</code>: ‘thrift’ not found</li>
+</ol>
+<p>Add Maven Dependencies:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;org.apache.thrift&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;libthrift&lt;/artifactId&gt;</span><br><span class="line">    &lt;version&gt;0.11.0&lt;/version&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure></p>
+<ol start="2">
+<li><code>@Override is not allowed when implementing interface method</code></li>
+</ol>
+<p>Add plugin:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">&lt;build&gt;</span><br><span class="line">    &lt;plugins&gt;</span><br><span class="line">        &lt;plugin&gt;</span><br><span class="line">            &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;maven-compiler-plugin&lt;/artifactId&gt;</span><br><span class="line">            &lt;version&gt;2.3.2&lt;/version&gt;</span><br><span class="line">            &lt;configuration&gt;</span><br><span class="line">                &lt;source&gt;1.7&lt;/source&gt;</span><br><span class="line">                &lt;target&gt;1.7&lt;/target&gt;</span><br><span class="line">            &lt;/configuration&gt;</span><br><span class="line">        &lt;/plugin&gt;</span><br><span class="line">    &lt;/plugins&gt;</span><br><span class="line">&lt;/build&gt;</span><br></pre></td></tr></table></figure></p>
+<ol start="3">
+<li><a href="mailto:`@javax.annotation.Generated" target="_blank" rel="noopener">`@javax.annotation.Generated</a><code>:</code>Cannot resolve symbol Generated`</li>
+</ol>
+<p>Add Maven Dependency:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;javax.annotation&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;javax.annotation-api&lt;/artifactId&gt;</span><br><span class="line">    &lt;version&gt;1.3.1&lt;/version&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure></p>
 
         </div>
 
@@ -143,7 +151,7 @@
                 <span class="tag">
                     
                     
-                        <a href="/tags/maven/"># maven</a>
+                        <a href="/tags/mvn/"># mvn</a>
                     
                         
                 </span>
@@ -156,10 +164,8 @@
         </section>
         <section class="post-nav">
             
-                <a class="prev" rel="prev" href="/2020/02/08/mvn-dependency-thrift-Override-javax-annotation-generated/">mvn dependency: thrift, @Override, @javax.annotation.generated</a>
             
-            
-            <a class="next" rel="next" href="/2020/02/08/RPC-thrift用法/">RPC: thrift用法</a>
+            <a class="next" rel="next" href="/2020/02/08/maven-java-class-missing-dependencies/">maven: java class missing dependencies</a>
             
         </section>
 
