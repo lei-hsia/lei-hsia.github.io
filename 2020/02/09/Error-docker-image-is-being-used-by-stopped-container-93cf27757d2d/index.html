@@ -13,7 +13,7 @@
 
 
 
-<title>CentOS, Ubuntu: docker | Blogs ©️ Lei Xia</title>
+<title>Error: docker image is being used by stopped container 93cf27757d2d | Blogs ©️ Lei Xia</title>
 
 
 
@@ -103,7 +103,7 @@
     
     <article class="post-wrap">
         <header class="post-header">
-            <h1 class="post-title">CentOS, Ubuntu: docker</h1>
+            <h1 class="post-title">Error: docker image is being used by stopped container 93cf27757d2d</h1>
             
                 <div class="post-meta">
                     
@@ -112,7 +112,7 @@
 
                     
                         <span class="post-time">
-                        Date: <a href="#">二月 8, 2020&nbsp;&nbsp;16:57</a>
+                        Date: <a href="#">二月 9, 2020&nbsp;&nbsp;15:08</a>
                         </span>
                     
                     
@@ -121,9 +121,17 @@
         </header>
 
         <div class="post-content">
-            <p>Manually control docker service start and stop.</p>
-<p>Ubuntu:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">sudo service docker start</span><br><span class="line">sudo service docker stop</span><br><span class="line">sudo service docker restart</span><br></pre></td></tr></table></figure></p>
-<p>CentOS:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">systemctl start docker</span><br><span class="line">systemctl stop docker</span><br><span class="line">systemctl restart docker</span><br><span class="line">systemctl status docker</span><br><span class="line"></span><br><span class="line">systemctl enable docker  # start when machine starts</span><br></pre></td></tr></table></figure></p>
+            <p>When remove an image, error: </p>
+<p><code>docker image is being used by stopped container 93cf27757d2d</code></p>
+<p>Reason: the image to be deleted is being used by a container. This container might not be running.</p>
+<p><code>docker ps</code>,or <code>docker container ls</code>: might show nothing, because this container is not running.</p>
+<p><code>docker ps -a</code>: ✅ <code>ls</code> all containers, including which are not running.</p>
+<p>It shows that a container with ID <code>93cf27757d2d</code> is using this image. </p>
+<p><code>docker rm 93cf27757d2d</code> to remove this container. 93cf27757d2d is its containerId.</p>
+<p>Then <code>docker rmi 76c7c66bff02</code> to remove this image. 76c7c66bff02 is ImageId. </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Deleted: sha256:76c766bff021dbe2ff1c974bce60f490bb7978db6f3363b76</span><br><span class="line">... (10+ lines like this)</span><br></pre></td></tr></table></figure>
+<p>shows the image is successfully deleted. </p>
+<p><code>docker images</code> to see this.</p>
 
         </div>
 
@@ -142,7 +150,7 @@
                 <span class="tag">
                     
                     
-                        <a href="/tags/docker/"># docker</a>
+                        <a href="/tags/docker-image/"># docker, image</a>
                     
                         
                 </span>
@@ -155,10 +163,8 @@
         </section>
         <section class="post-nav">
             
-                <a class="prev" rel="prev" href="/2020/02/09/Error-docker-image-is-being-used-by-stopped-container-93cf27757d2d/">Error: docker image is being used by stopped container 93cf27757d2d</a>
             
-            
-            <a class="next" rel="next" href="/2020/02/08/mvn-dependency-thrift-Override-javax-annotation-generated/">mvn dependency: thrift, @Override, @javax.annotation.generated</a>
+            <a class="next" rel="next" href="/2020/02/08/CentOS-Ubuntu-docker/">CentOS, Ubuntu: docker</a>
             
         </section>
 
