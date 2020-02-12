@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="LEI XIA">
+
+
+    <meta name="subtitle" content="夏雷的博客~">
+
+
+
+
+<title>javaSE: System.arraycopy | Blogs ©️ Lei Xia</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">LEI&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">LEI&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+
+
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">javaSE: System.arraycopy</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">LEI XIA</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">二月 12, 2020&nbsp;&nbsp;10:23</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>在 <code>StringBuilder</code>, <code>StringBuffer</code>, <code>ArrayList</code>, <code>Arrays</code>等类的源码中有很多<code>System.arraycopy</code>的方法调用</p>
+<p>Source code: </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line">     * Copies an array from the specified source array, beginning at the</span><br><span class="line">     * specified position, to the specified position of the destination array.</span><br><span class="line">     * A subsequence of array components are copied from the source</span><br><span class="line">     * array referenced by &lt;code&gt;src&lt;/code&gt; to the destination array</span><br><span class="line">     * referenced by &lt;code&gt;dest&lt;/code&gt;. The number of components copied is</span><br><span class="line">     * equal to the &lt;code&gt;length&lt;/code&gt; argument. The components at</span><br><span class="line">     * positions &lt;code&gt;srcPos&lt;/code&gt; through</span><br><span class="line">     * &lt;code&gt;srcPos+length-1&lt;/code&gt; in the source array are copied into</span><br><span class="line">     * positions &lt;code&gt;destPos&lt;/code&gt; through</span><br><span class="line">     * &lt;code&gt;destPos+length-1&lt;/code&gt;, respectively, of the destination</span><br><span class="line">     * array.</span><br><span class="line">     * &lt;p&gt;</span><br><span class="line">     * If the &lt;code&gt;src&lt;/code&gt; and &lt;code&gt;dest&lt;/code&gt; arguments refer to the</span><br><span class="line">     * same array object, then the copying is performed as if the</span><br><span class="line">     * components at positions &lt;code&gt;srcPos&lt;/code&gt; through</span><br><span class="line">     * &lt;code&gt;srcPos+length-1&lt;/code&gt; were first copied to a temporary</span><br><span class="line">     * array with &lt;code&gt;length&lt;/code&gt; components and then the contents of</span><br><span class="line">     * the temporary array were copied into positions</span><br><span class="line">     * &lt;code&gt;destPos&lt;/code&gt; through &lt;code&gt;destPos+length-1&lt;/code&gt; of the</span><br><span class="line">     * destination array.</span><br><span class="line">     * &lt;p&gt;</span><br><span class="line">     * If &lt;code&gt;dest&lt;/code&gt; is &lt;code&gt;null&lt;/code&gt;, then a</span><br><span class="line">     * &lt;code&gt;NullPointerException&lt;/code&gt; is thrown.</span><br><span class="line">     * &lt;p&gt;</span><br><span class="line">     * If &lt;code&gt;src&lt;/code&gt; is &lt;code&gt;null&lt;/code&gt;, then a</span><br><span class="line">     * &lt;code&gt;NullPointerException&lt;/code&gt; is thrown and the destination</span><br><span class="line">     * array is not modified.</span><br><span class="line">     * &lt;p&gt;</span><br><span class="line">     * Otherwise, if any of the following is true, an</span><br><span class="line">     * &lt;code&gt;ArrayStoreException&lt;/code&gt; is thrown and the destination is</span><br><span class="line">     * not modified:</span><br><span class="line">     * &lt;ul&gt;</span><br><span class="line">     * &lt;li&gt;The &lt;code&gt;src&lt;/code&gt; argument refers to an object that is not an</span><br><span class="line">     *     array.</span><br><span class="line">     * &lt;li&gt;The &lt;code&gt;dest&lt;/code&gt; argument refers to an object that is not an</span><br><span class="line">     *     array.</span><br><span class="line">     * &lt;li&gt;The &lt;code&gt;src&lt;/code&gt; argument and &lt;code&gt;dest&lt;/code&gt; argument refer</span><br><span class="line">     *     to arrays whose component types are different primitive types.</span><br><span class="line">     * &lt;li&gt;The &lt;code&gt;src&lt;/code&gt; argument refers to an array with a primitive</span><br><span class="line">     *    component type and the &lt;code&gt;dest&lt;/code&gt; argument refers to an array</span><br><span class="line">     *     with a reference component type.</span><br><span class="line">     * &lt;li&gt;The &lt;code&gt;src&lt;/code&gt; argument refers to an array with a reference</span><br><span class="line">     *    component type and the &lt;code&gt;dest&lt;/code&gt; argument refers to an array</span><br><span class="line">     *     with a primitive component type.</span><br><span class="line">     * &lt;/ul&gt;</span><br><span class="line">     * &lt;p&gt;</span><br><span class="line">     * Otherwise, if any of the following is true, an</span><br><span class="line">     * &lt;code&gt;IndexOutOfBoundsException&lt;/code&gt; is</span><br><span class="line">     * thrown and the destination is not modified:</span><br><span class="line">     * &lt;ul&gt;</span><br><span class="line">     * &lt;li&gt;The &lt;code&gt;srcPos&lt;/code&gt; argument is negative.</span><br><span class="line">     * &lt;li&gt;The &lt;code&gt;destPos&lt;/code&gt; argument is negative.</span><br><span class="line">     * &lt;li&gt;The &lt;code&gt;length&lt;/code&gt; argument is negative.</span><br><span class="line">     * &lt;li&gt;&lt;code&gt;srcPos+length&lt;/code&gt; is greater than</span><br><span class="line">     *     &lt;code&gt;src.length&lt;/code&gt;, the length of the source array.</span><br><span class="line">     * &lt;li&gt;&lt;code&gt;destPos+length&lt;/code&gt; is greater than</span><br><span class="line">     *     &lt;code&gt;dest.length&lt;/code&gt;, the length of the destination array.</span><br><span class="line">     * &lt;/ul&gt;</span><br><span class="line">     * &lt;p&gt;</span><br><span class="line">     * Otherwise, if any actual component of the source array from</span><br><span class="line">     * position &lt;code&gt;srcPos&lt;/code&gt; through</span><br><span class="line">     * &lt;code&gt;srcPos+length-1&lt;/code&gt; cannot be converted to the component</span><br><span class="line">     * type of the destination array by assignment conversion, an</span><br><span class="line">     * &lt;code&gt;ArrayStoreException&lt;/code&gt; is thrown. In this case, let</span><br><span class="line">     * &lt;b&gt;&lt;i&gt;k&lt;/i&gt;&lt;/b&gt; be the smallest nonnegative integer less than</span><br><span class="line">     * length such that &lt;code&gt;src[srcPos+&lt;/code&gt;&lt;i&gt;k&lt;/i&gt;&lt;code&gt;]&lt;/code&gt;</span><br><span class="line">     * cannot be converted to the component type of the destination</span><br><span class="line">     * array; when the exception is thrown, source array components from</span><br><span class="line">     * positions &lt;code&gt;srcPos&lt;/code&gt; through</span><br><span class="line">     * &lt;code&gt;srcPos+&lt;/code&gt;&lt;i&gt;k&lt;/i&gt;&lt;code&gt;-1&lt;/code&gt;</span><br><span class="line">     * will already have been copied to destination array positions</span><br><span class="line">     * &lt;code&gt;destPos&lt;/code&gt; through</span><br><span class="line">     * &lt;code&gt;destPos+&lt;/code&gt;&lt;i&gt;k&lt;/I&gt;&lt;code&gt;-1&lt;/code&gt; and no other</span><br><span class="line">     * positions of the destination array will have been modified.</span><br><span class="line">     * (Because of the restrictions already itemized, this</span><br><span class="line">     * paragraph effectively applies only to the situation where both</span><br><span class="line">     * arrays have component types that are reference types.)</span><br><span class="line">     *</span><br><span class="line">     * @param      src      the source array.</span><br><span class="line">     * @param      srcPos   starting position in the source array.</span><br><span class="line">     * @param      dest     the destination array.</span><br><span class="line">     * @param      destPos  starting position in the destination data.</span><br><span class="line">     * @param      length   the number of array elements to be copied.</span><br><span class="line">     * @exception  IndexOutOfBoundsException  if copying would cause</span><br><span class="line">     *               access of data outside array bounds.</span><br><span class="line">     * @exception  ArrayStoreException  if an element in the &lt;code&gt;src&lt;/code&gt;</span><br><span class="line">     *               array could not be stored into the &lt;code&gt;dest&lt;/code&gt; array</span><br><span class="line">     *               because of a type mismatch.</span><br><span class="line">     * @exception  NullPointerException if either &lt;code&gt;src&lt;/code&gt; or</span><br><span class="line">     *               &lt;code&gt;dest&lt;/code&gt; is &lt;code&gt;null&lt;/code&gt;.</span><br><span class="line">     */</span><br><span class="line">    public static native void arraycopy(Object src,  int  srcPos, Object dest, int destPos, int length);</span><br></pre></td></tr></table></figure>
+<p>我的测试:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">public class ArrayCopy &#123;</span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line">        User[] users = new User[]&#123;new User(1, &quot;admin&quot;, &quot;admin@gmail.com&quot;),</span><br><span class="line">        new User(2, &quot;lei&quot;, &quot;lei@163.com&quot;),</span><br><span class="line">        new User(3, &quot;fff&quot;, &quot;fff@163.com&quot;)&#125;;</span><br><span class="line"></span><br><span class="line">        User[] target = new User[users.length];</span><br><span class="line">        System.arraycopy(users,0,target,0,users.length);</span><br><span class="line">        System.out.println(&quot;源对象和目标对象物理地址是否相同: &quot; );</span><br><span class="line">        System.out.println((users[0] == target[0])? &quot;相同: 浅拷贝&quot;:&quot;不同: 深拷贝&quot;);</span><br><span class="line"></span><br><span class="line">        target[0].setEmail(&quot;admin@163.com&quot;);</span><br><span class="line">        System.out.println(&quot;修改目标对象属性值后，源对象users: &quot;);</span><br><span class="line">        for (User user : users) &#123;</span><br><span class="line">            System.out.println(user);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        Integer[] integers = new Integer[]&#123;1,2,3,4,5&#125;;</span><br><span class="line">        Integer[] dest = new Integer[integers.length];</span><br><span class="line">        System.arraycopy(integers,0,dest,0,integers.length);</span><br><span class="line">        System.out.println(&quot;源int数组和目标数组物理地址是否相同: &quot; );</span><br><span class="line">        System.out.println((users[0] == target[0])? &quot;相同: 浅拷贝&quot;:&quot;不同: 深拷贝&quot;);</span><br><span class="line"></span><br><span class="line">        dest[0] = 999;</span><br><span class="line">        System.out.println(&quot;修改目标数组后, 源数组: &quot;);</span><br><span class="line">        for (Integer integer : integers) &#123;</span><br><span class="line">            System.out.print(integer);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>结果:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">源对象和目标对象物理地址是否相同: </span><br><span class="line">相同: 浅拷贝</span><br><span class="line">修改目标对象属性值后，源对象users: </span><br><span class="line">User&#123;id=1, username=&apos;admin&apos;, email=&apos;admin@163.com&apos;&#125;</span><br><span class="line">User&#123;id=2, username=&apos;lei&apos;, email=&apos;lei@163.com&apos;&#125;</span><br><span class="line">User&#123;id=3, username=&apos;fff&apos;, email=&apos;fff@163.com&apos;&#125;</span><br><span class="line">源int数组和目标数组物理地址是否相同: </span><br><span class="line">相同: 浅拷贝</span><br><span class="line">修改目标数组后, 源数组: </span><br><span class="line">12345</span><br></pre></td></tr></table></figure></p>
+<h3 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h3><p>i.e. System提供了一个native方法 <code>System.arraycopy()</code>深浅拷贝，实现数组之间的复制；</p>
+<ol>
+<li>对于一维primitive type来说是很典型的pass-by-value, 复制传递修改副本不会影响原来的值；</li>
+<li>一维数组存放的是对象的时候，复制结果是一个一维引用变量传递给副本的数组，改变副本的值会影响源数组。</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">public class User &#123;</span><br><span class="line"></span><br><span class="line">    private Integer id;</span><br><span class="line">    private String username;</span><br><span class="line">    private String email;</span><br><span class="line"></span><br><span class="line">    public User () &#123;&#125;</span><br><span class="line"></span><br><span class="line">    public User(Integer id, String username, String email) &#123;</span><br><span class="line">        this.id = id;</span><br><span class="line">        this.username = username;</span><br><span class="line">        this.email = email;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public Integer getId() &#123;</span><br><span class="line">        return id;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setId(Integer id) &#123;</span><br><span class="line">        this.id = id;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public String getUsername() &#123;</span><br><span class="line">        return username;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setUsername(String username) &#123;</span><br><span class="line">        this.username = username;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public String getEmail() &#123;</span><br><span class="line">        return email;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setEmail(String email) &#123;</span><br><span class="line">        this.email = email;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    public String toString() &#123;</span><br><span class="line">        return &quot;User&#123;&quot; +</span><br><span class="line">                &quot;id=&quot; + id +</span><br><span class="line">                &quot;, username=&apos;&quot; + username + &apos;\&apos;&apos; +</span><br><span class="line">                &quot;, email=&apos;&quot; + email + &apos;\&apos;&apos; +</span><br><span class="line">                &apos;&#125;&apos;;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/java基础/"># java基础</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2020/02/12/leetcode1337-返回数组最小的K个数的下标/">leetcode1337:返回数组最小的K个数的下标</a>
+            
+            
+            <a class="next" rel="next" href="/2020/02/12/javaSE-array-element-frequency/">javaSE: array element frequency</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© LEI XIA </span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>
