@@ -13,7 +13,7 @@
 
 
 
-<title>javaSE: 查找数组中最小的K个数的index | Blogs ©️ Lei Xia</title>
+<title>docker修改镜像源 | Blogs ©️ Lei Xia</title>
 
 
 
@@ -103,7 +103,7 @@
     
     <article class="post-wrap">
         <header class="post-header">
-            <h1 class="post-title">javaSE: 查找数组中最小的K个数的index</h1>
+            <h1 class="post-title">docker修改镜像源</h1>
             
                 <div class="post-meta">
                     
@@ -112,7 +112,7 @@
 
                     
                         <span class="post-time">
-                        Date: <a href="#">二月 12, 2020&nbsp;&nbsp;11:05</a>
+                        Date: <a href="#">二月 12, 2020&nbsp;&nbsp;13:27</a>
                         </span>
                     
                     
@@ -121,8 +121,17 @@
         </header>
 
         <div class="post-content">
-            <p>和leetcode1337核心部分相同 </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">   array: arr[] </span><br><span class="line"></span><br><span class="line">// a: after sorting; num: index</span><br><span class="line">   double[] a = new double[k];</span><br><span class="line">   int[] nums = new int[m];</span><br><span class="line">   for (int i = 0; i &lt; m; ++i) &#123;</span><br><span class="line">       nums[i] = i;</span><br><span class="line">   &#125;</span><br><span class="line">   for (int i = 0; i &lt; k; ++i) &#123;</span><br><span class="line">       int index = i;</span><br><span class="line">       for (int j = i; j &lt; m; ++j) &#123;</span><br><span class="line">           if (arr[index] &gt; arr[j]) &#123;</span><br><span class="line">               index = j;</span><br><span class="line">           &#125;</span><br><span class="line">       &#125;</span><br><span class="line">       a[i] = arr[index];</span><br><span class="line">       </span><br><span class="line">       double tmp1 = arr[i];</span><br><span class="line">       arr[i] = arr[index];</span><br><span class="line">       arr[index] = tmp1;</span><br><span class="line">       </span><br><span class="line">       int tmp2 = nums[i];</span><br><span class="line">       nums[i] = nums[index];</span><br><span class="line">       nums[index] = tmp2;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+            <p>在国内，可以通过registry.docker-cn.com访问官方镜像库，目前该镜像库只包含流行的公有镜像，而私有镜像仍需要从美国镜像库中拉取。</p>
+<p><code>vim /etc/docker/daemon.json</code>:</p>
+<p>Docker官方中国区镜像:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">“registry-mirrors”: [‘https://registry.docker-cn.com’]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>阿里镜像源:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line"> 　　　　&quot;registry-mirrors&quot;: [ &quot;https://pee6w651.mirror.aliyuncs.com&quot;]</span><br><span class="line">　　&#125;</span><br></pre></td></tr></table></figure></p>
+<p>重启docker:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl daemon-reload</span><br><span class="line">systemctl restart docker</span><br></pre></td></tr></table></figure></p>
+<p>If bug:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Job for docker.service failed because the controll process exited with error code. See &quot;systemctl status docker.service&quot; and &quot;journalctl -xe&quot; for details.</span><br></pre></td></tr></table></figure></p>
+<p>In <code>/etc/docker</code>:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mv daemon.json daemon.conf</span><br></pre></td></tr></table></figure></p>
+<p>就行了.</p>
+<p>再<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl restart docker</span><br><span class="line">docker version</span><br></pre></td></tr></table></figure></p>
+
         </div>
 
         
@@ -140,7 +149,7 @@
                 <span class="tag">
                     
                     
-                        <a href="/tags/K-smallest-index/"># K-smallest index</a>
+                        <a href="/tags/docker-images/"># docker images</a>
                     
                         
                 </span>
@@ -153,10 +162,8 @@
         </section>
         <section class="post-nav">
             
-                <a class="prev" rel="prev" href="/2020/02/12/docker修改镜像源/">docker修改镜像源</a>
             
-            
-            <a class="next" rel="next" href="/2020/02/12/leetcode1337-返回数组最小的K个数的下标/">leetcode1337:返回数组最小的K个数的下标</a>
+            <a class="next" rel="next" href="/2020/02/12/javaSE-查找数组中最小的K个数的index/">javaSE: 查找数组中最小的K个数的index</a>
             
         </section>
 
