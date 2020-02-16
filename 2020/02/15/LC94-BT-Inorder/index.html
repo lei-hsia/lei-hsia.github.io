@@ -13,7 +13,7 @@
 
 
 
-<title>javaSE: ArrayList, LinkedList | Blogs ©️ Lei Xia</title>
+<title>LC94: BT Inorder | Blogs ©️ Lei Xia</title>
 
 
 
@@ -103,7 +103,7 @@
     
     <article class="post-wrap">
         <header class="post-header">
-            <h1 class="post-title">javaSE: ArrayList, LinkedList</h1>
+            <h1 class="post-title">LC94: BT Inorder</h1>
             
                 <div class="post-meta">
                     
@@ -112,7 +112,7 @@
 
                     
                         <span class="post-time">
-                        Date: <a href="#">二月 14, 2020&nbsp;&nbsp;16:30</a>
+                        Date: <a href="#">二月 15, 2020&nbsp;&nbsp;17:16</a>
                         </span>
                     
                     
@@ -121,32 +121,13 @@
         </header>
 
         <div class="post-content">
-            <ol>
-<li><p>ds: </p>
-<ul>
-<li>ArrayList: dynamic array</li>
-<li>LinkedList: linked list</li>
-</ul>
-</li>
-<li><p>eff: </p>
-<ul>
-<li>random access: ArrayList</li>
-<li>add/remove: LinkedList</li>
-</ul>
-</li>
-<li><p>degree of freedom:</p>
-<ul>
-<li>ArrayList: low, set capacity, easy to use;</li>
-<li>LinkedList: high, change w.r.t. #elements, uneasy to use</li>
-</ul>
-</li>
-<li><p>major expense:</p>
-<ul>
-<li>ArrayList: space pre-set for list</li>
-<li>LinkedList: node storage, node pointer</li>
-</ul>
-</li>
+            <p>其实这里iterative的写法，虽然是iterative但是还是有recursive的影子。</p>
+<ol>
+<li>pre: 根左右，直接反向stack添加就行了</li>
+<li>post: 左右根，因为是用addFirst从前面添加，所以stack添加的时候“左右”就行了</li>
+<li>in: 左根右，这里recursive的影子就出来了，因为左边先要遍历完才到根，所以左边一直下去都装到stack里面，然后回溯到根节点，再向右</li>
 </ol>
+<p>Iterative inorder:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">class Solution &#123;</span><br><span class="line">    public List&lt;Integer&gt; inorderTraversal(TreeNode root) &#123;</span><br><span class="line">        List&lt;Integer&gt; res = new LinkedList&lt;&gt;();</span><br><span class="line">        Stack&lt;TreeNode&gt; st = new Stack&lt;&gt;();</span><br><span class="line">        TreeNode node = root;</span><br><span class="line">        while (!st.empty() || node!=null) &#123;</span><br><span class="line">            while (node != null) &#123;</span><br><span class="line">                st.push(node);</span><br><span class="line">                node = node.left;</span><br><span class="line">            &#125;</span><br><span class="line">            node = st.pop(); // node is null, assign non-null node to node</span><br><span class="line">            res.add(node.val);</span><br><span class="line">            node = node.right;</span><br><span class="line">        &#125;</span><br><span class="line">        return res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 
         </div>
 
@@ -165,7 +146,7 @@
                 <span class="tag">
                     
                     
-                        <a href="/tags/java-List/"># java List</a>
+                        <a href="/tags/tree-inorder/"># tree inorder</a>
                     
                         
                 </span>
@@ -178,10 +159,10 @@
         </section>
         <section class="post-nav">
             
-                <a class="prev" rel="prev" href="/2020/02/14/LC144-BT-Preorder-Traversal/">LC144: BT Preorder Traversal</a>
+                <a class="prev" rel="prev" href="/2020/02/16/LC102-BT-Level-order/">LC102: BT Level order</a>
             
             
-            <a class="next" rel="next" href="/2020/02/13/javaSE-Map-dup-List-Set/">javaSE: Map dup; /List,Set</a>
+            <a class="next" rel="next" href="/2020/02/15/LC145-BT-Postorder/">LC145: BT Postorder</a>
             
         </section>
 

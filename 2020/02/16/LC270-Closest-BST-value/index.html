@@ -13,7 +13,7 @@
 
 
 
-<title>javaSE: ArrayList, LinkedList | Blogs ©️ Lei Xia</title>
+<title>LC270: Closest BST value | Blogs ©️ Lei Xia</title>
 
 
 
@@ -103,7 +103,7 @@
     
     <article class="post-wrap">
         <header class="post-header">
-            <h1 class="post-title">javaSE: ArrayList, LinkedList</h1>
+            <h1 class="post-title">LC270: Closest BST value</h1>
             
                 <div class="post-meta">
                     
@@ -112,7 +112,7 @@
 
                     
                         <span class="post-time">
-                        Date: <a href="#">二月 14, 2020&nbsp;&nbsp;16:30</a>
+                        Date: <a href="#">二月 16, 2020&nbsp;&nbsp;15:17</a>
                         </span>
                     
                     
@@ -121,33 +121,7 @@
         </header>
 
         <div class="post-content">
-            <ol>
-<li><p>ds: </p>
-<ul>
-<li>ArrayList: dynamic array</li>
-<li>LinkedList: linked list</li>
-</ul>
-</li>
-<li><p>eff: </p>
-<ul>
-<li>random access: ArrayList</li>
-<li>add/remove: LinkedList</li>
-</ul>
-</li>
-<li><p>degree of freedom:</p>
-<ul>
-<li>ArrayList: low, set capacity, easy to use;</li>
-<li>LinkedList: high, change w.r.t. #elements, uneasy to use</li>
-</ul>
-</li>
-<li><p>major expense:</p>
-<ul>
-<li>ArrayList: space pre-set for list</li>
-<li>LinkedList: node storage, node pointer</li>
-</ul>
-</li>
-</ol>
-
+            <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">class Solution &#123;</span><br><span class="line">    public int closestValue(TreeNode root, double target) &#123;</span><br><span class="line">        int res = root.val;</span><br><span class="line">        while (root != null) &#123;</span><br><span class="line">            if (Math.abs(root.val - target) &lt; Math.abs(res - target)) &#123;</span><br><span class="line">                res = root.val;</span><br><span class="line">            &#125;</span><br><span class="line">            root = root.val &gt; target ? root.left : root.right;</span><br><span class="line">        &#125;</span><br><span class="line">        return res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
         </div>
 
         
@@ -165,7 +139,7 @@
                 <span class="tag">
                     
                     
-                        <a href="/tags/java-List/"># java List</a>
+                        <a href="/tags/bst/"># bst</a>
                     
                         
                 </span>
@@ -178,10 +152,10 @@
         </section>
         <section class="post-nav">
             
-                <a class="prev" rel="prev" href="/2020/02/14/LC144-BT-Preorder-Traversal/">LC144: BT Preorder Traversal</a>
+                <a class="prev" rel="prev" href="/2020/02/16/LC255-Verify-Preorder-Sequence-in-BST/">LC255: Verify Preorder Sequence in BST</a>
             
             
-            <a class="next" rel="next" href="/2020/02/13/javaSE-Map-dup-List-Set/">javaSE: Map dup; /List,Set</a>
+            <a class="next" rel="next" href="/2020/02/16/LC107-BT-level-bottom-up/">LC107: BT level bottom-up</a>
             
         </section>
 
