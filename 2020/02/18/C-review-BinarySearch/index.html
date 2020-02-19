@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="LEI XIA">
+
+
+    <meta name="subtitle" content="夏雷的博客~">
+
+
+
+
+<title>C++: review: BinarySearch | Blogs ©️ Lei Xia</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">LEI&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">LEI&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+
+
+        <div class="main">
+            <div class="container">
+    
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">C++: review: BinarySearch</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">LEI XIA</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">二月 18, 2020&nbsp;&nbsp;15:42</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>most common edition:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">int binarysearch(int nums[], int low, int high, int key) &#123;</span><br><span class="line">	while (low &lt;= high) &#123;</span><br><span class="line">		int mid = low + (high - low) / 2;</span><br><span class="line">		if (nums[mid] == key) return mid;</span><br><span class="line">		else if (key &lt; nums[mid]) high = mid - 1; </span><br><span class="line">		else low = mid + 1;</span><br><span class="line">	&#125;</span><br><span class="line">	return low;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>Achtung: </p>
+<ol>
+<li><code>high = mid - 1</code>, <code>low = mid + 1</code>, <code>mid = low + (high - low) / 2</code>, 两头取的是闭区间，求中位数也防止了溢出</li>
+<li>结条件为搜索空间为空，也就是low&gt;high</li>
+</ol>
+<p><em>实际上是一个维护low的过程:</em>low为0开始，只在中位数遇到确定小于目标时才前进，并且永不后退。low一直朝着第一个目标的位置接近，直到到达。</p>
+<p>上面代码好用的前提条件:  <strong>没有重复值</strong></p>
+<p>如果有重复值的话，那么返回的位置就不一定是哪个了，虽然也是目标的位置，但是这个时候我们往往会要求返回第一个大于等于目标值的位置。</p>
+<p>那么具体该怎么办呢？其实很简单，当取到等于目标值的时候，之前是直接return，现在我们改为继续减小high来缩小搜索空间。代码如下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">int binarysearch_lower_bound(int nums[], int low, int high, int key)&#123;</span><br><span class="line">    while(low&lt;=high)&#123;</span><br><span class="line">        int mid = low + (high - low) / 2;</span><br><span class="line">        if(nums[mid]&gt;=key)</span><br><span class="line">            high = mid - 1;</span><br><span class="line">        else</span><br><span class="line">            low = mid + 1;</span><br><span class="line">    &#125;</span><br><span class="line">    return low;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/binary-search/"># binary search</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2020/02/18/LC33-Search-in-Rotated-Sorted-Array/">LC33: Search in Rotated Sorted Array</a>
+            
+            
+            <a class="next" rel="next" href="/2020/02/18/LC146-LRU-cache-LinkedHashMap/">LC146: LRU cache(LinkedHashMap)</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© LEI XIA </span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>
