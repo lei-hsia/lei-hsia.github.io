@@ -13,7 +13,7 @@
 
 
 
-<title>LC138 Copy list with Random Pointer | Blogs ©️ Lei Xia</title>
+<title>LC402. Remove K digits | Blogs ©️ Lei Xia</title>
 
 
 
@@ -103,7 +103,7 @@
     
     <article class="post-wrap">
         <header class="post-header">
-            <h1 class="post-title">LC138 Copy list with Random Pointer</h1>
+            <h1 class="post-title">LC402. Remove K digits</h1>
             
                 <div class="post-meta">
                     
@@ -112,7 +112,7 @@
 
                     
                         <span class="post-time">
-                        Date: <a href="#">二月 19, 2020&nbsp;&nbsp;17:33</a>
+                        Date: <a href="#">二月 20, 2020&nbsp;&nbsp;9:33</a>
                         </span>
                     
                     
@@ -121,12 +121,42 @@
         </header>
 
         <div class="post-content">
-            <p><strong>说到random就应该想到HashMap</strong></p>
-<p>因为每个节点都有一个random pointer,这个pointer可以指向null或者链表中任意一个节点; 如果新链表中每个节点的random pointer赋值时，都要去遍历整个链表那么肯定TLE; 所以应该考虑用HashMap缩短查找时间为O(1); 第一遍遍历生成所有节点的过程中建立一个原来所有节点和新节点的HashMap, 第二遍给node赋值next指针好说，赋值random pointer的时候，根据原来的节点的random pointer赋值查找时间也是O(1).</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">public RandomListNode copyRandomList(RandomListNode head) &#123;</span><br><span class="line">  if (head == null) return null;</span><br><span class="line">  </span><br><span class="line">  Map&lt;RandomListNode, RandomListNode&gt; map = new HashMap&lt;RandomListNode, RandomListNode&gt;();</span><br><span class="line">  </span><br><span class="line">  // loop 1. copy all the nodes</span><br><span class="line">  RandomListNode node = head;</span><br><span class="line">  while (node != null) &#123;</span><br><span class="line">    map.put(node, new RandomListNode(node.val));</span><br><span class="line">    node = node.next;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  // loop 2. assign next and random pointers</span><br><span class="line">  node = head;</span><br><span class="line">  while (node != null) &#123;</span><br><span class="line">    map.get(node).next = map.get(node.next);</span><br><span class="line">    map.get(node).random = map.get(node.random);</span><br><span class="line">    node = node.next;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  return map.get(head);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>Achtung hier: </p>
-<p><code>map.get(node).next</code>: 得到当前key的节点的next指针指向的节点, map中V对应的新创建的节点的next指针就应该指向这个节点</p>
-<p><code>map.get(node).random</code>同理，指向的是当前key的节点的random指针指向的节点</p>
+            <p>从中看出一个东西, 凡是这种要跟上一个digit比较,并且就只是上一个digit的题型，用stack很方便; 也就是解法中的第二部分的while</p>
+<pre><code>public String removeKdigits(String num, int k) {
+        int len = num.length();
+        if (len == k) return &quot;0&quot;;
+        Stack&lt;Character&gt; st = new Stack&lt;&gt;();
+        int i = 0;
+
+        // prev larger: discard prev
+        while (i &lt; len) {
+            while (k &gt; 0 &amp;&amp; !st.empty() &amp;&amp; st.peek() &gt; num.charAt(i)) {
+                st.pop();
+                k--;
+            }
+            st.push(num.charAt(i));
+            i++;
+        }
+
+        // k != 0, stack: greater at top; pop all top K digits
+        while (k &gt; 0) {
+            st.pop();
+            k--;
+        }
+
+        // build res from stack
+        StringBuilder sb = new StringBuilder();
+        while (!st.empty()) {
+            sb.append(st.pop());
+        }
+        sb.reverse();
+
+        while (sb.length() &gt; 1 &amp;&amp; sb.charAt(0) == &apos;0&apos;) {
+            sb.deleteCharAt(0);
+        }
+        return sb.toString();
+    }
+</code></pre><p>另外, <code>StringBuilder</code>的用法要弄熟</p>
 
         </div>
 
@@ -145,7 +175,7 @@
                 <span class="tag">
                     
                     
-                        <a href="/tags/HashMap/"># HashMap</a>
+                        <a href="/tags/stack/"># stack</a>
                     
                         
                 </span>
@@ -158,10 +188,10 @@
         </section>
         <section class="post-nav">
             
-                <a class="prev" rel="prev" href="/2020/02/20/LC402-Remove-K-digits/">LC402. Remove K digits</a>
+                <a class="prev" rel="prev" href="/2020/02/20/StringBuilder/">StringBuilder</a>
             
             
-            <a class="next" rel="next" href="/2020/02/19/LC7-Reverse-Integer/">LC7: Reverse Integer</a>
+            <a class="next" rel="next" href="/2020/02/19/LC138-Copy-list-with-Random-Pointer/">LC138 Copy list with Random Pointer</a>
             
         </section>
 
