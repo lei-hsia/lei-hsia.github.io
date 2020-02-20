@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="LEI XIA">
+
+
+    <meta name="subtitle" content="夏雷的博客~">
+
+
+
+
+<title>LC127. Word Ladder | Blogs ©️ Lei Xia</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">LEI&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">LEI&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+
+
+        <div class="main">
+            <div class="container">
+    
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">LC127. Word Ladder</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">LEI XIA</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">二月 20, 2020&nbsp;&nbsp;15:30</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>This is quite a hard one to me. Very good one as well.</p>
+<p><code>Java</code>:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">public int ladderLength(String b, String e, List&lt;String&gt; dict) &#123;</span><br><span class="line">    Queue&lt;String&gt; q = new LinkedList&lt;&gt;();</span><br><span class="line">    q.add(b);</span><br><span class="line">    q.add(null);</span><br><span class="line">    </span><br><span class="line">    // Mark visited word</span><br><span class="line">    Set&lt;String&gt; visited = new HashSet&lt;&gt;();</span><br><span class="line">    visited.add(b);</span><br><span class="line">    </span><br><span class="line">    int level = 1;</span><br><span class="line">    </span><br><span class="line">    while (!q.isEmpty()) &#123;</span><br><span class="line">        String str = q.poll();</span><br><span class="line">        </span><br><span class="line">        if (str != null) &#123;</span><br><span class="line">            for (int i = 0; i &lt; str.length(); ++i) &#123;</span><br><span class="line">                char[] chars = str.toCharArray();</span><br><span class="line">                </span><br><span class="line">                for (char c=&apos;a&apos;; c&lt;=&apos;z&apos;; ++c) &#123;</span><br><span class="line">                    chars[i] = c;</span><br><span class="line">                    </span><br><span class="line">                    String word = new String(chars);</span><br><span class="line">                    // dict.contains(word) : last word</span><br><span class="line">                    if (word.equals(e) &amp;&amp; dict.contains(word)) return level + 1;</span><br><span class="line">                    </span><br><span class="line">                    // Put into queue</span><br><span class="line">                    if (dict.contains(word) &amp;&amp; !visited.contains(word)) &#123;</span><br><span class="line">                        q.add(word);</span><br><span class="line">                        visited.add(word);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            level++;</span><br><span class="line">            // new level finished adding elements</span><br><span class="line">            if (!q.isEmpty()) q.add(null);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>But, it gets a <code>TLE</code> in 2020. OJ only passes bi-directional BFS now:</p>
+<p><code>C++</code>:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">unordered_set&lt;string&gt; dict(wordList.begin(), wordList.end());</span><br><span class="line">    if (!dict.count(endWord)) return 0;</span><br><span class="line">    </span><br><span class="line">    unordered_set&lt;string&gt; q1&#123;beginWord&#125;;</span><br><span class="line">    unordered_set&lt;string&gt; q2&#123;endWord&#125;;</span><br><span class="line">    </span><br><span class="line">    int len = beginWord.length();</span><br><span class="line">    int step = 0;</span><br><span class="line">    </span><br><span class="line">    while (!q1.empty() &amp;&amp; !q2.empty()) &#123;</span><br><span class="line">        ++step;</span><br><span class="line">        </span><br><span class="line">        // always expand the smaller queue first : q1</span><br><span class="line">        if (q1.size() &gt; q2.size()) </span><br><span class="line">            std::swap(q1, q2);</span><br><span class="line">        </span><br><span class="line">        unordered_set&lt;string&gt; q;</span><br><span class="line">        </span><br><span class="line">        for (string w : q1) &#123;</span><br><span class="line">            for (int i=0; i&lt;len; ++i) &#123;</span><br><span class="line">                char ch = w[i];</span><br><span class="line">                for (int j=&apos;a&apos;; j&lt;=&apos;z&apos;; ++j) &#123;</span><br><span class="line">                    w[i] = j;</span><br><span class="line">                    // q2存在这个w,说明两个bfs的graph汇合了</span><br><span class="line">                    if (q2.count(w)) return step + 1;</span><br><span class="line">                    if (!dict.count(w)) continue;</span><br><span class="line">                    dict.erase(w);</span><br><span class="line">                    q.insert(w);</span><br><span class="line">                &#125;</span><br><span class="line">                w[i] = ch;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        std::swap(q, q1);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    return 0;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/bfs-queue-bi-direction/"># bfs queue bi-direction</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2020/02/20/LC557-Reverse-Word-in-a-String/">LC557. Reverse Word in a String</a>
+            
+            
+            <a class="next" rel="next" href="/2020/02/20/LC1-Two-Sum/">LC1. Two Sum</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© LEI XIA </span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>
