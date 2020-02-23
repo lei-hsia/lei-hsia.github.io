@@ -13,7 +13,7 @@
 
 
 
-<title>LC42. Trapping rain water | Blogs ©️ Lei Xia</title>
+<title>LC273. Integer2English words | Blogs ©️ Lei Xia</title>
 
 
 
@@ -165,7 +165,7 @@
     
     <article class="post-wrap">
         <header class="post-header">
-            <h1 class="post-title">LC42. Trapping rain water</h1>
+            <h1 class="post-title">LC273. Integer2English words</h1>
             
                 <div class="post-meta">
                     
@@ -174,7 +174,7 @@
 
                     
                         <span class="post-time">
-                        Date: <a href="#">二月 23, 2020&nbsp;&nbsp;11:27</a>
+                        Date: <a href="#">二月 23, 2020&nbsp;&nbsp;15:37</a>
                         </span>
                     
                     
@@ -183,12 +183,9 @@
         </header>
 
         <div class="post-content">
-            <h4 id="Brute-force"><a href="#Brute-force" class="headerlink" title="Brute force"></a>Brute force</h4><p>Each bar: <code>min(left_max, right_max) - cur_height</code> decides how much rain water can be stored.</p>
-<p><code>C++</code>: </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">int trap(vector&lt;int&gt;&amp; height) &#123;</span><br><span class="line">    if (height.empty()) return 0;</span><br><span class="line">    int res = 0, size = height.size();</span><br><span class="line">    vector&lt;int&gt; left_max(size), right_max(size);</span><br><span class="line">    left_max[0] = height[0];</span><br><span class="line">    for (int i = 1; i &lt; size; ++i) &#123;</span><br><span class="line">        left_max[i]= max(left_max[i-1], height[i]);</span><br><span class="line">    &#125;</span><br><span class="line">    right_max[size - 1] = height[size - 1];</span><br><span class="line">    for (int i = size - 2; i &gt;= 0; --i) &#123;</span><br><span class="line">        right_max[i] = max(right_max[i+1], height[i]);</span><br><span class="line">    &#125;</span><br><span class="line">    for (int i = 1; i &lt; size - 1; ++i) &#123;</span><br><span class="line">        res += min(left_max[i], right_max[i]) - height[i];</span><br><span class="line">    &#125;</span><br><span class="line">    return res;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h4 id="two-pointer"><a href="#two-pointer" class="headerlink" title="two pointer"></a>two pointer</h4><p>比较subtle，不过实际上跟上面的思路类似；<br>双指针left和right向中间靠近, 因为当前bar的water量是由左右最高点两个中比较低的那个决定的，所以e.g. leftMax &lt; rightMax的时候，只用移动left向右，寻找更高的高度就行了，因为此时高度差跟right高度并没有关系，所以只用移动左边的；反过来的时候只用移动右边的.</p>
-<p><code>Java</code>:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">public int trap(int[] height) &#123;</span><br><span class="line">    if (height.length == 0) return 0;</span><br><span class="line">    int left = 0, right = height.length - 1;</span><br><span class="line">    int maxL = height[left], maxR = height[right];</span><br><span class="line">    int res = 0;</span><br><span class="line">    </span><br><span class="line">    while (left &lt; right) &#123;</span><br><span class="line">        if (maxL &lt; maxR) &#123;</span><br><span class="line">            res += maxL - height[left];</span><br><span class="line">            maxL = Math.max(maxL, height[++left]);</span><br><span class="line">        &#125; else &#123;</span><br><span class="line">            res += maxR - height[right];</span><br><span class="line">            maxR = Math.max(maxR, height[--right]);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    return res;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-
+            <h3 id="Integer-to-English-words"><a href="#Integer-to-English-words" class="headerlink" title="Integer to English words"></a>Integer to English words</h3><p>Actually, straightforward to understand, but quite hard to come up with a unconfusing way of dealing with it. </p>
+<p>If can’t come up with it properly, memorize it.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">private final String[] to19 = &#123;&quot;&quot;, &quot;One&quot;, &quot;Two&quot;, &quot;Three&quot;, &quot;Four&quot;, &quot;Five&quot;, &quot;Six&quot;, &quot;Seven&quot;, &quot;Eight&quot;, &quot;Nine&quot;, &quot;Ten&quot;, &quot;Eleven&quot;, &quot;Twelve&quot;, &quot;Thirteen&quot;, &quot;Fourteen&quot;, &quot;Fifteen&quot;, &quot;Sixteen&quot;, &quot;Seventeen&quot;, &quot;Eighteen&quot;, &quot;Nineteen&quot;&#125;;</span><br><span class="line"></span><br><span class="line">private final String[] tens = &#123;&quot;&quot;, &quot;Ten&quot;, &quot;Twenty&quot;, &quot;Thirty&quot;, &quot;Forty&quot;, &quot;Fifty&quot;, &quot;Sixty&quot;, &quot;Seventy&quot;, &quot;Eighty&quot;, &quot;Ninety&quot;&#125;;</span><br><span class="line"></span><br><span class="line">private final String[] thousands = &#123;&quot;&quot;, &quot;Thousand&quot;, &quot;Million&quot;, &quot;Billion&quot;&#125;;</span><br><span class="line"></span><br><span class="line">public String numberToWords(int num) &#123;</span><br><span class="line">    if (num == 0) return &quot;Zero&quot;;</span><br><span class="line">    </span><br><span class="line">    int i = 0;</span><br><span class="line">    String words = &quot;&quot;;</span><br><span class="line">    </span><br><span class="line">    while (num &gt; 0) &#123;</span><br><span class="line">        if (num % 1000 != 0) words = helper(num % 1000) + thousands[i] + &quot; &quot; + words;</span><br><span class="line">        num /= 1000;</span><br><span class="line">        ++i;</span><br><span class="line">    &#125;</span><br><span class="line">    return words.trim();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public String helper(int num) &#123;</span><br><span class="line">    if (num == 0) return &quot;&quot;;</span><br><span class="line">    else if (num &lt; 20) return to19[num] + &quot; &quot;;</span><br><span class="line">    else if (num &lt; 100) return tens[num / 10] + &quot; &quot; + helper(num % 10);</span><br><span class="line">    else return to19[num / 100] + &quot; Hundred &quot; + helper(num % 100);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
         </div>
 
         
@@ -206,7 +203,7 @@
                 <span class="tag">
                     
                     
-                        <a href="/tags/dp-two-pointer/"># dp two pointer</a>
+                        <a href="/tags/recursion/"># recursion</a>
                     
                         
                 </span>
@@ -219,10 +216,10 @@
         </section>
         <section class="post-nav">
             
-                <a class="prev" rel="prev" href="/2020/02/23/LC273-Integer2English-words/">LC273. Integer2English words</a>
+                <a class="prev" rel="prev" href="/2020/02/23/LC146-LRU-Cache-2/">LC146, LRU Cache 2</a>
             
             
-            <a class="next" rel="next" href="/2020/02/23/LC142-LinkedList-Cycle-II/">LC142. LinkedList Cycle II</a>
+            <a class="next" rel="next" href="/2020/02/23/LC42-Trapping-rain-water/">LC42. Trapping rain water</a>
             
         </section>
 
