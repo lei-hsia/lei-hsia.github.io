@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="LEI XIA">
+
+
+    <meta name="subtitle" content="夏雷的博客~">
+
+
+
+
+<title>Priority Queue | Blogs ©️ Lei Xia</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">LEI&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">LEI&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+
+
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Priority Queue</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">LEI XIA</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">二月 21, 2020&nbsp;&nbsp;14:40</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <ol>
+<li><code>PriorityQueue</code>是一个基于优先级的无界队列; 本来按照自然顺序排序，或者根据构造队列时提供的 Comparator 进行排序，具体取决于所用的构造方法。</li>
+<li>队列不允许用<code>null</code>元素，也不允许不能比较的对象(没有实现<code>Comparable</code>接口的对象).</li>
+<li><code>PriorityQueue</code>队列头指的是排序规则最小元素</li>
+<li>初始的容量(实际是一个Object[])，随着不断向优先级队列添加元素，其容量会自动扩容，无需指定容量增加策略</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">                     (I) Iterable</span><br><span class="line">                            ^</span><br><span class="line">                     (I) Collection</span><br><span class="line">                            ^</span><br><span class="line">               (I) Queue      (C) AbstractCollection</span><br><span class="line">                     ^              ^</span><br><span class="line">(I) Serializable    (C) AbstractQueue</span><br><span class="line">       ^               ^</span><br><span class="line">        (C) PriorityQueue</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">public static void main(String[] args) &#123;</span><br><span class="line">    PriorityQueue&lt;Integer&gt; queue = new PriorityQueue&lt;Integer&gt;();</span><br><span class="line">    queue.offer(1);</span><br><span class="line">    queue.offer(4);</span><br><span class="line">    queue.offer(5);</span><br><span class="line">    queue.offer(2);</span><br><span class="line"></span><br><span class="line">    System.out.println(queue.poll());</span><br><span class="line">    System.out.println(queue.poll());</span><br><span class="line">    System.out.println(queue.poll());</span><br><span class="line">    System.out.println(queue.poll());</span><br><span class="line"></span><br><span class="line">    PriorityQueue&lt;Student&gt; q = new PriorityQueue&lt;Student&gt;(new Comparator&lt;Student&gt;() &#123;</span><br><span class="line">        public int compare(Student o1, Student o2) &#123;</span><br><span class="line">            if (o1.getScore() == o2.getScore())&#123;</span><br><span class="line">                return o1.getName().compareTo(o2.getName());</span><br><span class="line">            &#125;</span><br><span class="line">            return o1.getScore() - o2.getScore();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;);</span><br><span class="line"></span><br><span class="line">    q.offer(new Student(&quot;lei&quot;, 100));</span><br><span class="line">    q.offer(new Student(&quot;kawasaki&quot;, 90));</span><br><span class="line">    q.offer(new Student(&quot;bob&quot;, 60));</span><br><span class="line"></span><br><span class="line">    System.out.println(q.poll());</span><br><span class="line">    System.out.println(q.poll());</span><br><span class="line">    System.out.println(q.poll());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">public class Student &#123;</span><br><span class="line">    private String name;</span><br><span class="line">    private int score;</span><br><span class="line"></span><br><span class="line">    public Student(String lei, int i) &#123;</span><br><span class="line">        this.name = name;</span><br><span class="line">        this.score = score;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public String getName() &#123;</span><br><span class="line">        return name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setName(String name) &#123;</span><br><span class="line">        this.name = name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public int getScore() &#123;</span><br><span class="line">        return score;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void setScore(int score) &#123;</span><br><span class="line">        this.score = score;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>PriorityQueue优先级规则可以由我们根据具体需求而定制， 方式有2种：</p>
+<ol>
+<li>添加元素自身实现了Comparable接口，确保元素是可排序的对象</li>
+<li>如果添加元素没有实现Comparable接口，可以在创建PriorityQueue队列时直接指定比较器</li>
+</ol>
+<h4 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public class PriorityQueue&lt;E&gt; extends AbstractQueue&lt;E&gt;</span><br><span class="line">    implements java.io.Serializable &#123;</span><br><span class="line">    transient Object[] queue;    //队列容器， 默认是11</span><br><span class="line">    private int size = 0;  //队列长度</span><br><span class="line">    private final Comparator&lt;? super E&gt; comparator;  //队列比较器， 为null使用自然排序</span><br><span class="line">    //....</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><em>此处省略入列源码</em></p>
+<p>从源码上看PriorityQueue的入列操作并没对所有加入的元素进行优先级排序。仅仅保证数组第一个元素是最小的即可</p>
+<p>上面源码，当第一个元素出列之后，对剩下的元素再排序，挑选出最小的元素排在数组第一个位置。</p>
+<p>通过上面的源码，可以看出<code>PriorityQueue</code>并不是thread-safe的队列，因为<code>offer</code>, <code>poll</code>都没有对队列进行锁定，所以如果要用一个thread-safe的PriorityQueue, 需要额外加锁。</p>
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p><code>PriorityQueue</code>: </p>
+<ol>
+<li>是一个无界的，也不是 thread-safe的队列</li>
+<li>是一种通过数组实现的，并有优先级的队列</li>
+<li>存储的元素要求必须是可比较的对象， 如果不是就必须明确指定比较器</li>
+</ol>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/Priority-Queue/"># Priority Queue</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2020/02/21/LC415-String-Compression/">LC415. String Compression</a>
+            
+            
+            <a class="next" rel="next" href="/2020/02/21/LC253-Meeting-Rooms-II/">LC253. Meeting Rooms II</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© LEI XIA </span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>

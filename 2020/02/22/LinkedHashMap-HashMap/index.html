@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="LEI XIA">
+
+
+    <meta name="subtitle" content="夏雷的博客~">
+
+
+
+
+<title>LinkedHashMap, HashMap | Blogs ©️ Lei Xia</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">LEI&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">LEI&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+
+
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">LinkedHashMap, HashMap</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">LEI XIA</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">二月 22, 2020&nbsp;&nbsp;11:50</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h4 id="null作为键放进HashMap-LinkedHashMap"><a href="#null作为键放进HashMap-LinkedHashMap" class="headerlink" title="null作为键放进HashMap, LinkedHashMap"></a>null作为键放进HashMap, LinkedHashMap</h4><ol>
+<li>Map: key不可重复，value可以</li>
+<li><code>HashMap</code>, <code>LinkedHashMap</code>都可以多个<code>null</code>作为key, <code>TreeMap</code>不能<code>null</code>作为key</li>
+<li><code>HashMap</code>, <code>LinkedHashMap</code>: put进去KV对的时候，重复的key最终对应的value是最后那个value</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">public static Map putSome(Map&lt;String, String&gt; map) &#123;</span><br><span class="line">    map.put(&quot;gender&quot;, &quot;male&quot;);</span><br><span class="line">    map.put(&quot;name&quot;, &quot;lei&quot;);</span><br><span class="line">    map.put(&quot;from&quot;, &quot;Asia&quot;);</span><br><span class="line">    map.put(&quot;name&quot;, &quot;kawasaki&quot;);</span><br><span class="line">    map.put(&quot;name&quot;, &quot;yamamoto&quot;);</span><br><span class="line">    map.put(null, null);</span><br><span class="line">    map.put(null, null);</span><br><span class="line">    map.put(null, &quot;null-later-v2&quot;);</span><br><span class="line">    return map;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public static void main(String[] args) &#123;</span><br><span class="line">    // HashMap, LinkedHashMap都可以多个null作为key</span><br><span class="line">    System.out.println(putSome(new HashMap&lt;String, String&gt;()));</span><br><span class="line">    // TreeMap不允许null作为key</span><br><span class="line">    // System.out.println(putSome(new TreeMap&lt;String, String&gt;()));</span><br><span class="line">    System.out.println(putSome(new LinkedHashMap&lt;String, String&gt;()));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#123;null=null-later-v2, gender=male, name=yamamoto, from=Asia&#125;</span><br><span class="line">&#123;gender=male, name=yamamoto, from=Asia, null=null-later-v2&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="HashMap和LinkedHashMap的区别"><a href="#HashMap和LinkedHashMap的区别" class="headerlink" title="HashMap和LinkedHashMap的区别"></a>HashMap和LinkedHashMap的区别</h4><p>Linked: 内部维持了一个双向链表，map中的键值对保持是插入的顺序</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">System.out.println(&quot;*************************LinkedHashMap*************&quot;);</span><br><span class="line">   Map&lt;Integer,String&gt; map = new LinkedHashMap&lt;Integer,String&gt;();</span><br><span class="line">   map.put(6, &quot;apple&quot;);</span><br><span class="line">   map.put(3, &quot;banana&quot;);</span><br><span class="line">   map.put(2,&quot;pear&quot;);</span><br><span class="line">   </span><br><span class="line">   for (Iterator it =  map.keySet().iterator();it.hasNext();)</span><br><span class="line">   &#123;</span><br><span class="line">    Object key = it.next();</span><br><span class="line">    System.out.println( key+&quot;=&quot;+ map.get(key));</span><br><span class="line">   &#125;</span><br><span class="line">   </span><br><span class="line">   System.out.println(&quot;*************************HashMap*************&quot;);</span><br><span class="line">   Map&lt;Integer,String&gt; map1 = new  HashMap&lt;Integer,String&gt;();</span><br><span class="line">   map1.put(6, &quot;apple&quot;);</span><br><span class="line">   map1.put(3, &quot;banana&quot;);</span><br><span class="line">   map1.put(2,&quot;pear&quot;);</span><br><span class="line">   </span><br><span class="line">   for (Iterator it =  map1.keySet().iterator();it.hasNext();)</span><br><span class="line">   &#123;</span><br><span class="line">    Object key = it.next();</span><br><span class="line">    System.out.println( key+&quot;=&quot;+ map1.get(key));</span><br><span class="line">   &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">*************************LinkedHashMap*************</span><br><span class="line">6=apple</span><br><span class="line">3=banana</span><br><span class="line">2=pear</span><br><span class="line">*************************HashMap**************************</span><br><span class="line">2=pear</span><br><span class="line">6=apple</span><br><span class="line">3=banana</span><br></pre></td></tr></table></figure>
+<p>i.e. LinkedHashMap的特点是put进去的对象位置没有发生变化，而HashMap会发生变化</p>
+<p><strong>分别介绍 HashMap, LinkedHashMap, TreeMap</strong></p>
+<h4 id="HashMap"><a href="#HashMap" class="headerlink" title="HashMap"></a>HashMap</h4><ol>
+<li>访问速度快，遍历取得数据顺序随机。</li>
+<li><code>HashMap</code>不支持线程同步, i.e. 任意时刻可能有多个线程同时写HashMap, 可能导致数据不一致。</li>
+<li>如果需要同步，可以用<code>ConcurrentHashMap</code>, 或者<code>Collections</code>的<code>synchronizedMap</code>.</li>
+<li>初始化默认大小是16，而且是成倍增长。<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">/**</span><br><span class="line"> * Constructs an empty &lt;tt&gt;HashMap&lt;/tt&gt; with the default initial capacity</span><br><span class="line"> * (16) and the default load factor (0.75).</span><br><span class="line"> */</span><br><span class="line">public HashMap() &#123;</span><br><span class="line">    this(DEFAULT_INITIAL_CAPACITY, DEFAULT_LOAD_FACTOR);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">void addEntry(int hash, K key, V value, int bucketIndex) &#123;</span><br><span class="line">    if ((size &gt;= threshold) &amp;&amp; (null != table[bucketIndex])) &#123;</span><br><span class="line">        resize(2 * table.length);</span><br><span class="line">        hash = (null != key) ? hash(key) : 0;</span><br><span class="line">        bucketIndex = indexFor(hash, table.length);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    createEntry(hash, key, value, bucketIndex);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="LinkedHashMap"><a href="#LinkedHashMap" class="headerlink" title="LinkedHashMap"></a>LinkedHashMap</h4><ol>
+<li>保存了纪录的插入顺序，在用Iterator遍历LinkedHashMap时，先得到的纪录就是先插入的。</li>
+<li>遍历时因为是linkedlist vs array, 所以比HashMap慢</li>
+<li>但是有一种例外: 当HashMap容量很大，实际数据较少时，HashMap遍历可能比LinkedHashMap慢；这是因为LinkedHashMap的遍历速度只和实际数据有关，和容量无关，而HashMap的遍历速度和容量有关。</li>
+</ol>
+<h4 id="TreeMap"><a href="#TreeMap" class="headerlink" title="TreeMap"></a>TreeMap</h4><ol>
+<li><strong>实现了SortMap接口，能够把保存的纪录根据key排序，默认按照key升序排序</strong></li>
+<li>可以指定排序比较器，用Iterator遍历TreeMap时，得到的纪录是排序过的</li>
+</ol>
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><ol>
+<li>只是一般的插入，删除，定位元素，<code>HashMap</code>用的最多</li>
+<li><em>按自然顺序或者自定义顺序遍历key</em>:<code>TreeMap</code></li>
+<li><em>输出顺序和输入顺序相同</em>: <code>LinkedHashMap</code></li>
+</ol>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/LinkedHashMap-HashMap/"># LinkedHashMap HashMap</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2020/02/22/LC236-LCA-of-BT/">LC236. LCA of BT</a>
+            
+            
+            <a class="next" rel="next" href="/2020/02/22/LC235-LCA-of-BST/">LC235. LCA of BST</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© LEI XIA </span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>
