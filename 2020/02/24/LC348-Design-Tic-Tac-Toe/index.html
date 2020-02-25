@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="LEI XIA">
+
+
+    <meta name="subtitle" content="夏雷的博客~">
+
+
+
+
+<title>LC348. Design Tic-Tac-Toe | Blogs ©️ Lei Xia</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">LEI&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">LEI&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+
+
+        <div class="main">
+            <div class="container">
+    
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">LC348. Design Tic-Tac-Toe</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">LEI XIA</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">二月 24, 2020&nbsp;&nbsp;16:39</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>Design a Tic-tac-toe game that is played between two players on a n x n grid.</p>
+<p>You may assume the following rules:</p>
+<p>A move is guaranteed to be valid and is placed on an empty block.<br>Once a winning condition is reached, no more moves is allowed.<br>A player who succeeds in placing n of their marks in a horizontal, vertical, or diagonal row wins the game.</p>
+<p>Example:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">Given n = 3, assume that player 1 is &quot;X&quot; and player 2 is &quot;O&quot; in the board.</span><br><span class="line"></span><br><span class="line">TicTacToe toe = new TicTacToe(3);</span><br><span class="line"></span><br><span class="line">toe.move(0, 0, 1); -&gt; Returns 0 (no one wins)</span><br><span class="line">|X| | |</span><br><span class="line">| | | |    // Player 1 makes a move at (0, 0).</span><br><span class="line">| | | |</span><br><span class="line"></span><br><span class="line">toe.move(0, 2, 2); -&gt; Returns 0 (no one wins)</span><br><span class="line">|X| |O|</span><br><span class="line">| | | |    // Player 2 makes a move at (0, 2).</span><br><span class="line">| | | |</span><br><span class="line"></span><br><span class="line">toe.move(2, 2, 1); -&gt; Returns 0 (no one wins)</span><br><span class="line">|X| |O|</span><br><span class="line">| | | |    // Player 1 makes a move at (2, 2).</span><br><span class="line">| | |X|</span><br><span class="line"></span><br><span class="line">toe.move(1, 1, 2); -&gt; Returns 0 (no one wins)</span><br><span class="line">|X| |O|</span><br><span class="line">| |O| |    // Player 2 makes a move at (1, 1).</span><br><span class="line">| | |X|</span><br><span class="line"></span><br><span class="line">toe.move(2, 0, 1); -&gt; Returns 0 (no one wins)</span><br><span class="line">|X| |O|</span><br><span class="line">| |O| |    // Player 1 makes a move at (2, 0).</span><br><span class="line">|X| |X|</span><br><span class="line"></span><br><span class="line">toe.move(1, 0, 2); -&gt; Returns 0 (no one wins)</span><br><span class="line">|X| |O|</span><br><span class="line">|O|O| |    // Player 2 makes a move at (1, 0).</span><br><span class="line">|X| |X|</span><br><span class="line"></span><br><span class="line">toe.move(2, 1, 1); -&gt; Returns 1 (player 1 wins)</span><br><span class="line">|X| |O|</span><br><span class="line">|O|O| |    // Player 1 makes a move at (2, 1).</span><br><span class="line">|X|X|X|</span><br></pre></td></tr></table></figure></p>
+<hr>
+<p>key: 不需要track整个grid，而是仅仅是每一行和每一列的sum; 一旦达到size不管正负，那么都是这一行/列都充满了;</p>
+<p>对角线和反对角线用一个int变量存储。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">class TicTacToe &#123;</span><br><span class="line"></span><br><span class="line">    private int[] rows; // sum of each row</span><br><span class="line">    private int[] cols;</span><br><span class="line">    private int diagonal;</span><br><span class="line">    private int antidiagonal;</span><br><span class="line">    private int size;</span><br><span class="line">    </span><br><span class="line">    /** Initialize your data structure here. */</span><br><span class="line">    public TicTacToe(int n) &#123;</span><br><span class="line">        rows = new int[n];</span><br><span class="line">        cols = new int[n];</span><br><span class="line">        diagonal = 0;</span><br><span class="line">        antidiagonal = 0;</span><br><span class="line">        size = n;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    /** Player &#123;player&#125; makes a move at (&#123;row&#125;, &#123;col&#125;).</span><br><span class="line">        @param row The row of the board.</span><br><span class="line">        @param col The column of the board.</span><br><span class="line">        @param player The player, can be either 1 or 2.</span><br><span class="line">        @return The current winning condition, can be either:</span><br><span class="line">                0: No one wins.</span><br><span class="line">                1: Player 1 wins.</span><br><span class="line">                2: Player 2 wins. */</span><br><span class="line">    public int move(int row, int col, int player) &#123;</span><br><span class="line">        int cur = player == 1 ? 1 : -1;</span><br><span class="line">        rows[row] += cur;</span><br><span class="line">        cols[col] += cur;</span><br><span class="line">        if (row == col) diagonal += cur;</span><br><span class="line">        if (row + col == size - 1) antidiagonal += cur;</span><br><span class="line">        if (Math.abs(rows[row]) == size || Math.abs(cols[col]) == size || Math.abs(diagonal) == size || Math.abs(antidiagonal) == size) return player;</span><br><span class="line">        return 0;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * Your TicTacToe object will be instantiated and called as such:</span><br><span class="line"> * TicTacToe obj = new TicTacToe(n);</span><br><span class="line"> * int param_1 = obj.move(row,col,player);</span><br><span class="line"> */</span><br></pre></td></tr></table></figure>
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/tic-tac-toe/"># tic-tac-toe</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2020/02/24/LC794-Valid-TTT-State/">LC794. Valid TTT State</a>
+            
+            
+            <a class="next" rel="next" href="/2020/02/24/LC186-Reverse-Words-in-a-String-2/">LC186.Reverse Words in a String 2</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© LEI XIA </span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>
