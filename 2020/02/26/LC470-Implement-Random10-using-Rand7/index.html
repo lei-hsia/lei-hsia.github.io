@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="LEI XIA">
+
+
+    <meta name="subtitle" content="夏雷的博客~">
+
+
+
+
+<title>LC470. Implement Random10() using Rand7() | Blogs ©️ Lei Xia</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">LEI&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">LEI&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+
+
+        <div class="main">
+            <div class="container">
+    
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">LC470. Implement Random10() using Rand7()</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">LEI XIA</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">二月 26, 2020&nbsp;&nbsp;15:23</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>关键是 Uniform. 如果<code>2 * Rand7()</code> 变为<code>[2, 14]</code>再减1变为<code>[1, 13]</code>,生成的各个数字的概率不是相等的；e.g. <code>rand2()</code>等概率生成1,2, 但是对于 <code>(rand2()-1) + rand2()</code>:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">rand2() - 1   +   rand()2  =  ?</span><br><span class="line"> &#123;0, 1&#125;           [1, 2]</span><br><span class="line">   0               1          1</span><br><span class="line">   0               2          2</span><br><span class="line">   1               1          2</span><br><span class="line">   1               2          3</span><br></pre></td></tr></table></figure></p>
+<p>不是等概率的;</p>
+<p>但是如果 <code>(rand2()-1)*2 + rand2()</code>:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(rand2() - 1)*2   +   rand()2  =  ?</span><br><span class="line"> &#123;0, 2&#125;               [1, 2]</span><br><span class="line">   0                   1          1</span><br><span class="line">   0                   2          2</span><br><span class="line">   2                   1          3</span><br><span class="line">   2                   2          4</span><br></pre></td></tr></table></figure></p>
+<p><em><code>rand2()</code>生成<code>rand4()</code></em>. </p>
+<p>为什么 上面乘2 之后就可以了? 对于<code>rand3()</code>: <code>{1, 2, 3}</code>, 如果按照相同的操作: <code>(rand3() - 1) * 3 + rand3()</code>:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">(rand3() - 1)*3   +   rand()3  =  ?</span><br><span class="line"> &#123;0,1,2&#125; * 3         &#123;1, 2, 3&#125;</span><br><span class="line">  &#123;0, 3, 6&#125;</span><br><span class="line">   0                   1          1</span><br><span class="line">                       2          2</span><br><span class="line">                       3          3</span><br><span class="line">   3                   1          4</span><br><span class="line">                       2          5</span><br><span class="line">                       3          6</span><br><span class="line">   6                   1          7</span><br><span class="line">                       2          8</span><br><span class="line">                       3          9</span><br></pre></td></tr></table></figure></p>
+<p><code>(rand3() - 1) * 3 + rand3()</code> 刚好可以等概率生成 <code>{0, ..., 9}</code>.</p>
+<p>可以看出, <code>(randN() - 1) * N</code> 对于原<code>randN()</code>来说，刚好上升一个维度并且接壤上，得到的结果就是等概率的。</p>
+<p>回到前面的<code>rand2()</code>生成<code>rand4()</code>,那么反过来用<code>rand4()</code>重新回到<code>rand2()</code>: <code>rand4() % 2 + 1</code>:<br> <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">rand4() % 2 + 1 =  ?</span><br><span class="line">   1               2</span><br><span class="line">   2               1</span><br><span class="line">   3               2</span><br><span class="line">   4               1</span><br></pre></td></tr></table></figure></p>
+<p>同理，也可以用<code>rand6()</code>生成<code>rand2()</code>:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">rand6() % 2 + 1 =  ?</span><br><span class="line">  1               2</span><br><span class="line">  2               1</span><br><span class="line">  3               2</span><br><span class="line">  4               1</span><br><span class="line">  5               2</span><br><span class="line">  6               1</span><br></pre></td></tr></table></figure></p>
+<p>i.e. <code>rand2N()</code>都可以通过<code>rand2N() % 2 + 1</code>得到<code>rand2()</code>。 所以，回到这道题，我们可以先凑出<code>rand10N()</code>，然后再通过 <code>rand10N() % 10 + 1</code> 来获得 <code>rand10()</code>. </p>
+<p><code>rand7()</code>直接变为<code>(rand7()-1) * 7 + rand7()</code>, <code>[0, 6]*7 + [1, 7]</code>得到[1, 49]<code>, 明显超过了</code>10<code>; 随机得到一个</code>[1, 10N]<code>的范围内的数之后就可以</code>%10<code>操作往</code>[1,10]`上靠.</p>
+<ul>
+<li><code>[1, 49]</code>: 首先要得到<code>[1,10N]</code>, 如果要操作次数最少，当然是最容易得到的最好: <code>[1,40]</code>范围最大；</li>
+<li><code>[1, 40]</code>的<code>%10</code>操作 =&gt; 等概率的<code>[0, 9]</code>;</li>
+<li><code>[0, 9] + 1</code> =&gt; <code>[1, 10]</code>, i.e. <code>rand10()</code></li>
+</ul>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/uniform/"># uniform</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2020/02/26/LC769-Max-Chunks-to-make-sorted/">LC769. Max Chunks to make sorted</a>
+            
+            
+            <a class="next" rel="next" href="/2020/02/26/LC431-Encode-N-ary-T-to-BT/">LC431. Encode N-ary T to BT</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© LEI XIA </span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>
