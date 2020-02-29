@@ -190,6 +190,7 @@
 <li>两个meeting，实际上比较的是start时间早些的A的end时间和后面一个start时间的B的开始的时间，如果不重叠就可以合并这两个区间，重叠就必须两个room;</li>
 <li>pq中先offer的总是两个meeting中后面的那个，下次poll直接得到这个</li>
 </ol>
+<h4 id="interval-1-intervals-i-1"><a href="#interval-1-intervals-i-1" class="headerlink" title="interval[1] = intervals[i][1]"></a>interval[1] = intervals[i][1]</h4><p>合并的理由: 新的meeting总是需要一个新的会议室，但是此时看看前面的<code>interval[1]</code>和当前的区间的结尾时间<code>intervals[i][1]</code>看能不能重用之前的room，如果可以直接合并结尾时间，并不用新增加room</p>
 <h4 id="深入思考if-else部分"><a href="#深入思考if-else部分" class="headerlink" title="深入思考if else部分"></a>深入思考if else部分</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">if (interval[1] &lt;= intervals[i][0]) &#123;</span><br><span class="line">    interval[1] = intervals[i][1];</span><br><span class="line">&#125;else pq.offer(intervals[i]);</span><br><span class="line"></span><br><span class="line">pq.offer(interval);</span><br></pre></td></tr></table></figure>
 <ol>
 <li>如果A结尾时间早于B开头时间，那么1个room就行了，合并之后<code>interval</code>放入`pq;</li>
