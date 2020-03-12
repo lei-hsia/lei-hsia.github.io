@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="LEI XIA">
+
+
+    <meta name="subtitle" content="夏雷的博客~">
+
+
+
+
+<title>1117. Building H2O | Blogs ©️ Lei Xia</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">LEI&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">LEI&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+
+
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">1117. Building H2O</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">LEI XIA</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">三月 12, 2020&nbsp;&nbsp;16:28</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h3 id="phaser-barrier-semaphore-conditional"><a href="#phaser-barrier-semaphore-conditional" class="headerlink" title="phaser : barrier, semaphore : conditional"></a><code>phaser : barrier</code>, <code>semaphore : conditional</code></h3><hr>
+<p>There are two kinds of threads, <code>oxygen</code> and <code>hydrogen</code>. Your goal is to group these threads to form water molecules. There is a barrier where each thread has to wait until a complete molecule can be formed. Hydrogen and oxygen threads will be given <code>releaseHydrogen</code> and <code>releaseOxygen</code> methods respectively, which will allow them to pass the barrier. These threads should pass the barrier in groups of three, and they must be able to immediately bond with each other to form a water molecule. You must guarantee that all the threads from one molecule bond before any other threads from the next molecule do.</p>
+<p>In other words:</p>
+<ul>
+<li>If an oxygen thread arrives at the barrier when no hydrogen threads are present, it has to wait for two hydrogen threads.</li>
+<li>If a hydrogen thread arrives at the barrier when no other threads are present, it has to wait for an oxygen thread and another hydrogen thread.</li>
+</ul>
+<p>We don’t have to worry about matching the threads up explicitly; that is, the threads do not necessarily know which other threads they are paired up with. The key is just that threads pass the barrier in complete sets; thus, if we examine the sequence of threads that bond and divide them into groups of three, each group should contain one oxygen and two hydrogen threads.</p>
+<p>Write synchronization code for oxygen and hydrogen molecules that enforces these constraints.</p>
+<p>Example1:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Input: &quot;HOH&quot;</span><br><span class="line">Output: &quot;HHO&quot;</span><br><span class="line">Explanation: &quot;HOH&quot; and &quot;OHH&quot; are also valid answers.</span><br></pre></td></tr></table></figure></p>
+<p>Constraints:</p>
+<ul>
+<li>Total length of input string will be 3n, where 1 ≤ n ≤ 20.</li>
+<li>Total number of H will be 2n in the input string.</li>
+<li>Total number of O will be n in the input string.</li>
+</ul>
+<hr>
+<h4 id="1-pure-semaphore"><a href="#1-pure-semaphore" class="headerlink" title="1. pure semaphore"></a>1. pure semaphore</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">import java.util.concurrent.Semaphore;</span><br><span class="line"></span><br><span class="line">class H2O &#123;</span><br><span class="line">    Semaphore output, hydro, oxy;</span><br><span class="line">    </span><br><span class="line">    public H2O() &#123;</span><br><span class="line">        output = new Semaphore(1);</span><br><span class="line">        hydro = new Semaphore(0);</span><br><span class="line">        oxy  = new Semaphore(0);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void hydrogen(Runnable releaseHydrogen) throws InterruptedException &#123;</span><br><span class="line">		</span><br><span class="line">        // releaseHydrogen.run() outputs &quot;H&quot;. Do not change or remove this line.</span><br><span class="line">        hydro.acquire();</span><br><span class="line">        releaseHydrogen.run();</span><br><span class="line">        oxy.release();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void oxygen(Runnable releaseOxygen) throws InterruptedException &#123;</span><br><span class="line">        </span><br><span class="line">        // releaseOxygen.run() outputs &quot;O&quot;. Do not change or remove this line.</span><br><span class="line">        output.acquire();</span><br><span class="line">        hydro.release(2);</span><br><span class="line">        oxy.acquire(2);</span><br><span class="line">		releaseOxygen.run();</span><br><span class="line">        output.release();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>NOT GOOD because only <code>HHO</code> pattern would be produced.</strong> What if random order is desired? </p>
+<h3 id="ランダムな順序は-欲しいです"><a href="#ランダムな順序は-欲しいです" class="headerlink" title="ランダムな順序は 欲しいです !"></a>ランダムな順序は 欲しいです !</h3><h3 id="2-Phaser"><a href="#2-Phaser" class="headerlink" title="2. Phaser"></a>2. <a href="https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/Phaser.html" target="_blank" rel="noopener">Phaser</a></h3><p>A reusable synchronization barrier, similar in functionality to CyclicBarrier and CountDownLatch but supporting more flexible usage.</p>
+<p><strong>Synchronization</strong>. Like a <code>CyclicBarrier</code>, a Phaser may be repeatedly awaited. Method <code>arriveAndAwaitAdvance()</code> has effect analogous to <code>CyclicBarrier.await</code>. Each generation of a phaser has an associated phase number. The phase number starts at zero, and advances when all parties arrive at the phaser</p>
+<p>Constructor: (most)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Phaser(int parties)</span><br></pre></td></tr></table></figure></p>
+<p>Methods: (most)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">int arrive(): Arrives at this phaser, without waiting for others to arrive.</span><br><span class="line"></span><br><span class="line">int arriveAndAwaitAdvance(): Arrives at this phaser and awaits others.</span><br></pre></td></tr></table></figure></p>
+<p>所以<code>arriveAndAwaitAdvance()</code>会等待所有的phaser都到达这里，然后这个phase完成，继续往下。</p>
+<p>In fact, using a <code>Phaser</code>(barrier) is the only correct way:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">import java.util.concurrent.Phaser;</span><br><span class="line">import java.util.concurrent.Semaphore;</span><br><span class="line"></span><br><span class="line">class H2O &#123;</span><br><span class="line">    </span><br><span class="line">    private Semaphore hydro, oxy;</span><br><span class="line">    private Phaser phaser;</span><br><span class="line">    </span><br><span class="line">    public H2O() &#123;</span><br><span class="line">        hydro = new Semaphore(2);</span><br><span class="line">        oxy = new Semaphore(1);</span><br><span class="line">        phaser = new Phaser(3);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void hydrogen(Runnable releaseHydrogen) throws InterruptedException &#123;</span><br><span class="line">		</span><br><span class="line">        // releaseHydrogen.run() outputs &quot;H&quot;. Do not change or remove this line.</span><br><span class="line">        hydro.acquire();</span><br><span class="line">        releaseHydrogen.run();</span><br><span class="line">        phaser.arriveAndAwaitAdvance(); // 类似yield型的暂停</span><br><span class="line">        hydro.release();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void oxygen(Runnable releaseOxygen) throws InterruptedException &#123;</span><br><span class="line">        </span><br><span class="line">        // releaseOxygen.run() outputs &quot;O&quot;. Do not change or remove this line.</span><br><span class="line">        oxy.acquire();</span><br><span class="line">		releaseOxygen.run();</span><br><span class="line">        phaser.arriveAndAwaitAdvance();</span><br><span class="line">        oxy.release();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/phaser-semaphore/"># phaser, semaphore</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2020/03/12/ConcurrentLinkedDeque/">ConcurrentLinkedDeque</a>
+            
+            
+            <a class="next" rel="next" href="/2020/03/12/LC1116-Print-ZeroEvenOdd/">LC1116. Print ZeroEvenOdd</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© LEI XIA </span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>

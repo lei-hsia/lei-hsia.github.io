@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="LEI XIA">
+
+
+    <meta name="subtitle" content="夏雷的博客~">
+
+
+
+
+<title>LC1116. Print ZeroEvenOdd | Blogs ©️ Lei Xia</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">LEI&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">LEI&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+
+
+        <div class="main">
+            <div class="container">
+    
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">LC1116. Print ZeroEvenOdd</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">LEI XIA</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">三月 12, 2020&nbsp;&nbsp;15:45</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>Suppose you are given the following code:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">class ZeroEvenOdd &#123;</span><br><span class="line">  public ZeroEvenOdd(int n) &#123; ... &#125;      // constructor</span><br><span class="line">  public void zero(printNumber) &#123; ... &#125;  // only output 0&apos;s</span><br><span class="line">  public void even(printNumber) &#123; ... &#125;  // only output even numbers</span><br><span class="line">  public void odd(printNumber) &#123; ... &#125;   // only output odd numbers</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>The same instance of <code>ZeroEvenOdd</code> will be passed to three different threads:</p>
+<ol>
+<li>Thread A will call <code>zero()</code> which should only output 0’s.</li>
+<li>Thread B will call <code>even()</code> which should only ouput even numbers.</li>
+<li>Thread C will call <code>odd()</code> which should only output odd numbers.</li>
+</ol>
+<p>Each of the threads is given a <code>printNumber</code> method to output an integer. Modify the given program to output the series <code>010203040506</code>… where the length of the series must be 2n.</p>
+<p>Example:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Input: n = 5</span><br><span class="line">Output: &quot;0102030405&quot;</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">class ZeroEvenOdd &#123;</span><br><span class="line">    private int n;</span><br><span class="line">    Semaphore zero = new Semaphore(1);</span><br><span class="line">    Semaphore even = new Semaphore(0);</span><br><span class="line">    Semaphore odd = new Semaphore(0);</span><br><span class="line">    </span><br><span class="line">    public ZeroEvenOdd(int n) &#123;</span><br><span class="line">        this.n = n;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // printNumber.accept(x) outputs &quot;x&quot;, where x is an integer.</span><br><span class="line">    public void zero(IntConsumer printNumber) throws InterruptedException &#123;</span><br><span class="line">        for (int i = 0; i &lt; n; ++i) &#123;</span><br><span class="line">            zero.acquire();</span><br><span class="line">            printNumber.accept(0);</span><br><span class="line">            if (i % 2 == 0) odd.release();</span><br><span class="line">            else even.release();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void even(IntConsumer printNumber) throws InterruptedException &#123;</span><br><span class="line">        for (int i = 2; i &lt;= n; i += 2) &#123;</span><br><span class="line">            even.acquire();</span><br><span class="line">            printNumber.accept(i);</span><br><span class="line">            zero.release();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void odd(IntConsumer printNumber) throws InterruptedException &#123;</span><br><span class="line">        for (int i = 1; i &lt;= n; i += 2) &#123;</span><br><span class="line">            odd.acquire();</span><br><span class="line">            printNumber.accept(i);</span><br><span class="line">            zero.release();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/concurrency-semaphore/"># concurrency semaphore</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2020/03/12/1117-Building-H2O/">1117. Building H2O</a>
+            
+            
+            <a class="next" rel="next" href="/2020/03/12/LC1115-Print-FooBar-alternatively/">LC1115. Print FooBar alternatively</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© LEI XIA </span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>
