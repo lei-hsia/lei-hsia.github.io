@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="LEI XIA">
+
+
+    <meta name="subtitle" content="夏雷的博客~">
+
+
+
+
+<title>Java8: Stream, flatmap | Blogs ©️ Lei Xia</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">LEI&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">LEI&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+
+
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Java8: Stream, flatmap</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">LEI XIA</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">三月 13, 2020&nbsp;&nbsp;15:34</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h3 id="Interface-Stream"><a href="#Interface-Stream" class="headerlink" title="Interface Stream"></a>Interface Stream<t></t></h3><p><a href="https://docs.oracle.com/javase/8/docs/api/java/util/stream/Stream.html" target="_blank" rel="noopener">Interface Stream<t></t></a></p>
+<p>Stream: A sequence of elements supporting sequential and parallel aggregate operations.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">int sum = widgets.stream()</span><br><span class="line">              .filter(w -&gt; w.getColor() == RED)</span><br><span class="line">              .mapToInt(w -&gt; w.getWeight())</span><br><span class="line">              .sum();</span><br></pre></td></tr></table></figure>
+<p>In this example, widgets is a <code>Collection&lt;Widget&gt;</code>. We create a stream of <code>Widget</code> objects via <code>Collection.stream()</code>, filter it to produce a stream containing only the red widgets, and then transform it into a stream of int values representing the weight of each red widget. Then this stream is summed to produce a total weight.</p>
+<hr>
+<p>Aggregate methods:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">collect()</span><br><span class="line"></span><br><span class="line">concat()</span><br><span class="line"></span><br><span class="line">count()</span><br><span class="line"></span><br><span class="line">distinct()</span><br><span class="line"></span><br><span class="line">filter()</span><br><span class="line"></span><br><span class="line">flatMap()</span><br><span class="line"></span><br><span class="line">forEach()</span><br><span class="line"></span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p><code>flatMap</code>: ~ <code>unzip</code> in python:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123; &#123;1,2&#125;, &#123;3,4&#125;, &#123;5,6&#125; &#125; -&gt; flatMap -&gt; &#123;1,2,3,4,5,6&#125;</span><br><span class="line"></span><br><span class="line">&#123; &#123;&apos;a&apos;,&apos;b&apos;&#125;, &#123;&apos;c&apos;,&apos;d&apos;&#125;, &#123;&apos;e&apos;,&apos;f&apos;&#125; &#125; -&gt; flatMap -&gt; &#123;&apos;a&apos;,&apos;b&apos;,&apos;c&apos;,&apos;d&apos;,&apos;e&apos;,&apos;f&apos;&#125;</span><br></pre></td></tr></table></figure></p>
+<p>In Java 8, Stream can hold different data types, for examples:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Stream&lt;String[]&gt;	</span><br><span class="line">Stream&lt;Set&lt;String&gt;&gt;	</span><br><span class="line">Stream&lt;List&lt;String&gt;&gt;	</span><br><span class="line">Stream&lt;List&lt;Object&gt;&gt;</span><br></pre></td></tr></table></figure></p>
+<p>But, the Stream operations (filter, sum, distinct…) and collectors do not support it, so, we need flatMap() to do the following conversion :<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Stream&lt;String[]&gt;		-&gt; flatMap -&gt;	Stream&lt;String&gt;</span><br><span class="line">Stream&lt;Set&lt;String&gt;&gt;	-&gt; flatMap -&gt;	Stream&lt;String&gt;</span><br><span class="line">Stream&lt;List&lt;String&gt;&gt;	-&gt; flatMap -&gt;	Stream&lt;String&gt;</span><br><span class="line">Stream&lt;List&lt;Object&gt;&gt;	-&gt; flatMap -&gt;	Stream&lt;Object&gt;</span><br></pre></td></tr></table></figure></p>
+<hr>
+<p><code>parallelStream()</code>:</p>
+<p><code>Collection.stream()</code> creates a sequential stream, and <code>Collection.parallelStream()</code> creates a parallel one.</p>
+<p>也就是说, <code>.stream()</code>和<code>.parallelStream()</code>都是collections的方法: <code>Collection.parallelStream()</code></p>
+<p>e.g. print <code>a</code> to <code>z</code>:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">import java.util.ArrayList;</span><br><span class="line">import java.util.List;</span><br><span class="line"></span><br><span class="line">public class ParallelExample2 &#123;</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line"></span><br><span class="line">        System.out.println(&quot;Normal...&quot;);</span><br><span class="line"></span><br><span class="line">        List&lt;String&gt; alpha = getData();</span><br><span class="line">        alpha.stream().forEach(System.out::println);</span><br><span class="line"></span><br><span class="line">        System.out.println(&quot;Parallel...&quot;);</span><br><span class="line"></span><br><span class="line">        List&lt;String&gt; alpha2 = getData();</span><br><span class="line">        alpha2.parallelStream().forEach(System.out::println);</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private static List&lt;String&gt; getData() &#123;</span><br><span class="line"></span><br><span class="line">        List&lt;String&gt; alpha = new ArrayList&lt;&gt;();</span><br><span class="line"></span><br><span class="line">        int n = 97;  // 97 = a , 122 = z</span><br><span class="line">        while (n &lt;= 122) &#123;</span><br><span class="line">            char c = (char) n;</span><br><span class="line">            alpha.add(String.valueOf(c));</span><br><span class="line">            n++;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        return alpha;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/stream-flatmap/"># stream, flatmap</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2020/03/13/ConcurrentHashMap-newKeySet/">ConcurrentHashMap newKeySet</a>
+            
+            
+            <a class="next" rel="next" href="/2020/03/13/1226-Dining-Philosopher/">1226. Dining Philosopher</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© LEI XIA </span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>

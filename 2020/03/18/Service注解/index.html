@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="LEI XIA">
+
+
+    <meta name="subtitle" content="夏雷的博客~">
+
+
+
+
+<title>@Service注解 | Blogs ©️ Lei Xia</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">LEI&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">LEI&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+
+
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">@Service注解</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">LEI XIA</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">三月 18, 2020&nbsp;&nbsp;16:23</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>不光是<code>@Service</code>注解，还有其他的三个: <code>@Controller</code>, <code>@Repository</code>, <code>@Component</code>.</p>
+<hr>
+<p>别人的: </p>
+<p>说明<code>@Service</code>注解的使用，就得说一下我们经常在spring配置文件<code>applicationContext.xml</code>中看到如下图中的配置：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;!-- 采用扫描 + 注解的方式进行开发 可以提高开发效率，后期维护变的困难了，可读性变差了 --&gt;</span><br><span class="line">&lt;context:component-scan base-package=&quot;com.study.persistent&quot; /&gt;</span><br></pre></td></tr></table></figure>
+<ol>
+<li><code>applicationContext.xml</code>(以前的做法)配置文件中加上<code>component-scan</code>之后，就自动扫描路径下的包，注入到spring容器；</li>
+<li>而如果一个类带了<code>@Service</code>注解, 就自动注入到spring容器，不需要<code>applicationContext.xml</code>配置文件中定义bean了。</li>
+<li>类似的包括<code>@Controller</code>, <code>@Repository</code>, <code>@Component</code>. </li>
+</ol>
+<hr>
+<h3 id="What-do-we-learn-from-above"><a href="#What-do-we-learn-from-above" class="headerlink" title="What do we learn from above?"></a>What do we learn from above?</h3><p>自己的感悟: </p>
+<p>也就是说，<code>@Service</code>(和另外三个), 是标识符，注解一个类(不能是接口), 那么这个类对应的bean就自动注入到spring容器，而不用手动在<code>applicationContext.xml</code>配置文件中手动component, component-scan.</p>
+<hr>
+<h3 id="Service中的参数有什么卵用"><a href="#Service中的参数有什么卵用" class="headerlink" title="@Service中的参数有什么卵用?"></a><code>@Service</code>中的参数有什么卵用?</h3><p>e.g. 这个类：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">@Service(&quot;courseDAO&quot;)</span><br><span class="line">@Scope(&quot;prototype&quot;)</span><br><span class="line">public class CourseDAOImpl extends HibernateDaoSupport implements CourseDAO&#123;</span><br><span class="line">......</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>就相当于在<code>applicationContext.xml</code>配置文件中配置:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;bean id=&quot;courseDAO&quot;</span><br><span class="line">      class=&quot;com.study.persistent.CourseDAOImpl&quot; scope=&quot;prototype&quot;&gt;</span><br><span class="line">      ......    </span><br><span class="line">&lt;/bean&gt;</span><br></pre></td></tr></table></figure></p>
+<p>i.e. </p>
+<ol>
+<li><code>@Service(&quot;courseDAO&quot;)</code> -&gt; <code>bean: id=&quot;courseDAO&quot; ...</code></li>
+<li><code>@Scope(&quot;prototype&quot;)</code> -&gt; <code>scope=&quot;prototype&quot;</code></li>
+</ol>
+<p>也就是说， <code>@Service(&quot;serviceName&quot;)</code>注解相当于<code>applicationContext.xml</code>配置文件中配置的<code>&lt;bean id=&quot;serviceName&quot;&gt;</code>, 表示给当前类命名一个别名，方便注入到其他需要用到的类中.</p>
+<p><code>@Service</code>注解也可以不指定<code>serviceName</code>,如果不指定相当于<code>&lt;bean id=&quot;com.study.service.serviceName&quot;&gt;</code>，<code>com.study.service.ServiceName</code>就是这个类的全限定名,</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/service-annotation/"># service annotation</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+            
+            <a class="next" rel="next" href="/2020/03/16/RPC-thrift-api-springboot-server-cannot-start/">RPC: thrift-api: springboot server cannot start</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© LEI XIA </span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>

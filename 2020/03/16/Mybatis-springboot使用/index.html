@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="LEI XIA">
+
+
+    <meta name="subtitle" content="夏雷的博客~">
+
+
+
+
+<title>Mybatis-springboot使用 | Blogs ©️ Lei Xia</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">LEI&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">LEI&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+
+
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Mybatis-springboot使用</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">LEI XIA</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">三月 16, 2020&nbsp;&nbsp;16:17</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h3 id="mapper-service"><a href="#mapper-service" class="headerlink" title="mapper, service"></a>mapper, service</h3><p>首先有定义接口<code>UserService</code>, 接口中的方法名为<code>getUserById(id)</code>, <code>getUserByName(String name)</code>, <code>registerUser(UserInfo user)</code>这种.</p>
+<p>然后，有如下目录:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">com.springbootbasic.user</span><br><span class="line">  mapper</span><br><span class="line">    UserMapper</span><br><span class="line">  service</span><br><span class="line">    UserServiceImpl</span><br></pre></td></tr></table></figure></p>
+<h3 id="mapper"><a href="#mapper" class="headerlink" title="mapper"></a>mapper</h3><p>在<code>mapper</code>中的 接口<code>UserMapper</code>中就是 mybatis 对应的方法，这个接口需要<code>@Mapper</code>注解，接口中的方法一般都用<code>@Select</code>, <code>@Insert</code>, etc.注解；这些注解中写的就是要执行的sql; 至于这些方法本身，其中的参数用<code>@Param</code>注解; e.g.</p>
+<p>example1:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">@Select(&quot;select id, real_name as realName from table_user where id = #&#123;id&#125;&quot;)</span><br><span class="line">UserInfo getUserById(@Param(&quot;id&quot;)int id);</span><br></pre></td></tr></table></figure>
+<p>看出来:</p>
+<ol>
+<li>本身参数是<code>int id</code>, 前面用<code>@Param(&quot;id&quot;)</code>对应的是<code>UserInfo</code>类中定义的字段<code>id</code>;</li>
+<li>mybatis注解中的参数，也就是对应注解的方法中的参数，要用<code>#{ }</code>修饰</li>
+<li>因为<code>real_name</code>是表中的字段, <code>realName</code>是<code>UserInfo</code>类中定义的字段，所以是<code>real_name as realName</code></li>
+</ol>
+<p>example2: </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">@Insert(&quot;insert into table_user (username, password)&quot; + &quot;values&quot; (#&#123;u.username&#125;, #&#123;u.password&#125;))</span><br><span class="line">void registerUser(@Param(&quot;u&quot;) UserInfo userInfo);</span><br></pre></td></tr></table></figure>
+<p>从上面的方法看出来，mybatis注解中<code>#{}</code>修饰的参数，就是被注解的方法中的<code>@Param</code>的参数</p>
+<h3 id="service"><a href="#service" class="headerlink" title="service"></a>service</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">public class UserServiceImpl implements UserService.Iface &#123;</span><br><span class="line"></span><br><span class="line">	@Autowired</span><br><span class="line">	private UserMapper userMapper;</span><br><span class="line"></span><br><span class="line">	@Override</span><br><span class="line">	public UserInfo getUserById(int id) throws TException &#123;</span><br><span class="line">		return userMapper.getUserById(id);</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	@Override</span><br><span class="line">	public void registerUser(UserInfo userInfo) throws TException &#123;</span><br><span class="line">		userMapper.registerUser(userInfo);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这样分层的思路就表现的很好: </p>
+<ol>
+<li>mybatis作为半ORM框架，写sql，对数据库进行操作，一切都在<code>mapper</code>的interface中；</li>
+<li>而真正的业务逻辑, i.e. 这里的查询过程，都是在<code>service</code>层中；具体表现为<code>@Autowired</code>mapper，调用mybatis接口中调用的方法查询。这里直接简单地传递参数就行了，因为定义内容都在<code>mapper</code>中</li>
+</ol>
+<hr>
+<h3 id="irrelevant"><a href="#irrelevant" class="headerlink" title="irrelevant"></a>irrelevant</h3><p>虽然和 springboot中整合使用mybatis不相关，但是也不能忽视: 属于那种并没有什么技术含量，但是如果不知道就可能花很多时间但是都徒劳无功的问题:</p>
+<p>Q: <code>pom.xml</code>中导入各种dependency,但是<code>import</code>之后idea仍然全红，怎么办?</p>
+<p>A: <code>File &gt; Invalidate Caches/Restart</code>. Done.</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/springboot-mybatis/"># springboot mybatis</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2020/03/16/RPC-thrift-api-springboot-server-cannot-start/">RPC: thrift-api: springboot server cannot start</a>
+            
+            
+            <a class="next" rel="next" href="/2020/03/15/ConcurrentLinkedQueue/">ConcurrentLinkedQueue</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© LEI XIA </span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>

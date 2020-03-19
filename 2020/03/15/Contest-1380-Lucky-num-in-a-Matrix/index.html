@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="LEI XIA">
+
+
+    <meta name="subtitle" content="夏雷的博客~">
+
+
+
+
+<title>Contest 1380. Lucky num in a Matrix | Blogs ©️ Lei Xia</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">LEI&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">LEI&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+
+
+        <div class="main">
+            <div class="container">
+    
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Contest 1380. Lucky num in a Matrix</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">LEI XIA</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">三月 15, 2020&nbsp;&nbsp;14:48</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>Given a <code>m * n</code> matrix of <strong>distinct</strong> numbers, return all lucky numbers in the matrix in any order.</p>
+<p>A lucky number is an element of the matrix such that it is the minimum element in its row and maximum in its column.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Input: matrix = [[3,7,8],[9,11,13],[15,16,17]]</span><br><span class="line">Output: [15]</span><br><span class="line"></span><br><span class="line">Input: matrix = [[1,10,4,2],[9,3,8,7],[15,16,17,12]]</span><br><span class="line">Output: [12]</span><br></pre></td></tr></table></figure>
+<p>比赛一开始用了一个费力不讨好的办法:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">class Solution &#123;</span><br><span class="line">    public List&lt;Integer&gt; luckyNumbers (int[][] matrix) &#123;</span><br><span class="line">        List&lt;Integer&gt; res = new ArrayList&lt;&gt;();</span><br><span class="line">        if (matrix == null || matrix.length == 0) return res;</span><br><span class="line">        </span><br><span class="line">        int m = matrix.length, n = matrix[0].length;</span><br><span class="line">        </span><br><span class="line">        Stack&lt;Integer&gt; min = new Stack&lt;&gt;();</span><br><span class="line">        Stack&lt;Integer&gt; col = new Stack&lt;&gt;();</span><br><span class="line">        </span><br><span class="line">        for (int[] mat : matrix) &#123;</span><br><span class="line">            int minNum = mat[0];</span><br><span class="line">            for (int i = 0; i &lt; n; ++i) &#123;</span><br><span class="line">                if (minNum &gt; mat[i]) minNum = mat[i];</span><br><span class="line">            &#125;</span><br><span class="line">            min.push(minNum);</span><br><span class="line">            </span><br><span class="line">            for (int i = 0; i &lt; n; ++i) &#123;</span><br><span class="line">                if (minNum == mat[i]) col.push(i);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; // min in each row, corresponding col</span><br><span class="line">        </span><br><span class="line">        while (!min.empty()) &#123;</span><br><span class="line">            int num = min.pop();</span><br><span class="line">            int c = col.pop();</span><br><span class="line">            System.out.println(num);</span><br><span class="line">            System.out.println(c);</span><br><span class="line">            </span><br><span class="line">            for (int i = 0; i &lt; m; ++i) &#123;</span><br><span class="line">                if (i != m-1 &amp;&amp; num == matrix[i][c]) continue;</span><br><span class="line">                if (num &lt; matrix[i][c]) break;</span><br><span class="line">                if (i == m-1 &amp;&amp; num &gt;= matrix[i][c]) res.add(num);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        return res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<hr>
+<p>而实际上，只需注意到几个小点，就可以很简单写出来.</p>
+<ol>
+<li>二维数组：拆分为2个一维数组，如果这两个一维数组分别是一个存储row min和column max;</li>
+<li>因为每个数都是distinct，那么<code>row min == column max</code>的时候，就是这种lucky number;</li>
+<li>如何把所有的<code>row min</code>和<code>col max</code>分别放到两个数组中？<em>实际上，并不需要额外怎么样处理，就只是普通的遍历，只不过需要注意到遍历的顺序是什么样的</em>: 内层for循环每次遍历完成，<code>min[i]</code>就完全得出来了，但是<code>max[j]</code>是只获得了一个数，然后外层for循环下一次的时候才会每个数都比较大小更新一次，所以遍历过程更新值的顺序是不同的；细细体会。</li>
+</ol>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">class Solution &#123;</span><br><span class="line">    public List&lt;Integer&gt; luckyNumbers (int[][] matrix) &#123;</span><br><span class="line">        List&lt;Integer&gt; res = new ArrayList&lt;&gt;();</span><br><span class="line">        int m = matrix.length, n = matrix[0].length;</span><br><span class="line">        int[] mi = new int[m]; int[] mx = new int[n];</span><br><span class="line">        Arrays.fill(mi, Integer.MAX_VALUE);</span><br><span class="line">        for (int i = 0; i &lt; m; ++i) &#123;</span><br><span class="line">            for (int j = 0; j &lt; n; ++j) &#123;</span><br><span class="line">                mi[i] = Math.min(mi[i], matrix[i][j]);</span><br><span class="line">                mx[j] = Math.max(mx[j], matrix[i][j]);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        for (int i = 0; i &lt; m; ++i) &#123;</span><br><span class="line">            for (int j = 0; j &lt; n; ++j) &#123;</span><br><span class="line">                if (mi[i] == mx[j]) </span><br><span class="line">                    res.add(mi[i]);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        return res;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/matrix/"># matrix</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2020/03/15/ConcurrentLinkedQueue/">ConcurrentLinkedQueue</a>
+            
+            
+            <a class="next" rel="next" href="/2020/03/15/Contest-1382-Balance-a-BST/">Contest 1382. Balance a BST</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© LEI XIA </span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>
