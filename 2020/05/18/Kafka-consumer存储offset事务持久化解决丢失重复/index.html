@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="LEI XIA">
+
+
+    <meta name="subtitle" content="夏雷的博客~">
+
+
+
+
+<title>Kafka consumer存储offset事务持久化解决丢失重复 | Blogs ©️ Lei Xia</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">LEI&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">LEI&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+
+
+        <div class="main">
+            <div class="container">
+    
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">Kafka consumer存储offset事务持久化解决丢失重复</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">LEI XIA</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">五月 18, 2020&nbsp;&nbsp;15:39</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>本质是自定义存储offset, 解决消息消费&amp;offset数据一致性问题。</p>
+<p>因为不管是自动提交<code>properties.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, true);</code>, 还是关闭自动提交改为<code>false</code>(其中手动提交分为同步提交offset<code>consumer.commitSync()</code>或者异步提交<code>consumer.commitAsync(new OffsetCommitCallback()...)</code>), </p>
+<p>不管先存<code>offset</code>还是先存数据: 都会有问题: </p>
+<ol>
+<li>offset先存:broker挂:数据还没存: broker重启:offset已经存了但是那段数据没存=&gt;<code>数据丢失</code>;</li>
+<li>反过来，数据存了但是offset还没存broker挂了重启就会<code>重复消费</code>;</li>
+</ol>
+<p>也就是不论是什么顺序，只要1.维持offset和2.存offset对应的数据，只要这是两步，那么中间突然中断＝&gt;都会导致数据一致性问题。如果offset放在内存中，那么出现这种问题几乎是必然的: 所以offset要持久化到DB ＝&gt; 多步要一起成功或失败=&gt; 事务, i.e. . <strong>这两步放在同一个transaction中存入mysql</strong></p>
+<p>但是offset的维护是相当繁琐的，因为需要考虑到消费者的Rebalace。消费者发生Rebalance之后，每个消费者消费的分区就会发生变化。因此<strong>消费者要首先获取到自己被重新分配到的分区，并且定位到每个分区最近提交的offset位置继续消费。</strong></p>
+<p>步骤: </p>
+<ol>
+<li>订阅的时候传入参数<code>ConsumerRebalanceListener</code>进行监听；</li>
+<li>自己根据业务需求实现其中的方法。</li>
+</ol>
+<p>一般是要自己写<code>onPartitionsRevoked</code>和<code>onPartitionsAssigned</code>两个方法，一个是rebalance之前调用另一个真的发生了rebalance之后调用—有点相当于AOP的增强功能。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line">public class CustomConsumer &#123;</span><br><span class="line"></span><br><span class="line">    private static Map&lt;TopicPartition, Long&gt; currentOffset = new HashMap&lt;&gt;();</span><br><span class="line"></span><br><span class="line">    public static void main(String[] args) &#123;</span><br><span class="line"></span><br><span class="line">        Properties properties = new Properties();</span><br><span class="line">        properties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, &quot;hadoop102:9092&quot;);</span><br><span class="line">        properties.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, false);</span><br><span class="line">        properties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG,&quot;org.apache.kafka.common.serialization.StringDeserialization&quot;);</span><br><span class="line">        properties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG,&quot;org.apache.kafka.common.serialization.StringDeserialization&quot;);</span><br><span class="line">        properties.put(ConsumerConfig.GROUP_ID_CONFIG, &quot;kafka01&quot;);</span><br><span class="line"></span><br><span class="line">        KafkaConsumer&lt;Object, Object&gt; consumer = new KafkaConsumer&lt;&gt;(properties);</span><br><span class="line"></span><br><span class="line">        consumer.subscribe(Arrays.asList(&quot;first&quot;, &quot;second&quot;), new ConsumerRebalanceListener() &#123;</span><br><span class="line">            @Override // 在Rebalance之前调用</span><br><span class="line">            public void onPartitionsRevoked(Collection&lt;TopicPartition&gt; collection) &#123;</span><br><span class="line">                commitOffset(currentOffset);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            @Override // Rebalance了!!</span><br><span class="line">            public void onPartitionsAssigned(Collection&lt;TopicPartition&gt; collection) &#123;</span><br><span class="line">                currentOffset.clear();</span><br><span class="line">                for (TopicPartition partition : collection) &#123;</span><br><span class="line">                    consumer.seek(partition, getOffset(partition));</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;);</span><br><span class="line"></span><br><span class="line">        while (true) &#123;</span><br><span class="line">            ConsumerRecords&lt;Object, Object&gt; consumerRecords =  consumer.poll(1000);</span><br><span class="line">            for (ConsumerRecord&lt;Object, Object&gt; record : consumerRecords) &#123;</span><br><span class="line">                System.out.println(record.partition() + record.offset());</span><br><span class="line"></span><br><span class="line">                currentOffset.put(new TopicPartition(record.topic(), record.partition()), record.offset());</span><br><span class="line">                commitOffset(currentOffset); // 异步提交</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    // 获取某个partition最近的offset</span><br><span class="line">    public static int getOffset(TopicPartition partition) &#123;</span><br><span class="line">        return 0;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public static void commitOffset(Map&lt;TopicPartition, Long&gt; currentOffset) &#123;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>注:<br>消息的丢失和重复问题, 分为<code>Producer-Broker</code>和<code>Consumer-Broker</code>两个地方的丢失和重复问题</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+            
+            <a class="next" rel="next" href="/2020/03/18/Service注解/">@Service注解</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© LEI XIA </span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>
