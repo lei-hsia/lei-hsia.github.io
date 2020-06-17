@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="LEI XIA">
+
+
+    <meta name="subtitle" content="夏雷的博客~">
+
+
+
+
+<title>iptables:tcpdump,telnet,conntrack多种方式抓包理解iptables | Blogs ©️ Lei Xia</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">LEI&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">LEI&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+
+
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">iptables:tcpdump,telnet,conntrack多种方式抓包理解iptables</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">LEI XIA</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">六月 17, 2020&nbsp;&nbsp;11:27</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>工具🔧:</p>
+<ol>
+<li><code>tcpdump</code>;</li>
+<li><code>telnet</code>;</li>
+<li><code>ifconfig</code>;</li>
+<li><code>iptables</code></li>
+<li><code>conntrack</code></li>
+</ol>
+<p>另: bridge命令 <code>brctl</code>;</p>
+<h4 id="telnet-tcpdump抓包"><a href="#telnet-tcpdump抓包" class="headerlink" title="telnet+tcpdump抓包"></a><code>telnet</code>+<code>tcpdump</code>抓包</h4><p>做法: <code>ifconfig</code>查看<code>docker0</code>和宿主机对应的网卡，宿主机<code>ping www.baidu.com</code>获得baidu的ip(<code>36.152.44.96</code>), 然后进入一个docker容器之后<code>telnet 36.152.44.96</code>; 同时宿主机上<code>tcpdump -i ens33 host 36.152.44.96</code>抓包</p>
+<hr>
+<p>附: docker内部安装<code>telnet</code>:</p>
+<ol>
+<li><code>apt-get update</code></li>
+<li><code>​apt-get install  telnet</code></li>
+</ol>
+<hr>
+<p><img src="/Users/xialei/Desktop/notes/tcpdump.png" alt="tcpdump.png"></p>
+<hr>
+<h4 id="iptables-显示nat表对应的地址转发"><a href="#iptables-显示nat表对应的地址转发" class="headerlink" title="iptables 显示nat表对应的地址转发"></a>iptables 显示nat表对应的地址转发</h4><p>关于<code>iptables</code>四表五链这里就不展开了，详情可以参见这里:<a href="https://www.jianshu.com/p/63aed7a9ca53" target="_blank" rel="noopener">iptables</a></p>
+<p><code>iptables -t nat -nvL</code>: (<code>-t: table:nat;  -nvL: name, verbose, show-List</code>)</p>
+<p><img src="/Users/xialei/Desktop/notes/iptables.png" alt="iptables.png"></p>
+<p><code>target: MASQUERADE</code>: 表示经过了地址转发;<br><code>prot</code>: protocol<br><code>in, out</code>: 表示是从哪个/些网卡进出<br><code>source, destination</code>: 表示src/dest 网段 </p>
+<p><code>Chain DOCKER</code>: 实际上是被最上面的<code>Chain PREROUTING</code>用到了，所以<code>PREROUTING</code>第三个是<code>DOCKER</code></p>
+<hr>
+<h4 id="Conntrack"><a href="#Conntrack" class="headerlink" title="Conntrack"></a>Conntrack</h4><p><code>conntrack</code>: 对应<code>iptables</code>那个图最开始的Connection Tracking部分，用于显示发送接收packets的详细信息的</p>
+<p>安装:</p>
+<ol>
+<li><code>yum install epel-release</code>添加epel源</li>
+<li><code>yum install conntrack-tools</code></li>
+</ol>
+<p><code>conntrack -L</code>:<br><img src="https://upload-images.jianshu.io/upload_images/22284259-719cce1e84c845dc.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="conntrack.png"></p>
+<p>docker容器中<code>telnet 36.152.44.96</code>， 所以可以看到最后的<code>dst=36.152.44.96</code>;<br>注: <code>src, dst, sport, dport</code>是一组，第二组是从baidu服务器角度看的</p>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+            
+            <a class="next" rel="next" href="/2020/06/16/LVS4工作模式和10种调度算法/">LVS企业级负载均衡入门到精通</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© LEI XIA </span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>

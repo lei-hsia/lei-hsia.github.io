@@ -13,7 +13,7 @@
 
 
 
-<title>hadoop: namenode的多目录配置 | Blogs ©️ Lei Xia</title>
+<title>一致性paxos, zab, raft | Blogs ©️ Lei Xia</title>
 
 
 
@@ -103,7 +103,7 @@
     
     <article class="post-wrap">
         <header class="post-header">
-            <h1 class="post-title">hadoop: namenode的多目录配置</h1>
+            <h1 class="post-title">一致性paxos, zab, raft</h1>
             
                 <div class="post-meta">
                     
@@ -112,7 +112,7 @@
 
                     
                         <span class="post-time">
-                        Date: <a href="#">五月 18, 2020&nbsp;&nbsp;17:00</a>
+                        Date: <a href="#">六月 12, 2020&nbsp;&nbsp;10:56</a>
                         </span>
                     
                     
@@ -121,27 +121,42 @@
         </header>
 
         <div class="post-content">
-            <p>NN那么重要, 虽然可以由2NN进行<code>Fsimage</code>, <code>editslog</code>或者<code>CheckPoint</code>的数据恢复，但是还是不保险，因为<code>/opt/module/hadoop-2.7.2/data/tmp/dfs</code>下面仅有一个<code>name</code>目录(和<code>data</code>目录). </p>
-<p>实际上NameNode的本地目录可以配置成多个，且每个目录的内容相同，这样就更有<code>HA</code>; (挂一个另一个自动切换这里先不写)</p>
-<ol>
-<li><p>在<code>etc/hadoop/hdfs-site.xml</code>增加: </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;property&gt;</span><br><span class="line">    &lt;name&gt;dfs.namenode.name.dir&lt;/name&gt;</span><br><span class="line">&lt;value&gt;file:///$&#123;hadoop.tmp.dir&#125;/dfs/name1,file:///$&#123;hadoop.tmp.dir&#125;/dfs/name2&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><code>[lei@hadoop100 hadoop-2.7.2]$ xsync etc/hadoop/</code>, 前提是已经写了同步脚本和ssh免密登录;</p>
-</li>
-<li><code>[lei@hadoop100 hadoop-2.7.2]$ stop-dfs.sh</code>;</li>
-<li><code>[lei@hadoop101 hadoop-2.7.2]$ stop-yarn.sh</code>; 停止了集群;</li>
-<li><p>删除所有产生的数据: </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[lei@hadoop100 hadoop-2.7.2]$ rm -rf data/ logs/</span><br><span class="line">[lei@hadoop101 hadoop-2.7.2]$ rm -rf data/ logs/</span><br><span class="line">[lei@hadoop102 hadoop-2.7.2]$ rm -rf data/ logs/</span><br><span class="line">...</span><br><span class="line">[lei@hadoop149 hadoop-2.7.2]$ rm -rf data/ logs/</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><code>[lei@hadoop100 hadoop-2.7.2]$ bin/hdfs namenode -format</code></p>
-</li>
-<li><p>再次启动集群:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[lei@hadoop100 hadoop-2.7.2]$ sbin/start-dfs.sh</span><br><span class="line">[lei@hadoop101 hadoop-2.7.2]$ sbin/start-yarn.sh</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><code>[lei@hadoop100 hadoop-2.7.2]$ cd data/tmp/dfs/</code>看到:<br><img src="https://upload-images.jianshu.io/upload_images/22284259-5e4a245a18fb01b3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="name2.png"><br>进入目录中发现<code>name1/</code>和<code>name2</code>完全相同, 所以说就是完全的备份。不过也只有<code>namenode</code>所在的node上面有这个</p>
-</li>
+            <p>CAP</p>
+<ul>
+<li>CP: MongoDB, Redis, Hbase</li>
+<li>AP: Cassandra, DynamoDB</li>
+</ul>
+<p>一致性模型: </p>
+<ul>
+<li>弱一致性<ol>
+<li>DNS</li>
+<li>Gossip(Cassandra通信协议)</li>
 </ol>
+</li>
+<li>强一致性<ol>
+<li>同步</li>
+<li>Paxos</li>
+<li>Raft(multi-paxos)</li>
+<li>Zab(multi-paxos)</li>
+</ol>
+</li>
+</ul>
+<p>明确问题: 数据不能存在单点上; 分布式系统对fault tolerance的一般解决方案是state machine replication, 所以准确一致性算法就是”state machine replication的’共识’(consensus)算法”</p>
+<p>强一致性算法: </p>
+<ul>
+<li>主从同步: (主从节点复制)<ol>
+<li>Master接受write</li>
+<li>Master复制日志到slave</li>
+<li>Master等待，直到所有slave返回ok:  HA大大降低</li>
+</ol>
+</li>
+<li>多数派<ol>
+<li></li>
+</ol>
+</li>
+</ul>
+<pre><code>痛みを知らない人は、本当の平和を分かりません。
+</code></pre><p>零 青 白 朱 亥 南 北 三</p>
 
         </div>
 
@@ -169,10 +184,10 @@
         </section>
         <section class="post-nav">
             
-                <a class="prev" rel="prev" href="/2020/06/12/一致性paxos-zab-raft/">一致性paxos, zab, raft</a>
+                <a class="prev" rel="prev" href="/2020/06/16/OldBoy-网络部分/">OldBoy:网络部分</a>
             
             
-            <a class="next" rel="next" href="/2020/05/18/Kafka-consumer存储offset事务持久化解决丢失重复/">Kafka consumer存储offset事务持久化解决丢失重复</a>
+            <a class="next" rel="next" href="/2020/05/18/hadoop-namenode的多目录配置/">hadoop: namenode的多目录配置</a>
             
         </section>
 

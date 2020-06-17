@@ -13,7 +13,7 @@
 
 
 
-<title>hadoop: namenode的多目录配置 | Blogs ©️ Lei Xia</title>
+<title>OldBoy:网络部分 | Blogs ©️ Lei Xia</title>
 
 
 
@@ -103,7 +103,7 @@
     
     <article class="post-wrap">
         <header class="post-header">
-            <h1 class="post-title">hadoop: namenode的多目录配置</h1>
+            <h1 class="post-title">OldBoy:网络部分</h1>
             
                 <div class="post-meta">
                     
@@ -112,7 +112,7 @@
 
                     
                         <span class="post-time">
-                        Date: <a href="#">五月 18, 2020&nbsp;&nbsp;17:00</a>
+                        Date: <a href="#">六月 16, 2020&nbsp;&nbsp;11:10</a>
                         </span>
                     
                     
@@ -121,25 +121,39 @@
         </header>
 
         <div class="post-content">
-            <p>NN那么重要, 虽然可以由2NN进行<code>Fsimage</code>, <code>editslog</code>或者<code>CheckPoint</code>的数据恢复，但是还是不保险，因为<code>/opt/module/hadoop-2.7.2/data/tmp/dfs</code>下面仅有一个<code>name</code>目录(和<code>data</code>目录). </p>
-<p>实际上NameNode的本地目录可以配置成多个，且每个目录的内容相同，这样就更有<code>HA</code>; (挂一个另一个自动切换这里先不写)</p>
+            <p>自己配置搭建Hadoop集群，搭建K8S集群和配置K8S核心插件，发现我网络部分非常不行，所以学习一下。</p>
+<p>index:</p>
 <ol>
-<li><p>在<code>etc/hadoop/hdfs-site.xml</code>增加: </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;property&gt;</span><br><span class="line">    &lt;name&gt;dfs.namenode.name.dir&lt;/name&gt;</span><br><span class="line">&lt;value&gt;file:///$&#123;hadoop.tmp.dir&#125;/dfs/name1,file:///$&#123;hadoop.tmp.dir&#125;/dfs/name2&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br></pre></td></tr></table></figure>
+<li>网络课程体系</li>
+<li>两台主机通讯原理</li>
+<li>一个局域网中多台主机如何通讯 : 交换</li>
+<li>不同局域网中多台主机如何通讯 : 路由</li>
+<li>网络配置CLI操作</li>
+<li>网络架构</li>
+<li>OSI7层模型   TCP/IP模型</li>
+<li>TCP三次握手／四次挥手</li>
+<li>TCP的11种状态集转换</li>
+<li>网路重要协议<ul>
+<li>DNS: 域名访问网站-nginx</li>
+<li>ARP: 访问IP地址–MAC地址</li>
+</ul>
 </li>
-<li><p><code>[lei@hadoop100 hadoop-2.7.2]$ xsync etc/hadoop/</code>, 前提是已经写了同步脚本和ssh免密登录;</p>
+<li>办公环境上网原理（家庭网络环境）</li>
+<li>IP地址概念<ul>
+<li>ip地址种类划分 192.168.10.500</li>
+<li>ip地址子网划分</li>
+</ul>
 </li>
-<li><code>[lei@hadoop100 hadoop-2.7.2]$ stop-dfs.sh</code>;</li>
-<li><code>[lei@hadoop101 hadoop-2.7.2]$ stop-yarn.sh</code>; 停止了集群;</li>
-<li><p>删除所有产生的数据: </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[lei@hadoop100 hadoop-2.7.2]$ rm -rf data/ logs/</span><br><span class="line">[lei@hadoop101 hadoop-2.7.2]$ rm -rf data/ logs/</span><br><span class="line">[lei@hadoop102 hadoop-2.7.2]$ rm -rf data/ logs/</span><br><span class="line">...</span><br><span class="line">[lei@hadoop149 hadoop-2.7.2]$ rm -rf data/ logs/</span><br></pre></td></tr></table></figure>
+<li>系统中路由配置，网卡别名设置 *</li>
+<li>网络中抓包软件使用<ul>
+<li>wireshark</li>
+<li>tcpdump</li>
+</ul>
 </li>
-<li><p><code>[lei@hadoop100 hadoop-2.7.2]$ bin/hdfs namenode -format</code></p>
-</li>
-<li><p>再次启动集群:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[lei@hadoop100 hadoop-2.7.2]$ sbin/start-dfs.sh</span><br><span class="line">[lei@hadoop101 hadoop-2.7.2]$ sbin/start-yarn.sh</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><code>[lei@hadoop100 hadoop-2.7.2]$ cd data/tmp/dfs/</code>看到:<br><img src="https://upload-images.jianshu.io/upload_images/22284259-5e4a245a18fb01b3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="name2.png"><br>进入目录中发现<code>name1/</code>和<code>name2</code>完全相同, 所以说就是完全的备份。不过也只有<code>namenode</code>所在的node上面有这个</p>
+<li>企业网络排错思路<ul>
+<li>系统主机无法访问网站</li>
+<li>系统主机访问网站慢 </li>
+</ul>
 </li>
 </ol>
 
@@ -169,10 +183,10 @@
         </section>
         <section class="post-nav">
             
-                <a class="prev" rel="prev" href="/2020/06/12/一致性paxos-zab-raft/">一致性paxos, zab, raft</a>
+                <a class="prev" rel="prev" href="/2020/06/16/LVS4工作模式和10种调度算法/">LVS企业级负载均衡入门到精通</a>
             
             
-            <a class="next" rel="next" href="/2020/05/18/Kafka-consumer存储offset事务持久化解决丢失重复/">Kafka consumer存储offset事务持久化解决丢失重复</a>
+            <a class="next" rel="next" href="/2020/06/12/一致性paxos-zab-raft/">一致性paxos, zab, raft</a>
             
         </section>
 
