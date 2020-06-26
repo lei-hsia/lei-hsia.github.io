@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="LEI XIA">
+
+
+    <meta name="subtitle" content="夏雷的博客~">
+
+
+
+
+<title>CPU:cache consistency protocol MESI | Blogs ©️ Lei Xia</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">LEI&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">LEI&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+
+
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">CPU:cache consistency protocol MESI</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">LEI XIA</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">六月 26, 2020&nbsp;&nbsp;16:51</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h4 id="Forehead"><a href="#Forehead" class="headerlink" title="Forehead"></a>Forehead</h4><p>I was thinking about translating this article into English and Japanese, but not too sure if I need to do that; it will take one hour or two after all. Please shoot me an email if you feel that would work at: <a href="mailto:leileetcodekaggle@163.com" target="_blank" rel="noopener">leileetcodekaggle@163.com</a></p>
+<h4 id="Prelude"><a href="#Prelude" class="headerlink" title="Prelude"></a>Prelude</h4><p>总线风暴，缓存雪崩，容易联想到暴雪和鲁·高因。</p>
+<h4 id="Inspiration"><a href="#Inspiration" class="headerlink" title="Inspiration"></a>Inspiration</h4><p>自从装上了AMD的3990X，64核128线程的怪物配置之后： CineBench测试: PBO开启之后能达到3.8GHz!<br>HOLY CRAP💩💩💩💩💩💩💩💩<br><img src="https://upload-images.jianshu.io/upload_images/22284259-7bbbfcfd59b516b8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="3990X-CPUz_PBO.png"></p>
+<h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>回归正题。Prerequisites: <code>volatile</code>和JMM模型相关；volatile三大特性: 可见性，原子性，有序性；其中老生常谈：</p>
+<ol>
+<li>原子性不能由<code>volatile</code>满足, 用integer举例出现<code>AtomicInteger</code>,衍生出来的底层CAS还有ABA问题；</li>
+<li>有序性实际上就是”禁止指令Assembly重排”</li>
+</ol>
+<p>不过这次主要讲的是， <code>volatile</code>可以带来可见性。我之前以为这个没什么说的，就是描述“一个线程工作内存中对共享变量<code>var</code>的修改对其它线程也是可见的”; 可是深究起来，tmd凭什么可以这样？为什么其它线程就可以看到某个线程对这个<code>var</code>的修改？</p>
+<p>我简单地写一下，因为不想写一大堆。</p>
+<p>首先要知道，java代码编译之后变成class文件，也就是字节码；字节码经过JIT汇编得到Assembly汇编指令；这些指令就是机器可以识别的。(注: 后面如果要看总线锁情况下的反汇编得到的汇编指令, 需要安装hsdis/hotspot disassembler，点击<a href="https://blog.csdn.net/21aspnet/article/details/88571740" target="_blank" rel="noopener">这里</a><br>)</p>
+<p>这里讨论多进程下的多线程之间的可见性问题，模型如下:<br><img src="https://upload-images.jianshu.io/upload_images/22284259-a40223940d4d3abb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="jmm.png"></p>
+<p>最下面的灰色的部分就是<code>Main Memory</code>; 也就是说，<code>CPU - L1缓存 - L2缓存 - L3缓存</code>和<code>Main Memory</code>之间，是通过总线来进行数据交互的；这个虽然是常识，但是还是写一写避免有人不知道；</p>
+<p>每个核上CPU工作，跑在不同CPU的线程，每个线程都有自己的工作内存。</p>
+<h4 id="JMM-8大原子操作"><a href="#JMM-8大原子操作" class="headerlink" title="JMM 8大原子操作"></a>JMM 8大原子操作</h4><p>JMM 8大原子操作: <code>load, read, use, assign, store, write, lock, unlock</code>.工作内存从主内存读，更改值之后再写会主内存，就是按照上面写的顺序进行的。</p>
+<h4 id="核心"><a href="#核心" class="headerlink" title="核心"></a>核心</h4><p><code>volatile</code>保证可见性底层原理，就是<code>java代码 -&gt; class字节码文件 -&gt; assembly汇编指令</code>这个过程中，在最后得到的汇编指令集前面加上<code>lock</code>前缀；而<code>lock</code>指令，能触发<strong>缓存锁定机制</strong>, 缓存锁定机制类似一个接口，具体落地实现是缓存一致性协议或者总线锁；不过因为总线锁之于缓存一致性协议，类似JDK1.2的<code>synchronized</code>之于JDK1.6的<code>synchronized</code>：过重导致效率低, 所以现在一般实现缓存锁定机制的都是缓存一致性协议。不过总线锁，可以用hsdis加一段<code>VM Options</code>来看java代码对应的汇编指令:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">-server</span><br><span class="line">-Xcomp</span><br><span class="line">-XX:+UnlockDiagnosticVMOptions</span><br><span class="line">-XX:+PrintAssembly</span><br><span class="line">-XX:CompileCommand=compileonly,*VolatileVisibilitySample.refresh</span><br></pre></td></tr></table></figure></p>
+<h4 id="缓存一致性协议MESI"><a href="#缓存一致性协议MESI" class="headerlink" title="缓存一致性协议MESI"></a>缓存一致性协议MESI</h4><p>MESI: <code>Modified, Exclusive, Shared, Invalid</code></p>
+<p>本质问题: 修改共享变量<code>var</code>, thread A怎么知道thread B也在修改此变量? </p>
+<p>答: 总线嗅探<code>Bus Snooping</code>.</p>
+<ol>
+<li>总线嗅探：thread A发现其它线程工作内存中也有<code>var</code>这个变量; <code>E -&gt; S</code>;</li>
+<li>某thread, e.g. thread A改变<code>var</code>成功，<code>S -&gt; M</code>; Bus write机制: 总线写入：通知其它所有之前总线嗅探过的线程，<code>var: M</code>了，所以你们要放弃之前从<code>Main Memory</code>获得的<code>var</code>的值，重新去<code>Main Memory</code>获得新值；</li>
+<li>当然，<code>var</code>修改之后，thread A会尽快把数值<code>store</code>到总线，再总线<code>write</code>到<code>Main Memory</code>(都是<code>JIT 8大数据原子操作</code>(<a href="https://blog.csdn.net/qq_36042506/article/details/82976586" target="_blank" rel="noopener">JIT把bytecode翻译成Assembly</a>), 便于其它线程从主内存获得最新值。</li>
+</ol>
+<p>总线风暴，这里不写了。</p>
+<h4 id="Bibliography"><a href="#Bibliography" class="headerlink" title="Bibliography"></a>Bibliography</h4><ul>
+<li><a href="https://developpaper.com/learn-about-cache-consistency-protocol-mesi/" target="_blank" rel="noopener">https://developpaper.com/learn-about-cache-consistency-protocol-mesi/</a></li>
+<li><a href="https://www.cnblogs.com/yanlong300/p/8986041.html" target="_blank" rel="noopener">https://www.cnblogs.com/yanlong300/p/8986041.html</a></li>
+</ul>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+            
+            <a class="next" rel="next" href="/2020/06/17/iptables-tcpdump-telnet-conntrack多种方式抓包理解iptables/">iptables:tcpdump,telnet,conntrack多种方式抓包理解iptables</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© LEI XIA </span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>
