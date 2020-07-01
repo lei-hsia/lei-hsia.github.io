@@ -185,7 +185,8 @@
         <div class="post-content">
             <h4 id="Forehead"><a href="#Forehead" class="headerlink" title="Forehead"></a>Forehead</h4><p>I was thinking about translating this article into English and Japanese, but not too sure if I need to do that; it will take one hour or two after all. Please shoot me an email if you feel that would work at: <a href="mailto:leileetcodekaggle@163.com" target="_blank" rel="noopener">leileetcodekaggle@163.com</a></p>
 <h4 id="Prelude"><a href="#Prelude" class="headerlink" title="Prelude"></a>Prelude</h4><p>总线风暴，缓存雪崩，容易联想到暴雪和鲁·高因。</p>
-<h4 id="Inspiration"><a href="#Inspiration" class="headerlink" title="Inspiration"></a>Inspiration</h4><p>自从装上了AMD的3990X，64核128线程的怪物配置之后： CineBench测试: PBO开启之后能达到3.8GHz!<br>HOLY CRAP💩💩💩💩💩💩💩💩<br><img src="https://upload-images.jianshu.io/upload_images/22284259-7bbbfcfd59b516b8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="3990X-CPUz_PBO.png"></p>
+<h4 id="Inspiration"><a href="#Inspiration" class="headerlink" title="Inspiration"></a>Inspiration</h4><p>自从装上了AMD的3990X，64核128线程的怪物配置之后： CineBench测试: PBO开启之后能达到3.8GHz!</p>
+<p><img src="/Users/xialei/Desktop/company/amd/3990X-CPUz_PBO.png" alt="3990X-CPUz_PBO.png"></p>
 <h4 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h4><p>回归正题。Prerequisites: <code>volatile</code>和JMM模型相关；volatile三大特性: 可见性，原子性，有序性；其中老生常谈：</p>
 <ol>
 <li>原子性不能由<code>volatile</code>满足, 用integer举例出现<code>AtomicInteger</code>,衍生出来的底层CAS还有ABA问题；</li>
@@ -194,7 +195,7 @@
 <p>不过这次主要讲的是， <code>volatile</code>可以带来可见性。我之前以为这个没什么说的，就是描述“一个线程工作内存中对共享变量<code>var</code>的修改对其它线程也是可见的”; 可是深究起来，tmd凭什么可以这样？为什么其它线程就可以看到某个线程对这个<code>var</code>的修改？</p>
 <p>我简单地写一下，因为不想写一大堆。</p>
 <p>首先要知道，java代码编译之后变成class文件，也就是字节码；字节码经过JIT汇编得到Assembly汇编指令；这些指令就是机器可以识别的。(注: 后面如果要看总线锁情况下的反汇编得到的汇编指令, 需要安装hsdis/hotspot disassembler，点击<a href="https://blog.csdn.net/21aspnet/article/details/88571740" target="_blank" rel="noopener">这里</a><br>)</p>
-<p>这里讨论多进程下的多线程之间的可见性问题，模型如下:<br><img src="https://upload-images.jianshu.io/upload_images/22284259-a40223940d4d3abb.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="jmm.png"></p>
+<p>这里讨论多进程下的多线程之间的可见性问题，模型如下:<br><img src="/Users/xialei/Desktop/company/amd/cpubusdram.png" alt="jmm.png"></p>
 <p>最下面的灰色的部分就是<code>Main Memory</code>; 也就是说，<code>CPU - L1缓存 - L2缓存 - L3缓存</code>和<code>Main Memory</code>之间，是通过总线来进行数据交互的；这个虽然是常识，但是还是写一写避免有人不知道；</p>
 <p>每个核上CPU工作，跑在不同CPU的线程，每个线程都有自己的工作内存。</p>
 <h4 id="JMM-8大原子操作"><a href="#JMM-8大原子操作" class="headerlink" title="JMM 8大原子操作"></a>JMM 8大原子操作</h4><p>JMM 8大原子操作: <code>load, read, use, assign, store, write, lock, unlock</code>.工作内存从主内存读，更改值之后再写会主内存，就是按照上面写的顺序进行的。</p>

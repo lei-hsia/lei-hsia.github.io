@@ -389,12 +389,12 @@
 </li>
 </ol>
 <h4 id="LVS-NAT"><a href="#LVS-NAT" class="headerlink" title="LVS-NAT"></a>LVS-NAT</h4><ul>
-<li><img src="/Users/xialei/Desktop/notes/lvs-nat.png" alt="nat模型"> <pre><code>- LVS和后端服务器: 在一个网络中，一般用Switch(交换机),用Router(路由器)效率低
+<li><img src="/Users/xialei/Desktop/cs/lvs/image/lvs-nat.png" alt="nat模型"> <pre><code>- LVS和后端服务器: 在一个网络中，一般用Switch(交换机),用Router(路由器)效率低
 - 问题: LVS服务器单点问题: 既没有HA，也容易出现性能瓶颈
 - LVS &amp;&amp; iptables五链: ![lvs-iptables](/Users/xialei/Desktop/notes/LVS-iptables.png)
 </code></pre></li>
 </ul>
-<h2 id="LVS-DR"><a href="#LVS-DR" class="headerlink" title="LVS-DR"></a>LVS-DR</h2><p>DR模型:<br><img src="/Users/xialei/Desktop/notes/lvs-dr.png" alt="DR模型"></p>
+<h2 id="LVS-DR"><a href="#LVS-DR" class="headerlink" title="LVS-DR"></a>LVS-DR</h2><p>DR模型:<br><img src="/Users/xialei/Desktop/cs/lvs/image/lvs-dr.png" alt="DR模型"></p>
 <ul>
 <li>显然的问题: 多个RS绑定同一个VIP: 多台服务器相同IP?</li>
 <li>地址冲突底层逻辑: 免费ARP(gratutious ARP)</li>
@@ -410,7 +410,7 @@
 <li>ARP: 基于广播，把IP解析到MAC;</li>
 <li><strong>MAC地址在路由过程中一段一段不断切换，但是IP地址是不变的</strong></li>
 </ul>
-<p>DR原理:<br><img src="/Users/xialei/Desktop/notes/DR原理.png" alt="DR-under"></p>
+<p>DR原理:<br><img src="/Users/xialei/Desktop/cs/lvs/image/DR原理.png" alt="DR-under"></p>
 <h4 id="详解发送报文的IP和MAC地址"><a href="#详解发送报文的IP和MAC地址" class="headerlink" title="详解发送报文的IP和MAC地址:"></a>详解发送报文的IP和MAC地址:</h4><p>(MAC1:路由器进口MAC地址; MAC2:路由器出口MAC地址)</p>
 <table>
 <thead>
@@ -459,7 +459,7 @@
 <li>LVS服务器配置<code>ingore</code>和<code>announce</code>两个参数</li>
 </ol>
 <p>RIP和VIP: 可以都配在物理网卡上,<code>eth0</code>; 但是因为要配置<code>ignore</code>和<code>announce</code>内核参数，所以这样也去掉了RIP的广播功能; 所以可以把VIP配置到<code>lo</code>这个虚拟回环网卡上; 因为网络设备是工作在内核上面的，所以<code>lo</code>是可以的</p>
-<h4 id="LVS-Tunnel-类似跨网络的LVS-DR"><a href="#LVS-Tunnel-类似跨网络的LVS-DR" class="headerlink" title="LVS-Tunnel : 类似跨网络的LVS-DR"></a>LVS-Tunnel : 类似跨网络的LVS-DR</h4><p><img src="/Users/xialei/Desktop/notes/lvs-tun.png" alt="lvs-tun"></p>
+<h4 id="LVS-Tunnel-类似跨网络的LVS-DR"><a href="#LVS-Tunnel-类似跨网络的LVS-DR" class="headerlink" title="LVS-Tunnel : 类似跨网络的LVS-DR"></a>LVS-Tunnel : 类似跨网络的LVS-DR</h4><p><img src="/Users/xialei/Desktop/cs/lvs/image/lvs-tun.png" alt="lvs-tun"></p>
 <p>TUN模式特点:</p>
 <ol>
 <li>DIP, VIP, RIP可以是公网地址（跨互联网）</li>
@@ -469,7 +469,7 @@
 <li>RS的OS支持隧道功能</li>
 </ol>
 <h4 id="LVS-fullnat"><a href="#LVS-fullnat" class="headerlink" title="LVS-fullnat"></a>LVS-fullnat</h4><p>Kernel默认不支持。</p>
-<p><img src="/Users/xialei/Desktop/notes/lvs-fullnat.png" alt="lvs-fullnat"></p>
+<p><img src="/Users/xialei/Desktop/cs/lvs/image/lvs-fullnat.png" alt="lvs-fullnat"></p>
 <p>和NAT模式没有太大区别，只是src地址也转化了; 而且请求报文和相应报文还是都经过Director，所以和NAT相比都没有显著性的提升;一般都不怎么用</p>
 <h3 id="LVS工作模式总结和比较"><a href="#LVS工作模式总结和比较" class="headerlink" title="LVS工作模式总结和比较"></a>LVS工作模式总结和比较</h3><table>
 <thead>
