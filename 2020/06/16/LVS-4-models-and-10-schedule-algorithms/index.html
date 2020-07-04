@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="LEI XIA">
+
+
+    <meta name="subtitle" content="夏雷的博客~">
+
+
+
+
+<title>LVS: 4 models and 10 schedule algorithms | Blogs ©️ Lei Xia</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">LEI&#39;s Blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">LEI&#39;s Blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+
+
+        <div class="main">
+            <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    document.ready(
+        function () {
+            tocbot.init({
+                tocSelector: '.tocbot-list',
+                contentSelector: '.post-content',
+                headingSelector: 'h1, h2, h3, h4, h5',
+                collapseDepth: 1,
+                orderedList: false,
+                scrollSmooth: true,
+            })
+        }
+    )
+
+    function expand_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 6,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "collapse_toc()");
+        b.innerHTML = "Collapse all"
+    }
+
+    function collapse_toc() {
+        var b = document.querySelector(".tocbot-toc-expand");
+        tocbot.init({
+            tocSelector: '.tocbot-list',
+            contentSelector: '.post-content',
+            headingSelector: 'h1, h2, h3, h4, h5',
+            collapseDepth: 1,
+            orderedList: false,
+            scrollSmooth: true,
+        });
+        b.setAttribute("onclick", "expand_toc()");
+        b.innerHTML = "Expand all"
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">LVS: 4 models and 10 schedule algorithms</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">LEI XIA</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">六月 16, 2020&nbsp;&nbsp;14:35</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h3 id="客户端访问服务端整个互联网架构"><a href="#客户端访问服务端整个互联网架构" class="headerlink" title="客户端访问服务端整个互联网架构:"></a>客户端访问服务端整个互联网架构:</h3><ol>
+<li>Android/iOS/Win/Mac 客户端访问</li>
+<li>CDN(Content Dilivery Network):基于GSLB(Global Server LB)实现全局LB:如:DNS</li>
+<li>firewall</li>
+<li>LVS/HAProxy决定访问哪个服务器 (LVS集群: VIP)(keepalived)</li>
+<li>服务端偏运维基础:<ul>
+<li>来到Nginx:L7反向代理</li>
+<li>企业内部DNS, NTP, Harbor等基础服务</li>
+<li>HA私有云管理: Openstack管VM,K8S管docker</li>
+<li>LAMP企业门户</li>
+</ul>
+</li>
+<li>静态资源<ul>
+<li>静态资源缓存集群</li>
+<li>静态资源服务器, nginx集群</li>
+<li>资源存储服务器, e.g. NFS, ceph</li>
+<li>商业存储服务器, e.g. NAS, SAN</li>
+</ul>
+</li>
+<li>动态资源<ul>
+<li>Java SOA</li>
+<li>微服务管理中心</li>
+<li>生产者微服务集群</li>
+<li>消费者微服务集群</li>
+</ul>
+</li>
+<li>DB<ul>
+<li>MQ: Kafka, RabbitMQ</li>
+<li>NoSQL: mongoDB</li>
+<li>分布式注册中心: Eureka, ZK</li>
+<li>Cache服务器集群: Redis</li>
+<li>RDBMS: Mysql, etc.</li>
+</ul>
+</li>
+<li>monitor:<ul>
+<li>Prometheus</li>
+<li>Zabbix</li>
+</ul>
+</li>
+<li>CICD:<ul>
+<li>Jenkins</li>
+<li>Gitlab</li>
+</ul>
+</li>
+<li>Log: ELK: 分析日志 (大数据运维)<ul>
+<li>Hadoop/Hive数仓</li>
+<li>Spark(RDD)/Flume</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2 id="LVS-调度功能"><a href="#LVS-调度功能" class="headerlink" title="LVS(调度功能)"></a>LVS(调度功能)</h2><ul>
+<li><strong>LVS模型</strong></li>
+<li><strong>LVS调度算法</strong></li>
+<li>LVS实现</li>
+<li>Idirectord</li>
+</ul>
+<h5 id="集群和分布式"><a href="#集群和分布式" class="headerlink" title="集群和分布式"></a>集群和分布式</h5><ol>
+<li><p>集群:</p>
+<ul>
+<li>LB: <ul>
+<li>e.g. mysql主从: </li>
+<li>LVS: Linux Virtual Server: 属于LB; </li>
+<li>LVS:可能有单点故障问题(SPOF)</li>
+<li>LVS SPOF:用keepalived解决LVS单点失败问题</li>
+<li>LVS+keepalived</li>
+</ul>
+</li>
+<li>HA,避免SPOF(Single Point Of Failure)<ul>
+<li>e.g. mysql: MHA: Perl脚本快速“副”变为“主”</li>
+<li>MTBF: Mean Time Between Failure</li>
+<li>MTTR: Mean Time To Restoration</li>
+<li>A:= MTBF/(MTBF+MTTR)</li>
+<li>SLA: Service Level Agreement</li>
+</ul>
+</li>
+<li>HPC</li>
+</ul>
+</li>
+<li><p>分布式系统:</p>
+<ul>
+<li>分布式存储: Ceph,GlusterFS,FastDFS,MogileFS</li>
+<li>分布式计算: hadoop, Spark</li>
+<li>分布式系统最典型: DNS服务</li>
+<li>分布式常见应用<ul>
+<li>分布式应用: MS</li>
+<li>分布式静态资源: 静态资源放在不同存储集群上</li>
+<li>分布式数据和存储: 使用KV缓存系统,e.g. Redis集群</li>
+<li>分布式计算: 特殊业务使用分布式计算:比如hadoop集群</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<p>分布式一般以缩短单个任务的执行时间提升效率，而集群通过提高单位时间内执行的任务数量提升效率</p>
+<p>集群设计实现</p>
+<ol>
+<li>基础设施层面<ul>
+<li>提升硬件资源性能:从入口防火墙到后端web server均使用更高性能的硬件资源</li>
+<li>多域名: DNS轮询A记录解析</li>
+<li>多入口: 将A记录解析到多个公网IP入口</li>
+<li>多机房: 同城＋异地容灾</li>
+<li>CDN(Content Delivery Network):基于GSLB实现全局LB:DNS</li>
+</ul>
+</li>
+<li>业务层面<ul>
+<li>分层: 安全层 负载层 静态层 动态层 缓存层 存储层 持久化</li>
+<li>分割: 基于功能分割大业务为小服务</li>
+<li>分布式: 对于特殊场景服务，使用分布式计算</li>
+</ul>
+</li>
+<li>LB Cluster:<ul>
+<li>硬件<ul>
+<li>F5 Big-IP</li>
+<li>…</li>
+</ul>
+</li>
+<li>软件<ul>
+<li>LVS: 4层, AliL4 SLB使用</li>
+<li>nginx: 支持L7调度, AliL7 SLB使用Tengine<ul>
+<li>nginx:可做代理服务器，或者web服务器</li>
+</ul>
+</li>
+<li>haproxy: L7</li>
+<li>ats: Apache Traffic Server…</li>
+<li>…</li>
+</ul>
+</li>
+<li>基于工作的协议层次划分:<ul>
+<li>传输层(通用): DNAT &amp;&amp; DPORT<ul>
+<li>LVS</li>
+<li>nginx: stream</li>
+<li>haproxy: mode tcp</li>
+</ul>
+</li>
+<li>应用层(专用): 针对特定协议，常称proxy server<ul>
+<li>http: nginx, httpd, haproxy</li>
+<li>fastcgi: nginx, …</li>
+<li>mysql: mysql-proxy…</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>LB会话保持:<ol>
+<li>session sticky: 同一用户调度固定服务器<ul>
+<li>Source IP: LVS sh算法(缺点:同一个地方IP相同: SNAT)</li>
+<li>Cookie(更好，基于浏览器, LVS L4不能用cookie)</li>
+<li>访问一台服务器，如果这台服务器宕机:</li>
+</ul>
+</li>
+<li>session replication: 每台服务器拥有全部session<ul>
+<li>session multicast cluster: 占内存</li>
+</ul>
+</li>
+<li>session server: 专门的session服务器<ul>
+<li>Redis</li>
+<li>memcached</li>
+<li>redis 集群…</li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+</li>
+<li>HA 高可用集群实现<ul>
+<li>keepalived VRRP协议</li>
+<li>Ais: heartbeat …(不怎么用了)</li>
+</ul>
+</li>
+</ol>
+<h4 id="LVS-4种工作模式和10种调度算法"><a href="#LVS-4种工作模式和10种调度算法" class="headerlink" title="LVS: 4种工作模式和10种调度算法"></a>LVS: 4种工作模式和10种调度算法</h4><h4 id="LVS架构的NAT和DR模型实现原理"><a href="#LVS架构的NAT和DR模型实现原理" class="headerlink" title="LVS架构的NAT和DR模型实现原理"></a>LVS架构的NAT和DR模型实现原理</h4><p>常: L4: LVS; L7: nginx</p>
+<ol>
+<li>术语:<ul>
+<li>VS: Virtual Server: 只负责调度, Director Server(DS), Dispatcher(调度器), LB</li>
+<li>RS: Real Server(lvs), upstream server(nginx), backend server(haproxy)</li>
+<li>CIP: Client IP</li>
+<li>VIP: Virtual server IP</li>
+<li>DIP: Director IP (VIP,DIP都是LVS服务器地址)</li>
+<li>RIP: Real server IP</li>
+<li>访问流程: <code>CIP&lt;--&gt;VIP=(in LVS)=DIP&lt;--&gt;RIP</code></li>
+</ul>
+</li>
+<li>查看: <code>grep -i -C 10 ipvs /boot/config-3.10.0-1127.el7.x86_64</code></li>
+<li><p>LVS集群体系架构:</p>
+<ul>
+<li>交换机: 接入交换机-&gt;[汇聚交换机]-&gt;核心交换机</li>
+<li>real server-&gt;Director(LVS,多,keepalived)-&gt;接入交换机</li>
+<li>核心交换机-&gt;路由器-&gt;防火墙-&gt;外网</li>
+</ul>
+</li>
+<li><p>功能: 单独LVS只能实现LB,不能实现HA; 多LVS+keepalived实现HA</p>
+</li>
+<li>扩展应用</li>
+<li>消除SPOF(keepalived)</li>
+<li>LVS本质就是一个调度器</li>
+</ol>
+<h4 id="LVS集群工作模式和相关命令"><a href="#LVS集群工作模式和相关命令" class="headerlink" title="LVS集群工作模式和相关命令"></a>LVS集群工作模式和相关命令</h4><ol>
+<li>LVS集群工作模式<ul>
+<li><code>lvs-nat</code>:修改请求报文的目标IP,i.e.多目标IP的DNAT; </li>
+<li><code>lvs-dr</code>:操纵封装新的MAC地址</li>
+<li><code>lvs-tun</code>:在原请求IP报文外新加一个IP首部</li>
+<li><code>lvs-fullnat</code>:修改请求报文的源和目标IP</li>
+</ul>
+</li>
+</ol>
+<h4 id="LVS-NAT"><a href="#LVS-NAT" class="headerlink" title="LVS-NAT"></a>LVS-NAT</h4><ul>
+<li><img src="/Users/xialei/Desktop/cs/lvs/image/lvs-nat.png" alt="nat模型"> <pre><code>- LVS和后端服务器: 在一个网络中，一般用Switch(交换机),用Router(路由器)效率低
+- 问题: LVS服务器单点问题: 既没有HA，也容易出现性能瓶颈
+- LVS &amp;&amp; iptables五链: ![lvs-iptables](/Users/xialei/Desktop/notes/LVS-iptables.png)
+</code></pre></li>
+</ul>
+<h2 id="LVS-DR"><a href="#LVS-DR" class="headerlink" title="LVS-DR"></a>LVS-DR</h2><p>DR模型:<br><img src="/Users/xialei/Desktop/cs/lvs/image/lvs-dr.png" alt="DR模型"></p>
+<ul>
+<li>显然的问题: 多个RS绑定同一个VIP: 多台服务器相同IP?</li>
+<li>地址冲突底层逻辑: 免费ARP(gratutious ARP)</li>
+<li>CIP-VIP -&gt; LVS-&gt; RS: 还是CIP-VIP，但是还加了一个RS的MAC地址看是哪一个具体的RS; </li>
+<li>ip得到MAC: RIP-&gt;MAC;</li>
+<li>MAC:设备<->设备; IP: 网络<->网络;</-></-></li>
+<li>如果隐藏RS自己的VIP? <ul>
+<li>ignore: 不响应别人的请求</li>
+<li>announce: 不主动说 (实际上是kernel中的两个参数)</li>
+</ul>
+</li>
+<li>解决了LVS-NAT模式的LVS返回通过的瓶颈</li>
+<li>ARP: 基于广播，把IP解析到MAC;</li>
+<li><strong>MAC地址在路由过程中一段一段不断切换，但是IP地址是不变的</strong></li>
+</ul>
+<p>DR原理:<br><img src="/Users/xialei/Desktop/cs/lvs/image/DR原理.png" alt="DR-under"></p>
+<h4 id="详解发送报文的IP和MAC地址"><a href="#详解发送报文的IP和MAC地址" class="headerlink" title="详解发送报文的IP和MAC地址:"></a>详解发送报文的IP和MAC地址:</h4><p>(MAC1:路由器进口MAC地址; MAC2:路由器出口MAC地址)</p>
+<table>
+<thead>
+<tr>
+<th>src IP/MAC</th>
+<th>dest IP/MAC</th>
+<th>stage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CIP:x, MAC_C</td>
+<td>VIP:80, MAC1</td>
+<td>客户端到路由器</td>
+</tr>
+<tr>
+<td>CIP:x, MAC2</td>
+<td>VIP:80, MAC_LVS</td>
+<td>路由器到LVS服务器</td>
+</tr>
+<tr>
+<td>CIP:x, MAC_LVS</td>
+<td>VIP:80, MAC_RS1</td>
+<td>LVS服务器到RS1</td>
+</tr>
+<tr>
+<td>VIP:80, MAC_RS1</td>
+<td>CIP:xx, MAC2</td>
+<td>DR模型:RS1返回报文到路由器</td>
+</tr>
+<tr>
+<td>VIP:80, MAC1</td>
+<td>CIP:xx, MAC_C</td>
+<td>路由器到客户端</td>
+</tr>
+</tbody>
+</table>
+<p>DR模型特点: </p>
+<ol>
+<li>请求报文响应报文不需要都经过LVC服务器(其实是响应报文)</li>
+<li>LVS服务器要和后端服务器都在同一个网段: <ul>
+<li>RIP和Director必须在同一个网段</li>
+<li>RIP,DIP和VIP:不一定要在同一个网段</li>
+</ul>
+</li>
+<li>LVS服务器配置<code>ingore</code>和<code>announce</code>两个参数</li>
+</ol>
+<p>RIP和VIP: 可以都配在物理网卡上,<code>eth0</code>; 但是因为要配置<code>ignore</code>和<code>announce</code>内核参数，所以这样也去掉了RIP的广播功能; 所以可以把VIP配置到<code>lo</code>这个虚拟回环网卡上; 因为网络设备是工作在内核上面的，所以<code>lo</code>是可以的</p>
+<h4 id="LVS-Tunnel-类似跨网络的LVS-DR"><a href="#LVS-Tunnel-类似跨网络的LVS-DR" class="headerlink" title="LVS-Tunnel : 类似跨网络的LVS-DR"></a>LVS-Tunnel : 类似跨网络的LVS-DR</h4><p><img src="/Users/xialei/Desktop/cs/lvs/image/lvs-tun.png" alt="lvs-tun"></p>
+<p>TUN模式特点:</p>
+<ol>
+<li>DIP, VIP, RIP可以是公网地址（跨互联网）</li>
+<li>RS的网关一般不指向DIP(要不就没有必要用路由器和tunnel模式)</li>
+<li>请求报文要经由director，但是响应不经过director</li>
+<li>不支持端口映射(因为只是加了报文，并没有修改/转发)</li>
+<li>RS的OS支持隧道功能</li>
+</ol>
+<h4 id="LVS-fullnat"><a href="#LVS-fullnat" class="headerlink" title="LVS-fullnat"></a>LVS-fullnat</h4><p>Kernel默认不支持。</p>
+<p><img src="/Users/xialei/Desktop/cs/lvs/image/lvs-fullnat.png" alt="lvs-fullnat"></p>
+<p>和NAT模式没有太大区别，只是src地址也转化了; 而且请求报文和相应报文还是都经过Director，所以和NAT相比都没有显著性的提升;一般都不怎么用</p>
+<h3 id="LVS工作模式总结和比较"><a href="#LVS工作模式总结和比较" class="headerlink" title="LVS工作模式总结和比较"></a>LVS工作模式总结和比较</h3><table>
+<thead>
+<tr>
+<th></th>
+<th>VS/NAT</th>
+<th>VS/TUN</th>
+<th>VS/DR</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Server</td>
+<td>any</td>
+<td>Tunneling</td>
+<td>Non-arp device</td>
+</tr>
+<tr>
+<td>server network</td>
+<td>private</td>
+<td>LAN/WAN</td>
+<td>LAN</td>
+</tr>
+<tr>
+<td>server number</td>
+<td>low(10-20)</td>
+<td>high(100)</td>
+<td>high(100)</td>
+</tr>
+<tr>
+<td>server gateway</td>
+<td>load balancer</td>
+<td>own router</td>
+<td>own router(因为都是直接返回给客户端不经过LVS)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="LVS调度算法"><a href="#LVS调度算法" class="headerlink" title="LVS调度算法"></a>LVS调度算法</h2><ul>
+<li><p>静态方法: 仅根据算法本身调度</p>
+<ol>
+<li>RR</li>
+<li>WRR: RR机器性能不同加weight</li>
+<li>SH: Source Hashing,源地址哈希; 实现session sticky,源IP地址hash; 将来自同一个IP地址的请求始终发往第一次挑中的RS，实现会话绑定: </li>
+<li>DH: Destination Hashing,目标地址哈希;第一次轮训调度到RS，后续将发往同一个目标地址的请求始终发到第一次挑中的RS, 典型使用场景是正向代理缓存场景中的LB, i.e. client-&gt;Redis-&gt;Mysql集群; mysql集群假如ABCD四个服务器, Redis1对应AB, Redis2对应CD, 那么如果之前访问的是A，下次客户端访问就是Redis1, 因为Redis1对应的A</li>
+</ol>
+</li>
+<li><p>动态算法: 根据当前RS负载状态和调度算法进行调度Overhead=value比较小的RS将被调度(LVS知道后面RS的负载情况)</p>
+<ol>
+<li>LC: least connections: 适用长连接应用; <code>Overhead=activeconns*256+inactiveconns</code>, 没有考虑到后端服务器的性能: 改进: WLC</li>
+<li>WLC: 默认调度算法; <code>Overhead=(activeconns*256+inactiveconns)/weight</code>: 权重越大，Overhead越小，优先调度</li>
+<li>SED: Shortest Expection Delay: 解决#conn为0的问题:<code>Overhead=(activeconns+1)*256/weight</code>: weight设置可能不合理</li>
+<li>NQ: Never Queue: <strong>第一轮</strong>均匀分配, 后续SED: 解决第一轮问题</li>
+<li>LBLC: Locality-Based LC, 动态DH, 根据负载状态考虑</li>
+<li>LBLCR: LBLC with Replication; 5中的mysql可能均衡但是前面的Redis不均衡，所以Replication:解决LBLC负载不均衡问题，从负载中的复制到负载轻的RS</li>
+</ol>
+</li>
+<li><p>Kernel4.15后新增的调度算法</p>
+<ol>
+<li>FO(静态): Weighted FailOver: FO算法中遍历Virtual Server(VS)关联的真实服务器列表，找到还没有标记过载(未设置<code>IP_VS_DEST_F_OVERLOAD</code>标志)并且权重最高的真RS调度</li>
+<li>OVF(Overflow-Connection)(动态): FO+activeconn </li>
+</ol>
+</li>
+</ul>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                
+                
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2020/06/17/iptables-tcpdump-telnet-conntrack多种方式抓包理解iptables/">iptables:tcpdump,telnet,conntrack多种方式抓包理解iptables</a>
+            
+            
+            <a class="next" rel="next" href="/2020/06/16/OldBoy-网络部分/">OldBoy:网络部分</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+        </div>
+        <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© LEI XIA </span>
+    </div>
+</footer>
+
+    </div>
+</body>
+</html>
